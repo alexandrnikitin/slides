@@ -402,7 +402,8 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                         <h2>Under the hood</h2>
                     </section>
                     <section>
-                        <p>__Canon</p>
+                        <p>__Canon - is a placeholder</p>
+                        <p>__Canon - will be replaced </p>
                         <p>Code for reference types is shared</p>
                         <p>Code for value types is not</p>
                     </section>
@@ -412,11 +413,27 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                 </section>
 
                 <section>
-                    <h2>Optimizations by CLR</h2>
+                    <section>
+                        <h2>Optimizations by CLR</h2>
+                        <ol>
+                            <li>Class loader (300 clocks)</li>
+                            <li>Type hierarchy walk with global dictionary cache lookup (50-60 clocks)</li>
+                            <li>Helper global dictionary cache lookup (30 clocks)</li>
+                            <li>Inline lookup from dictionary slot (10 clocks)</li>
+                        </ol>
+                    </section>
+
                 </section>
 
                 <section>
-                    <h2>Dessert</h2>
+                    <section>
+                        <h2>Dessert</h2>
+                    </section>
+                    <section>
+                        <h2>Links:</h2>
+                        <p><a href="http://stackoverflow.com/questions/27176159/performance-type-derived-from-generic">SO question</a></p>
+                        <p><a href="https://github.com/dotnet/coreclr/issues/55">An issue on github</a></p>
+                    </section>
                 </section>
 
                 <section>
