@@ -501,12 +501,14 @@ public class Program
                 </section>
 
                 <section>
-                <section>
-                    <h2>Interesting things</h2>
-                </section>
-                <section>
-                    <h2>Heuristic algorithm</h2>
-                        <pre><code class="cpp" data-trim contenteditable>
+
+                    <section>
+                        <h2>Interesting things</h2>
+                    </section>
+
+                    <section>
+                        <h2>Heuristic algorithm</h2>
+                            <pre><code class="cpp" data-trim contenteditable>
 DWORD numMethodsAdjusted =
     (bmtMethod->dwNumDeclaredNonAbstractMethods == 0)
     ? 0
@@ -519,9 +521,96 @@ DWORD nTypeFactorBy2 = (bmtGenerics->GetNumGenericArgs() == 1)
                        : 3;
 
 DWORD estNumTypeSlots = (numMethodsAdjusted * nTypeFactorBy2 + 2) / 3;
-                        </code></pre>
-                        <p><a href="https://github.com/dotnet/coreclr/blob/master/src/vm/methodtablebuilder.cpp#L7253">Sources</a></p>
-                </section>
+                            </code></pre>
+                            <p><a href="https://github.com/dotnet/coreclr/blob/master/src/vm/methodtablebuilder.cpp#L7253">Sources</a></p>
+
+                    </section>
+                    <section>
+                        <h2>Dictionary lookup</h2>
+                            <pre><code class="cpp" data-trim contenteditable>
+CORINFO_GENERIC_HANDLE
+JIT_GenericHandleWorker(
+    MethodDesc *  pMD,
+    MethodTable * pMT,
+    LPVOID        signature)
+{
+     CONTRACTL {
+        THROWS;
+        GC_TRIGGERS;
+    } CONTRACTL_END;
+
+    MethodTable * pDeclaringMT = NULL;
+
+    if (pMT != NULL)
+    {
+        SigPointer ptr((PCCOR_SIGNATURE)signature);
+
+        ULONG kind; // DictionaryEntryKind
+        IfFailThrow(ptr.GetData(&kind));
+
+        // We need to normalize the class passed in (if any) for reliability purposes. That's because preparation of a code region that
+        // contains these handle lookups depends on being able to predict exactly which lookups are required (so we can pre-cache the
+        // answers and remove any possibility of failure at runtime). This is hard to do if the lookup (in this case the lookup of the
+        // dictionary overflow cache) is keyed off the somewhat arbitrary type of the instance on which the call is made (we'd need to
+        // prepare for every possible derived type of the type containing the method). So instead we have to locate the exactly
+        // instantiated (non-shared) super-type of the class passed in.
+
+        ULONG dictionaryIndex = 0;
+        IfFailThrow(ptr.GetData(&dictionaryIndex));
+
+        pDeclaringMT = pMT;
+        for (;;)
+        {
+            MethodTable * pParentMT = pDeclaringMT->GetParentMethodTable();
+            if (pParentMT->GetNumDicts() <= dictionaryIndex)
+                break;
+            pDeclaringMT = pParentMT;
+        }
+
+        if (pDeclaringMT != pMT)
+        {
+            JitGenericHandleCacheKey key((CORINFO_CLASS_HANDLE)pDeclaringMT, NULL, signature);
+            HashDatum res;
+            if (g_pJitGenericHandleCache->GetValue(&key,&res))
+            {
+                // Add the denormalized key for faster lookup next time. This is not a critical entry - no need
+                // to specify appdomain affinity.
+                JitGenericHandleCacheKey denormKey((CORINFO_CLASS_HANDLE)pMT, NULL, signature);
+                AddToGenericHandleCache(&denormKey, res);
+                return (CORINFO_GENERIC_HANDLE) (DictionaryEntry) res;
+            }
+        }
+    }
+
+    DictionaryEntry * pSlot;
+    CORINFO_GENERIC_HANDLE result = (CORINFO_GENERIC_HANDLE)Dictionary::PopulateEntry(pMD, pDeclaringMT, signature, FALSE, &pSlot);
+
+    if (pSlot == NULL)
+    {
+        // If we've overflowed the dictionary write the result to the cache.
+        BaseDomain *pDictDomain = NULL;
+
+        if (pMT != NULL)
+        {
+            pDictDomain = pDeclaringMT->GetDomain();
+        }
+        else
+        {
+            pDictDomain = pMD->GetDomain();
+        }
+
+        // Add the normalized key (pDeclaringMT) here so that future lookups of any
+        // inherited types are faster next time rather than just just for this specific pMT.
+        JitGenericHandleCacheKey key((CORINFO_CLASS_HANDLE)pDeclaringMT, (CORINFO_METHOD_HANDLE)pMD, signature, pDictDomain);
+        AddToGenericHandleCache(&key, (HashDatum)result);
+    }
+
+    return result;
+}
+                            </code></pre>
+                            <p><a href="https://github.com/dotnet/coreclr/blob/master/src/vm/jithelpers.cpp#L3705">Sources</a></p>
+
+                    </section>
                 </section>
 
                 <section data-background="img/reila-the-end.jpg">
