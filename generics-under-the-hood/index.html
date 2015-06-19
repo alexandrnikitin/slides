@@ -514,7 +514,6 @@ DWORD numMethodsAdjusted =
     ? 3
     : bmtMethod->dwNumDeclaredNonAbstractMethods;
 
-_ASSERTE(bmtGenerics->GetNumGenericArgs() != 0);
 DWORD nTypeFactorBy2 = (bmtGenerics->GetNumGenericArgs() == 1)
                        ? 2
                        : 3;
