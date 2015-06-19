@@ -73,7 +73,8 @@
                         <h2>.NET memory layout</h2>
                     </section>
                     <section>
-                        <pre><code class="csharp" data-trim contenteditable>
+						<p>An example class:</p>
+                        <pre><code class="cs" data-trim contenteditable>
 public class MyClass
 {
     private int _myField;
@@ -84,11 +85,44 @@ public class MyClass
     }
 }
                         </code></pre>
+						<p>An instance:</p>
                         <pre><code class="csharp" data-trim contenteditable>
 var myClass = new MyClass();
                         </code></pre>
 
                     </section>
+
+					<section>
+						<h2>WinDbg the Great and Powerful</h2>
+						<p>SOS / Son of Strike</p>
+						<p>SOSEX / SOS extensions</p>
+					</section>
+
+					<section>
+						<h2>Instance on heap</h2>
+						<p>Sync block address</p>
+						<p>Method table address</p>
+						<p>Field1</p>
+						<p>FieldN</p>
+					</section>
+
+					<section>
+						<h2>Method Table structure</h2>
+						<p>Interface Map Table address</p>
+						<p>Inherited Virtual Method addresses</p>
+						<p>Introduced Virtual Method addresses</p>
+						<p>Instance Method addresses</p>
+						<p>Static Method addresses</p>
+						<p>Static Field1 value</p>
+						<p>Static FieldN value</p>
+						<p>Interface1 method addresses</p>
+						<p>InterfaceN method addresses</p>
+					</section>
+
+					<section>
+						<h2>EEClass structure</h2>
+					</section>
+
                 </section>
 
                 <section>
