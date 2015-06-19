@@ -58,33 +58,11 @@
                         <li>Analyze the bug in JITter</li>
                         <li>Discuss some interesting facts</li>
                     </ul>
-                    <p></p>
                 </section>
 
-                <section>
-                    <section>
-                        <h2>JAVA and swear words</h2>
-                    </section>
-                    <section>
-                        <h2>Pattern matching in Scala</h2>
-                        <p>Right now:</p>
-					    <pre><code class="scala stretch" data-trim contenteditable>
-list match {
-    case xs: java.util.List[_] => xs.asInstanceOf[java.util.List[Long]].asScala
-    case _ => Nil
-}
-                        </code></pre>
-                        <p>While it could be:</p>
-                        <pre><code class="scala stretch" data-trim contenteditable>
-list match {
-    case (x: Long) :: xs => x.toString
-    case Nil => "empty"
-    case _ => "other"
-}
-                        </code></pre>
-                    </section>
-
-                </section>
+				<section>
+					<h2>JAVA and swear words</h2>
+				</section>
 
                 <section>
                     <h2>.NET</h2>
