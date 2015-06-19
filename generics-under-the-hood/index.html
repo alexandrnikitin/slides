@@ -193,18 +193,41 @@ public class MyGenericClass&lt;T&gt;
                     <section>
                         <h2>Miracle CLR knows about Generics</h2>
                     </section>
+
                     <section>
                         <p>An instance:</p>
                         <pre><code class="csharp" data-trim contenteditable>
 var myObject = new MyGenericClass&lt;object&gt;();
-var myString = new MyGenericClass&lt;string&gt;();
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <p>An instance:</p>
+                        <pre><code class="csharp" data-trim contenteditable>
 var myInt = new MyGenericClass&lt;int&gt;();
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <p>An instance:</p>
+                        <pre><code class="csharp" data-trim contenteditable>
+var myString = new MyGenericClass&lt;string&gt;();
                         </code></pre>
                     </section>
                 </section>
 
                 <section>
-                    <h2>Under the hood</h2>
+                    <section>
+                        <h2>Under the hood</h2>
+                    </section>
+                    <section>
+                        <p>__Canon</p>
+                        <p>Code for reference types is shared</p>
+                        <p>Code for value types is not</p>
+                    </section>
+                    <section>
+                        <h2></h2>
+                    </section>
                 </section>
 
                 <section>
