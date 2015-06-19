@@ -467,6 +467,27 @@ public class DerivedClass : BaseClass&lt;object&gt;
                         </code></pre>
                     </section>
                     <section>
+                        <h2>Benchmark:</h2>
+                        <pre><code class="cs" data-trim contenteditable>
+public class Program
+{
+    public static void Main()
+    {
+        Measure(new DerivedClass());
+        Measure(new BaseClass&lt;object&gt;());
+    }
+
+    private static void Measure(BaseClass&lt;object&gt;> baseClass)
+    {
+        var sw = Stopwatch.StartNew();
+        baseClass.Run();
+        sw.Stop();
+        Console.WriteLine(sw.ElapsedMilliseconds);
+    }
+}
+                        </code></pre>
+                    </section>
+                    <section>
                         <h2>Links:</h2>
                         <p><a href="http://stackoverflow.com/questions/27176159/performance-type-derived-from-generic">Stackoverflow question</a></p>
                         <p><a href="https://github.com/dotnet/coreclr/issues/55">An issue on github</a></p>
@@ -475,7 +496,28 @@ public class DerivedClass : BaseClass&lt;object&gt;
                 </section>
 
                 <section>
+                <section>
                     <h2>Interesting things</h2>
+                </section>
+                <section>
+                    <h2>Heuristic algorithm</h2>
+                        <pre><code class="cpp" data-trim contenteditable>
+DWORD numMethodsAdjusted =
+    (bmtMethod->dwNumDeclaredNonAbstractMethods == 0)
+    ? 0
+    : (bmtMethod->dwNumDeclaredNonAbstractMethods < 3)
+    ? 3
+    : bmtMethod->dwNumDeclaredNonAbstractMethods;
+
+_ASSERTE(bmtGenerics->GetNumGenericArgs() != 0);
+DWORD nTypeFactorBy2 = (bmtGenerics->GetNumGenericArgs() == 1)
+                       ? 2
+                       : 3;
+
+DWORD estNumTypeSlots = (numMethodsAdjusted * nTypeFactorBy2 + 2) / 3;
+                        </code></pre>
+                        <p><a href="https://github.com/dotnet/coreclr/blob/master/src/vm/methodtablebuilder.cpp#L7253">Sources</a></p>
+                </section>
                 </section>
 
                 <section>
