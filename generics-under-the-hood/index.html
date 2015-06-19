@@ -68,9 +68,28 @@
                     <h2>.NET</h2>
                 </section>
 
-                <section>
-                    <h2>.NET memory layout</h2>
-                </section>
+				<section>
+					<section>
+						<h2>.NET memory layout</h2>
+					</section>
+					<section>
+						<pre><code class="csharp" data-trim contenteditable>
+public class MyClass
+{
+    private int _myField;
+
+    public int MyMethod()
+    {
+        return _myField;
+    }
+}
+						</code></pre>
+						<pre><code class="csharp" data-trim contenteditable>
+var myClass = new MyClass();
+						</code></pre>
+
+					</section>
+				</section>
 
                 <section>
                     <h2>Generics memory layout</h2>
