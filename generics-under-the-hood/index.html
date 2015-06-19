@@ -430,9 +430,47 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                         <h2>Dessert</h2>
                     </section>
                     <section>
+                        <h2>Simplified version:</h2>
+                        <pre><code class="cs" data-trim contenteditable>
+public class BaseClass&lt;T&gt;
+{
+    private List&lt;T&gt; _list = new List&lt;T&gt;();
+
+    public BaseClass()
+    {
+        Enumerable.Empty&lt;T&gt;();
+        // or Enumerable.Repeat(new T(), 10);
+        // or even new T();
+        // or foreach (var item in _list) {}
+    }
+
+    public void Run()
+    {
+        for (var i = 0; i < 8000000; i++)
+        {
+            if (_list.Any())
+            // or if (_list.Count() > 0)
+            // or if (_list.FirstOrDefault() != null)
+            // or if (_list.SingleOrDefault() != null)
+            // or other IEnumerable&lt;T&gt; method
+            {
+                return;
+            }
+        }
+    }
+}
+
+public class DerivedClass : BaseClass&lt;object&gt;
+{
+}
+
+                        </code></pre>
+                    </section>
+                    <section>
                         <h2>Links:</h2>
-                        <p><a href="http://stackoverflow.com/questions/27176159/performance-type-derived-from-generic">SO question</a></p>
+                        <p><a href="http://stackoverflow.com/questions/27176159/performance-type-derived-from-generic">Stackoverflow question</a></p>
                         <p><a href="https://github.com/dotnet/coreclr/issues/55">An issue on github</a></p>
+                        <p><a href="https://github.com/dotnet/coreclr/issues/55">Great explanation of the CLR core developer</a></p>
                     </section>
                 </section>
 
