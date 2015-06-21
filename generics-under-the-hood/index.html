@@ -101,31 +101,53 @@
                         <pre><code class="cs" data-trim contenteditable>
 var o = new object();
                         </code></pre>
-                    </section>
+                        <p>Instance on heap:</p>
+                        <div style="font-size: 70%">
+                            <table>
+                                <tbody>
+                                <tr><td>Sync block address</td></tr>
+                                <tr><td>Method table address</td></tr>
+                                <tr><td>Field1</td></tr>
+                                <tr><td>FieldN</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <section>
-                        <h2>Instance on heap</h2>
-                        <p>Sync block address</p>
-                        <p>Method table address</p>
-                        <p>Field1</p>
-                        <p>FieldN</p>
                     </section>
 
                     <section>
                         <h2>Method Table structure</h2>
-                        <p>Interface Map Table address</p>
-                        <p>Inherited Virtual Method addresses</p>
-                        <p>Introduced Virtual Method addresses</p>
-                        <p>Instance Method addresses</p>
-                        <p>Static Method addresses</p>
-                        <p>Static Field1 value</p>
-                        <p>Static FieldN value</p>
-                        <p>Interface1 method addresses</p>
-                        <p>InterfaceN method addresses</p>
+                        <ul>
+                            <li>The central data structure of the runtime</li>
+                            <li>"Hot" data</li>
+                        </ul>
+                        <br/>
+                        <br/>
+                        <div style="font-size: 60%">
+                            <table>
+                                <tbody>
+                                <tr><td>Interface Map Table address</td></tr>
+                                <tr><td>Inherited Virtual Method addresses</td></tr>
+                                <tr><td>Introduced Virtual Method addresses</td></tr>
+                                <tr><td>Instance Method addresses</td></tr>
+                                <tr><td>Static Method addresses</td></tr>
+                                <tr><td>Static Field1 value</td></tr>
+                                <tr><td>Static FieldN value</td></tr>
+                                <tr><td>Interface1 method addresses</td></tr>
+                                <tr><td>InterfaceN method addresses</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </section>
 
                     <section>
                         <h2>EEClass structure</h2>
+                        <ul>
+                            <li>Everything about the type</li>
+                            <li>Data needed by type loading, JITing or reflection</li>
+                            <li>"Cold" data</li>
+                            <li>Too complex: contains EEClassOptionalFields, EEClassPackedFields</li>
+                        </ul>
                     </section>
 
                     <section>
