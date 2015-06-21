@@ -174,7 +174,7 @@ public class MyClass
                         <pre><code class="cs" data-trim contenteditable>
 var myClass = new MyClass();
                         </code></pre>
-                        <pre><code data-trim contenteditable>
+                        <pre><code style="overflow: hidden" data-trim contenteditable>
 0:003> !DumpHeap -type GenericsUnderTheHood.MyClass
 Address          MT                     Size
 0000004a2d912de8 00007fff8e7540d8       24
@@ -189,7 +189,8 @@ Total 1 objects
 
                     <section>
                         <h2>Method Table looks like:</h2>
-                        <pre><code data-trim contenteditable>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" data-trim contenteditable>
 0:003> !dumpmt -md 00007fff8e7540d8
 EEClass:         00007fff8e8623f0
 Module:          00007fff8e752fc8
@@ -209,12 +210,14 @@ Entry            MethodDesc       JIT    Name
 00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
 00007fff8e8701c0 00007fff8e7540d0    JIT GenericsUnderTheHood.MyClass..ctor()
 00007fff8e75c048 00007fff8e7540c0   NONE GenericsUnderTheHood.MyClass.MyMethod()
-                        </code></pre>
+                            </code></pre>
+                        </div>
                     </section>
 
                     <section>
                         <h2>EEClass looks like:</h2>
-                        <pre><code data-trim contenteditable>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" data-trim contenteditable>
 0:003> !DumpClass 00007fff8e8623f0
 Class Name:      GenericsUnderTheHood.MyClass
 mdToken:         0000000002000002
@@ -230,7 +233,8 @@ NumInstanceFields:   1
 NumStaticFields:     0
 MT                Field          Offset    Type          VT Attr     Value Name
 00007fffecf03980  4000001        8         System.Int32  1 instance  _myField
-                        </code></pre>
+                            </code></pre>
+                        </div>
                     </section>
 
                     <section>
@@ -267,9 +271,10 @@ public class MyGenericClass&lt;T&gt;
 
                     <section>
                         <p>Compiles to:</p>
-                        <pre><code class="cs" data-trim contenteditable>
-.class public auto ansi beforefieldinit GenericsUnderTheHood.MyGenericClass`1&lt;T&gt;
-    extends [mscorlib]System.Object
+                        <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+.class public auto ansi beforefieldinit
+    GenericsUnderTheHood.MyGenericClass`1&lt;T&gt;
+        extends [mscorlib]System.Object
 {
     .field private !T _myField
 
@@ -293,12 +298,12 @@ public class MyGenericClass&lt;T&gt;
                     <section>
                         <p>An instance:</p>
                         <pre><code class="cs" data-trim contenteditable>
-var myObject = new MyGenericClass&lt;object&gt;();
+                            var myObject = new MyGenericClass&lt;object&gt;();
                         </code></pre>
-                    </section>
-                    <section>
+
                         <p>Method table:</p>
-                        <pre><code class="cs" data-trim contenteditable>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
 0:003> !DumpMT -md 00007fff8e754368
 EEClass:         00007fff8e862510
 Module:          00007fff8e752fc8
@@ -318,11 +323,13 @@ Entry            MethodDesc       JIT    Name
 00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
 00007fff8e870210 00007fff8e754280    JIT GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]..ctor()
 00007fff8e75c098 00007fff8e754278   NONE GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]].MyMethod()
-                        </code></pre>
+                            </code></pre>
+                        </div>
                     </section>
                     <section>
                         <p>EEClass:</p>
-                        <pre><code class="cs" data-trim contenteditable>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
 0:003> !DumpClass 00007fff8e862510
 Class Name:      GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]
 mdToken:         0000000002000003
@@ -338,19 +345,73 @@ NumInstanceFields:   1
 NumStaticFields:     0
 MT                Field          Offset  Type            VT Attr       Value Name
 00007fffecf05c80  4000002        8       System.__Canon  0 instance    _myField
-                        </code></pre>
+                            </code></pre>
+                        </div>
                     </section>
 
                     <section>
                         <p>An instance:</p>
                         <pre><code class="cs" data-trim contenteditable>
-var myInt = new MyGenericClass&lt;int&gt;();
+                            var myString = new MyGenericClass&lt;string&gt;();
                         </code></pre>
+
+                        <p>Method table:</p>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+0:003> !DumpMT -md 00007fff8e754400
+EEClass:         00007fff8e862510
+Module:          00007fff8e752fc8
+Name:            GenericsUnderTheHood.MyGenericClass`1[[System.String, mscorlib]]
+mdToken:         0000000002000003
+File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
+BaseSize:        0x18
+ComponentSize:   0x0
+Slots in VTable: 6
+Number of IFaces in IFaceMap: 0
+--------------------------------------
+MethodDesc Table
+Entry       MethodDesc    JIT Name
+00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
+00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
+00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
+00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
+00007fff8e870210 00007fff8e754280    JIT GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]..ctor()
+00007fff8e75c098 00007fff8e754278   NONE GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]].MyMethod()
+                            </code></pre>
+                        </div>
+                    </section>
+                    <section>
+                        <p>EEClass:</p>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+0:003> !DumpClass 00007fff8e862510
+Class Name:      GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]
+mdToken:         0000000002000003
+File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
+Parent Class:    00007fffec824908
+Module:          00007fff8e752fc8
+Method Table:    00007fff8e7542a0
+Vtable Slots:    4
+Total Method Slots:  6
+Class Attributes:    100001
+Transparency:        Critical
+NumInstanceFields:   1
+NumStaticFields:     0
+MT    Field   Offset                 Type VT     Attr            Value Name
+00007fffecf05c80  4000002        8       System.__Canon  0 instance           _myField
+                            </code></pre>
+                        </div>
                     </section>
 
                     <section>
-                        <p>Method table:</p>
+                        <p>An instance:</p>
                         <pre><code class="cs" data-trim contenteditable>
+                            var myInt = new MyGenericClass&lt;int&gt;();
+                        </code></pre>
+
+                        <p>Method table:</p>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
 0:003> !DumpMT -md 00007fff8e7544c0
 EEClass:         00007fff8e862628
 Module:          00007fff8e752fc8
@@ -371,10 +432,12 @@ Entry       MethodDesc    JIT Name
 00007fff8e870260 00007fff8e7544b8    JIT GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]]..ctor()
 00007fff8e75c0c0 00007fff8e7544b0   NONE GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]].MyMethod()
                         </code></pre>
+                        </div>
                     </section>
                     <section>
                         <p>EEClass:</p>
-                        <pre><code class="cs" data-trim contenteditable>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
 0:003> !DumpClass 00007fff8e862628
 Class Name:      GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]]
 mdToken:         0000000002000003
@@ -390,66 +453,16 @@ NumInstanceFields:   1
 NumStaticFields:     0
 MT    Field   Offset                 Type VT     Attr            Value Name
 00007fffecf03980  4000002        8         System.Int32  1 instance           _myField
-                        </code></pre>
+                            </code></pre>
+                        </div>
                     </section>
 
-                    <section>
-                        <p>An instance:</p>
-                        <pre><code class="cs" data-trim contenteditable>
-var myString = new MyGenericClass&lt;string&gt;();
-                        </code></pre>
-                    </section>
-
-                    <section>
-                        <p>Method table:</p>
-                        <pre><code class="cs" data-trim contenteditable>
-0:003> !DumpMT -md 00007fff8e754400
-EEClass:         00007fff8e862510
-Module:          00007fff8e752fc8
-Name:            GenericsUnderTheHood.MyGenericClass`1[[System.String, mscorlib]]
-mdToken:         0000000002000003
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-BaseSize:        0x18
-ComponentSize:   0x0
-Slots in VTable: 6
-Number of IFaces in IFaceMap: 0
---------------------------------------
-MethodDesc Table
-Entry       MethodDesc    JIT Name
-00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
-00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
-00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
-00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
-00007fff8e870210 00007fff8e754280    JIT GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]..ctor()
-00007fff8e75c098 00007fff8e754278   NONE GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]].MyMethod()
-                        </code></pre>
-                    </section>
-                    <section>
-                        <p>EEClass:</p>
-                        <pre><code class="cs" data-trim contenteditable>
-0:003> !DumpClass 00007fff8e862510
-Class Name:      GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]
-mdToken:         0000000002000003
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-Parent Class:    00007fffec824908
-Module:          00007fff8e752fc8
-Method Table:    00007fff8e7542a0
-Vtable Slots:    4
-Total Method Slots:  6
-Class Attributes:    100001
-Transparency:        Critical
-NumInstanceFields:   1
-NumStaticFields:     0
-MT    Field   Offset                 Type VT     Attr            Value Name
-00007fffecf05c80  4000002        8       System.__Canon  0 instance           _myField
-                        </code></pre>
-                    </section>
                 </section>
 
                 <section>
                     <section>
                         <h2>Under the hood</h2>
-                        <img data-src="img/awesom-o-under-the-hood.jpg" alt="awesom-o">
+                        <img src="img/awesom-o-under-the-hood.jpg" alt="awesom-o">
                     </section>
                     <section>
                         <p>System.__Canon is an internal type</p>
