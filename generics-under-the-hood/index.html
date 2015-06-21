@@ -465,32 +465,30 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                         <img src="img/awesom-o-under-the-hood.jpg" alt="awesom-o">
                     </section>
                     <section>
-                        <p>System.__Canon is an internal type</p>
-                        <p>__Canon - will be replaced </p>
-                        <p>Code for reference types is shared</p>
-                        <p>Code for value types is not</p>
-                    </section>
-
-                    <section>
-                        <h2></h2>
+                        <ul>
+                            <li>System.__Canon - an internal type</li>
+                            <li>System.__Canon - will be replaced</li>
+                            <li>Code for reference types is shared</li>
+                            <li>Code for value types is not</li>
+                        </ul>
                     </section>
 
                     <section>
                         <h2>Optimizations by CLR</h2>
-                        <p>Optimizes the generic calls in your method not your generic method</p>
                         <ol>
-                            <li>Class loader (300 clocks)</li>
-                            <li>Type hierarchy walk with global dictionary cache lookup (50-60 clocks)</li>
-                            <li>Helper global dictionary cache lookup (30 clocks)</li>
-                            <li>Inline lookup from dictionary slot (10 clocks)</li>
+                            <li>Class loader - 30x</li>
+                            <li>Type hierarchy walk with global dictionary cache lookup - 6x</li>
+                            <li>Global dictionary cache lookup - 3x</li>
+                            <li>Method Table slot - 1x</li>
                         </ol>
+                        <p>Note: Optimizes the generic calls in your method not your generic method</p>
                     </section>
 
                     <section>
                         <h2>Links:</h2>
                         <p><a href="http://research.microsoft.com/apps/pubs/default.aspx?id=64031">Design and Implementation of Generics for the .NET Common Language Runtime</a></p>
-                        <p><a href="https://github.com/dotnet/coreclr/blob/master/Documentation/botr/type-loader.md#22-generics">About generics on CoreCLR github</a></p>
-                        <p><a href="https://github.com/dotnet/coreclr/issues/55#issuecomment-89026823">Optimizations explained by core developer</a></p>
+                        <p><a href="https://github.com/dotnet/coreclr/blob/master/Documentation/botr/type-loader.md#22-generics">About generics in CoreCLR documentation</a></p>
+                        <p><a href="https://github.com/dotnet/coreclr/issues/55#issuecomment-89026823">Optimizations explained by a core developer</a></p>
                     </section>
 
                 </section>
