@@ -498,8 +498,9 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                         <h1>Dessert</h1>
                     </section>
                     <section>
-                        <h2>Simplified version:</h2>
-                        <pre><code class="cs" data-trim contenteditable>
+                        <p>Simplified version:</p>
+                        <div style="font-size: 50%">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
 public class BaseClass&lt;T&gt;
 {
     private List&lt;T&gt; _list = new List&lt;T&gt;();
@@ -532,10 +533,11 @@ public class DerivedClass : BaseClass&lt;object&gt;
 {
 }
 
-                        </code></pre>
+                            </code></pre>
+                        </div>
                     </section>
                     <section>
-                        <h2>Benchmark:</h2>
+                        <p>Benchmark:</p>
                         <pre><code class="cs" data-trim contenteditable>
 public class Program
 {
