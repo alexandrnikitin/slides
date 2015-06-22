@@ -381,6 +381,13 @@ Entry       MethodDesc    JIT Name
 00007fff8e75c098 00007fff8e754278   NONE GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]].MyMethod()
                             </code></pre>
                         </div>
+
+                        <aside class="notes">
+                            <p>Name is different.</p>
+                            <p>But method signatures are the same. MethodDesc addresses too.</p>
+                            <p>EEClass address is the same too.</p>
+                        </aside>
+
                     </section>
                     
                     <section>
@@ -411,8 +418,15 @@ Entry       MethodDesc    JIT Name
 00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
 00007fff8e870260 00007fff8e7544b8    JIT GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]]..ctor()
 00007fff8e75c0c0 00007fff8e7544b0   NONE GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]].MyMethod()
-                        </code></pre>
+                            </code></pre>
                         </div>
+
+                        <aside class="notes">
+                            <p>Name is different.</p>
+                            <p>Method signatures are parameterized with Int32. Separate MethodDesc addresses.</p>
+                            <p>EEClass address is different too.</p>
+                        </aside>
+
                     </section>
                     <section>
                         <p>EEClass:</p>
@@ -435,6 +449,12 @@ MT    Field   Offset                 Type VT     Attr            Value Name
 00007fffecf03980  4000002        8         System.Int32  1 instance           _myField
                             </code></pre>
                         </div>
+
+                        <aside class="notes">
+                            <p>Name</p>
+                            <p>Field has type.</p>
+                        </aside>
+
                     </section>
 
                 </section>
