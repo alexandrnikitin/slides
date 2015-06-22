@@ -139,6 +139,7 @@ var o = new object();
                         <div style="font-size: 60%">
                             <table>
                                 <tbody>
+                                <tr><td>EEClass</td></tr>
                                 <tr><td>Interface Map Table address</td></tr>
                                 <tr><td>Inherited Virtual Method addresses</td></tr>
                                 <tr><td>Introduced Virtual Method addresses</td></tr>
@@ -312,6 +313,11 @@ public class MyGenericClass&lt;T&gt;
     ...
 }
                         </code></pre>
+
+                        <aside class="notes">
+                            <p>Template that will be compiled by JIT</p>
+                        </aside>
+
                     </section>
 
                     <section data-background="img/miracle.gif">
@@ -501,10 +507,10 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                     </section>
                     <section>
                         <ul>
+                            <li>Value types don't share anything</li>
+                            <li>Reference types share code and EEClass</li>
                             <li>System.__Canon - an internal type</li>
                             <li>System.__Canon - will be replaced</li>
-                            <li>Code for reference types is shared</li>
-                            <li>Code for value types is not</li>
                         </ul>
                     </section>
 
