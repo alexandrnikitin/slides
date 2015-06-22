@@ -70,6 +70,13 @@
                 <section>
                     <section>
                         <h2>JAVA and swear words</h2>
+
+                        <aside class="notes">
+                            <p>When I developed for .NET ... :)</p>
+                            <p>Interest outweigh and I move to JVM and Scala</p>
+                            <p>Slipped some sh##</p>
+                        </aside>
+
                     </section>
                     <section>
                         <blockquote>&ldquo;Šuo ir kariamas pripranta.&rdquo;</blockquote>
@@ -90,6 +97,10 @@
                             <li>Performance improvements (no boxing, no casting)</li>
                             <li>Compile-time checks</li>
                         </ul>
+
+                        <aside class="notes">
+                            <p>What price do we pay for that?</p>
+                        </aside>
 
                     </section>
                 </section>
@@ -148,12 +159,24 @@ var o = new object();
                             <li>"Cold" data</li>
                             <li>Too complex: contains EEClassOptionalFields, EEClassPackedFields</li>
                         </ul>
+
+                        <aside class="notes">
+                            <p>EEClass is a class with getters and setters and contains other classes and structures</p>
+                            <p>MethodTable is an optimized array of addresses</p>
+                        </aside>
+
                     </section>
 
                     <section>
                         <h2>WinDbg the Great and Powerful</h2>
                         <p>SOS / Son of Strike</p>
                         <p>SOSEX / SOS extensions</p>
+
+                        <aside class="notes">
+                            <p>WinDbg awful UX</p>
+                            <p>SOS name story</p>
+                        </aside>
+
                     </section>
 
 
@@ -327,6 +350,12 @@ Entry            MethodDesc       JIT    Name
 00007fff8e75c098 00007fff8e754278   NONE GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]].MyMethod()
                             </code></pre>
                         </div>
+
+                        <aside class="notes">
+                            <p>Typed name</p>
+                            <p>Magic System.__Canon type</p>
+                        </aside>
+
                     </section>
                     <section>
                         <p>EEClass:</p>
@@ -349,6 +378,12 @@ MT                Field          Offset  Type            VT Attr       Value Nam
 00007fffecf05c80  4000002        8       System.__Canon  0 instance    _myField
                             </code></pre>
                         </div>
+
+                        <aside class="notes">
+                            <p>Name isn't typed</p>
+                            <p>Magic System.__Canon as field type</p>
+                        </aside>
+
                     </section>
 
                     <section>
@@ -383,9 +418,9 @@ Entry       MethodDesc    JIT Name
                         </div>
 
                         <aside class="notes">
-                            <p>Name is different.</p>
+                            <p>Name is different and typed with String.</p>
                             <p>But method signatures are the same. MethodDesc addresses too.</p>
-                            <p>EEClass address is the same too.</p>
+                            <p>EEClass address is the same too. It's shared.</p>
                         </aside>
 
                     </section>
@@ -451,7 +486,7 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                         </div>
 
                         <aside class="notes">
-                            <p>Name</p>
+                            <p>Typed name</p>
                             <p>Field has type.</p>
                         </aside>
 
