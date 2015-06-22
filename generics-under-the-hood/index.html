@@ -101,16 +101,18 @@
                         <pre><code class="cs" data-trim contenteditable>
 var o = new object();
                         </code></pre>
-                        <p>Instance on heap:</p>
-                        <div style="font-size: 70%">
-                            <table>
-                                <tbody>
-                                <tr><td>Sync block address</td></tr>
-                                <tr><td>Method table address</td></tr>
-                                <tr><td>Field1</td></tr>
-                                <tr><td>FieldN</td></tr>
-                                </tbody>
-                            </table>
+                        <div class="fragment">
+                            <p>Instance on heap:</p>
+                            <div style="font-size: 70%">
+                                <table>
+                                    <tbody>
+                                    <tr><td>Sync block address</td></tr>
+                                    <tr><td>Method table address</td></tr>
+                                    <tr><td>Field1</td></tr>
+                                    <tr><td>FieldN</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                     </section>
@@ -131,9 +133,7 @@ var o = new object();
                                 <tr><td>Introduced Virtual Method addresses</td></tr>
                                 <tr><td>Instance Method addresses</td></tr>
                                 <tr><td>Static Method addresses</td></tr>
-                                <tr><td>Static Field1 value</td></tr>
-                                <tr><td>Static FieldN value</td></tr>
-                                <tr><td>Interface1 method addresses</td></tr>
+                                <tr><td>Static Fields values</td></tr>
                                 <tr><td>InterfaceN method addresses</td></tr>
                                 </tbody>
                             </table>
@@ -170,11 +170,12 @@ public class MyClass
     }
 }
                         </code></pre>
-                        <p>An instance:</p>
-                        <pre><code class="cs" data-trim contenteditable>
+                        <div class="fragment">
+                            <p>An instance:</p>
+                            <pre><code class="cs" data-trim contenteditable>
 var myClass = new MyClass();
-                        </code></pre>
-                        <pre><code style="overflow: hidden" data-trim contenteditable>
+                            </code></pre>
+                            <pre><code style="overflow: hidden" data-trim contenteditable>
 0:003> !DumpHeap -type GenericsUnderTheHood.MyClass
 Address          MT                     Size
 0000004a2d912de8 00007fff8e7540d8       24
@@ -183,7 +184,8 @@ Statistics:
 MT                      Count       TotalSize   Class Name
 00007fff8e7540d8        1           24          GenericsUnderTheHood.MyClass
 Total 1 objects
-                        </code></pre>
+                            </code></pre>
+                        </div>
 
                     </section>
 
