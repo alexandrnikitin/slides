@@ -476,10 +476,22 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                     <section>
                         <h2>Optimizations by CLR</h2>
                         <ol>
-                            <li>Class loader - 30x</li>
-                            <li>Type hierarchy walk with global dictionary cache lookup - 6x</li>
-                            <li>Global dictionary cache lookup - 3x</li>
-                            <li>Method Table slot - 1x</li>
+                            <li>
+                                Class loader
+                                <span class="fragment" data-fragment-index="4"> - 30x</span>
+                            </li>
+                            <li>
+                                Type hierarchy walk with global dictionary cache lookup
+                                <span class="fragment" data-fragment-index="3"> - 6x</span>
+                            </li>
+                            <li>
+                                Global dictionary cache lookup
+                                <span class="fragment" data-fragment-index="2"> - 3x</span>
+                            </li>
+                            <li>
+                                Method Table slot
+                                <span class="fragment" data-fragment-index="1"> - 1x</span>
+                            </li>
                         </ol>
                         <p>Note: Optimizes the generic calls in your method not your generic method</p>
                     </section>
