@@ -626,6 +626,27 @@ public class Program
 
                     </section>
                     <section>
+                        <h2>Workaround:</h2>
+                        <p>Just add two methods:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+public class BaseClass&lt;T&gt;
+{
+...
+    public void Method1()
+    {
+    }
+
+    public void Method2()
+    {
+    }
+...
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Wat?</h2>
+                    </section>
+                    <section>
                         <h2>The fix</h2>
                         <img src="img/the-fix.png" alt="The fix">
                         <a href="https://github.com/dotnet/coreclr/pull/618">The pull request on github</a>
