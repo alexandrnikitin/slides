@@ -517,24 +517,24 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                     <section>
                         <h2>Optimizations by CLR</h2>
                         <ol>
-                            <li>
+                            <li class="fragment" data-fragment-index="1">
                                 Class loader
-                                <span style="color: darkred" class="fragment" data-fragment-index="4"> - 30x</span>
+                                <span style="color: darkred" class="fragment" data-fragment-index="13"> - 30x</span>
                             </li>
-                            <li>
+                            <li class="fragment" data-fragment-index="2">
                                 Type hierarchy walk with global dictionary cache lookup
-                                <span style="color: darkred" class="fragment" data-fragment-index="3"> - 6x</span>
+                                <span style="color: darkred" class="fragment" data-fragment-index="12"> - 6x</span>
                             </li>
-                            <li>
+                            <li class="fragment" data-fragment-index="3">
                                 Global dictionary cache lookup
-                                <span style="color: darkred" class="fragment" data-fragment-index="2"> - 3x</span>
+                                <span style="color: darkred" class="fragment" data-fragment-index="11"> - 3x</span>
                             </li>
-                            <li>
+                            <li class="fragment" data-fragment-index="4">
                                 Method Table slot
-                                <span style="color: darkred" class="fragment" data-fragment-index="1"> - 1x</span>
+                                <span style="color: darkred" class="fragment" data-fragment-index="10"> - 1x</span>
                             </li>
                         </ol>
-                        <p>Note: Optimizes the generic calls in your method not your generic method</p>
+                        <p class="fragment" data-fragment-index="5">Note: Optimizes the generic calls in your method not your generic method</p>
                     </section>
 
                     <section>
