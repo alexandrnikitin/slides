@@ -784,6 +784,32 @@ JIT_GenericHandleWorker(
                             <p><a href="https://github.com/dotnet/coreclr/blob/master/src/vm/jithelpers.cpp#L3705">Sources</a></p>
 
                     </section>
+
+                    <section>
+                        <h2>TODO</h2>
+                        <p>Generic method:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+public class MyClassWithGenericMethod
+{
+    public T MyGenericMethod&lt;T&gt;(T arg)
+    {
+        return arg;
+    }
+}
+                        </code></pre>
+                        <p>Generic struct:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+public struct MyGenericStruct&lt;T&gt;
+{
+    private T _myField;
+
+    public T MyMethod()
+    {
+        return _myField;
+    }
+}
+                        </code></pre>
+                    </section>
                 </section>
 
                 <section data-background="img/reila-the-end.jpg">
