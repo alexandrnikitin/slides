@@ -698,7 +698,8 @@ DWORD estNumTypeSlots = (numMethodsAdjusted * nTypeFactorBy2 + 2) / 3;
                     </section>
                     <section>
                         <h2>Dictionary lookup</h2>
-                            <pre><code class="cpp" data-trim contenteditable>
+                            <div style="font-size: 40%;">
+                                <pre><code class="cpp" data-trim contenteditable>
 CORINFO_GENERIC_HANDLE
 JIT_GenericHandleWorker(
     MethodDesc *  pMD,
@@ -778,7 +779,8 @@ JIT_GenericHandleWorker(
 
     return result;
 }
-                            </code></pre>
+                                </code></pre>
+                            </div>
                             <p><a href="https://github.com/dotnet/coreclr/blob/master/src/vm/jithelpers.cpp#L3705">Sources</a></p>
 
                     </section>
