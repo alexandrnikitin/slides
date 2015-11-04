@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Generics under the hood</title>
+
+        <meta name="description" content="Generics under the hood and a JITter bug for dessert">
+        <meta name="author" content="Alexandr Nikitin">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+        <!-- Code syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section>
+                    <h1>Generics under the hood</h1>
+                    <h4>and a JITter bug for dessert</h4>
+                    <p>
+                        <small>by <a href="https://github.com/alexandrnikitin">Alexandr Nikitin</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Overview</h2>
+                    <ul>
+                        <li>
+                            <span style="text-decoration: line-through;">Compare with </span>
+                            JAVA
+                            <span style="text-decoration: line-through;">and C++</span>
+                        </li>
+                        <li>
+                            <span style="text-decoration: line-through;">Find out </span>
+                            .NET is awesome
+                        </li>
+                        <li>Recall memory layout</li>
+                        <li>Look under the hood</li>
+                        <li>Analyze the performance degradation</li>
+                        <li>Discuss some interesting things</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>JAVA and swear words</h2>
+
+                        <aside class="notes">
+                            <p>When I developed for .NET ... :)</p>
+                            <p>Interest outweigh and I move to JVM and Scala</p>
+                            <p>Slipped some sh##</p>
+                        </aside>
+
+                    </section>
+                    <section>
+                        <blockquote>&ldquo;Šuo ir kariamas pripranta.&rdquo;</blockquote>
+                        <p style="text-align: right;">Lithuanian proverbs</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Generics in .NET</h2>
+                        <img src="img/awesom-o.jpg" alt="awesom-o">
+                    </section>
+                    <section>
+                        <h2>Well known benefits</h2>
+                        <ul>
+                            <li>Reduce code duplication</li>
+                            <li>Constraints & variance</li>
+                            <li>Performance improvements (no boxing, no casting)</li>
+                            <li>Compile-time checks</li>
+                        </ul>
+
+                        <aside class="notes">
+                            <p>What price do we pay for that?</p>
+                        </aside>
+
+                    </section>
+                </section>
+
+                <section>
+
+                    <section>
+                        <h2>.NET memory layout</h2>
+                        <pre><code class="cs" data-trim contenteditable>
+var o = new object();
+                        </code></pre>
+                        <div class="fragment">
+                            <p>Instance on heap:</p>
+                            <div style="font-size: 70%">
+                                <table>
+                                    <tbody>
+                                    <tr><td>Sync block address</td></tr>
+                                    <tr><td>Method table address</td></tr>
+                                    <tr><td>Field1</td></tr>
+                                    <tr><td>FieldN</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <section>
+                        <h2>Method Table structure</h2>
+                        <ul>
+                            <li>The central data structure of the runtime</li>
+                            <li>"Hot" data</li>
+                        </ul>
+                        <br/>
+                        <br/>
+                        <div style="font-size: 60%">
+                            <table>
+                                <tbody>
+                                <tr><td>EEClass address</td></tr>
+                                <tr><td>Interface Map Table address</td></tr>
+                                <tr><td>Inherited Virtual Method addresses</td></tr>
+                                <tr><td>Introduced Virtual Method addresses</td></tr>
+                                <tr><td>Instance Method addresses</td></tr>
+                                <tr><td>Static Method addresses</td></tr>
+                                <tr><td>Static Fields values</td></tr>
+                                <tr><td>InterfaceN method addresses</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>EEClass structure</h2>
+                        <ul>
+                            <li>Everything about the type</li>
+                            <li>Data needed by type loading, JITing or reflection</li>
+                            <li>"Cold" data</li>
+                            <li>Too complex: contains EEClassOptionalFields, EEClassPackedFields</li>
+                        </ul>
+
+                        <aside class="notes">
+                            <p>EEClass is a class with getters and setters and contains other classes and structures</p>
+                            <p>MethodTable is an optimized array of addresses</p>
+                        </aside>
+
+                    </section>
+
+                    <section>
+                        <h2>WinDbg the Great and Powerful</h2>
+                        <p>SOS / Son of Strike</p>
+                        <p>SOSEX / SOS extensions</p>
+
+                        <aside class="notes">
+                            <p>WinDbg awful UX</p>
+                            <p>SOS name story</p>
+                        </aside>
+
+                    </section>
+
+
+                    <section>
+                        <p>An example class:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+public class MyClass
+{
+    private int _myField;
+
+    public int MyMethod()
+    {
+        return _myField;
+    }
+}
+                        </code></pre>
+                        <div class="fragment">
+                            <p>An instance:</p>
+                            <pre><code class="cs" data-trim contenteditable>
+var myClass = new MyClass();
+                            </code></pre>
+                            <pre><code style="overflow: hidden" data-trim contenteditable>
+0:003> !DumpHeap -type GenericsUnderTheHood.MyClass
+Address          MT                     Size
+0000004a2d912de8 00007fff8e7540d8       24
+
+Statistics:
+MT                      Count       TotalSize   Class Name
+00007fff8e7540d8        1           24          GenericsUnderTheHood.MyClass
+Total 1 objects
+                            </code></pre>
+                        </div>
+
+                    </section>
+
+                    <section>
+                        <h2>Method Table looks like:</h2>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" data-trim contenteditable>
+0:003> !dumpmt -md 00007fff8e7540d8
+EEClass:         00007fff8e8623f0
+Module:          00007fff8e752fc8
+Name:            GenericsUnderTheHood.MyClass
+mdToken:         0000000002000002
+File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
+BaseSize:        0x18
+ComponentSize:   0x0
+Slots in VTable: 6
+Number of IFaces in IFaceMap: 0
+--------------------------------------
+MethodDesc Table
+Entry            MethodDesc       JIT    Name
+00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
+00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
+00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
+00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
+00007fff8e8701c0 00007fff8e7540d0    JIT GenericsUnderTheHood.MyClass..ctor()
+00007fff8e75c048 00007fff8e7540c0   NONE GenericsUnderTheHood.MyClass.MyMethod()
+                            </code></pre>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>EEClass looks like:</h2>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" data-trim contenteditable>
+0:003> !DumpClass 00007fff8e8623f0
+Class Name:      GenericsUnderTheHood.MyClass
+mdToken:         0000000002000002
+File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
+Parent Class:    00007fffec824908
+Module:          00007fff8e752fc8
+Method Table:    00007fff8e7540d8
+Vtable Slots:    4
+Total Method Slots:  5
+Class Attributes:    100001
+Transparency:        Critical
+NumInstanceFields:   1
+NumStaticFields:     0
+MT                Field          Offset    Type          VT Attr     Value Name
+00007fffecf03980  4000001        8         System.Int32  1 instance  _myField
+                            </code></pre>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>Links:</h2>
+                        <p><a href="http://www.windbg.org/">WinDbg links</a></p>
+                        <p><a href="https://msdn.microsoft.com/en-us/library/bb190764(v=vs.110).aspx">SOS</a></p>
+                        <p><a href="http://www.stevestechspot.com/">SOSEX</a></p>
+                        <p><a href="https://docs.google.com/document/d/1yMQ8NAQZEBtsfVp7AsFLSA_MkIKlYNuSowG72_nU0ek">HOWTO: Debugging .NET with WinDbg</a></p>
+                        <p><a href="http://www.codeproject.com/Articles/20481/NET-Type-Internals-From-a-Microsoft-CLR-Perspecti">Article: .NET internals</a></p>
+                        <p>Book: "Pro .NET Performance" by Sasha Goldshtein, Dima Zurbalev, Ido Flatow</p>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Generics memory layout</h2>
+                    </section>
+
+                    <section>
+                        <p>An example class:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+public class MyGenericClass&lt;T&gt;
+{
+    private T _myField;
+
+    public T MyMethod()
+    {
+        return _myField;
+    }
+}
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <p>Compiles to:</p>
+                        <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+.class public auto ansi beforefieldinit
+    GenericsUnderTheHood.MyGenericClass`1&lt;T&gt;
+        extends [mscorlib]System.Object
+{
+    .field private !T _myField
+
+    .method public hidebysig
+        instance !T MyMethod () cil managed
+    {
+        ...
+    }
+
+    ...
+}
+                        </code></pre>
+
+                        <aside class="notes">
+                            <p>Template that will be compiled by JIT</p>
+                        </aside>
+
+                    </section>
+
+                    <section data-background="img/miracle.gif">
+                        <div style="background-color: rgba(0, 0, 0, 0.7); color: #fff; padding: 20px;">
+                            <h2>Miracle! CLR knows about Generics</h2>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p>An instance:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+                            var myObject = new MyGenericClass&lt;object&gt;();
+                        </code></pre>
+
+                        <p>Method table:</p>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+0:003> !DumpMT -md 00007fff8e754368
+EEClass:         00007fff8e862510
+Module:          00007fff8e752fc8
+Name:            GenericsUnderTheHood.MyGenericClass`1[[System.Object, mscorlib]]
+mdToken:         0000000002000003
+File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
+BaseSize:        0x18
+ComponentSize:   0x0
+Slots in VTable: 6
+Number of IFaces in IFaceMap: 0
+--------------------------------------
+MethodDesc Table
+Entry            MethodDesc       JIT    Name
+00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
+00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
+00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
+00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
+00007fff8e870210 00007fff8e754280    JIT GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]..ctor()
+00007fff8e75c098 00007fff8e754278   NONE GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]].MyMethod()
+                            </code></pre>
+                        </div>
+
+                        <aside class="notes">
+                            <p>Typed name</p>
+                            <p>Magic System.__Canon type</p>
+                        </aside>
+
+                    </section>
+                    <section>
+                        <p>EEClass:</p>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+0:003> !DumpClass 00007fff8e862510
+Class Name:      GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]
+mdToken:         0000000002000003
+File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
+Parent Class:    00007fffec824908
+Module:          00007fff8e752fc8
+Method Table:    00007fff8e7542a0
+Vtable Slots:    4
+Total Method Slots:  6
+Class Attributes:    100001
+Transparency:        Critical
+NumInstanceFields:   1
+NumStaticFields:     0
+MT                Field          Offset  Type            VT Attr       Value Name
+00007fffecf05c80  4000002        8       System.__Canon  0 instance    _myField
+                            </code></pre>
+                        </div>
+
+                        <aside class="notes">
+                            <p>Name isn't typed</p>
+                            <p>Magic System.__Canon as field type</p>
+                        </aside>
+
+                    </section>
+
+                    <section>
+                        <p>An instance:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+                            var myString = new MyGenericClass&lt;string&gt;();
+                        </code></pre>
+
+                        <p>Method table:</p>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+0:003> !DumpMT -md 00007fff8e754400
+EEClass:         00007fff8e862510
+Module:          00007fff8e752fc8
+Name:            GenericsUnderTheHood.MyGenericClass`1[[System.String, mscorlib]]
+mdToken:         0000000002000003
+File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
+BaseSize:        0x18
+ComponentSize:   0x0
+Slots in VTable: 6
+Number of IFaces in IFaceMap: 0
+--------------------------------------
+MethodDesc Table
+Entry       MethodDesc    JIT Name
+00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
+00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
+00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
+00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
+00007fff8e870210 00007fff8e754280    JIT GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]..ctor()
+00007fff8e75c098 00007fff8e754278   NONE GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]].MyMethod()
+                            </code></pre>
+                        </div>
+
+                        <aside class="notes">
+                            <p>Name is different and typed with String.</p>
+                            <p>But method signatures are the same. MethodDesc addresses too.</p>
+                            <p>EEClass address is the same too. It's shared.</p>
+                        </aside>
+
+                    </section>
+                    
+                    <section>
+                        <p>An instance:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+                            var myInt = new MyGenericClass&lt;int&gt;();
+                        </code></pre>
+
+                        <p>Method table:</p>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+0:003> !DumpMT -md 00007fff8e7544c0
+EEClass:         00007fff8e862628
+Module:          00007fff8e752fc8
+Name:            GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]]
+mdToken:         0000000002000003
+File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
+BaseSize:        0x18
+ComponentSize:   0x0
+Slots in VTable: 6
+Number of IFaces in IFaceMap: 0
+--------------------------------------
+MethodDesc Table
+Entry       MethodDesc    JIT Name
+00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
+00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
+00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
+00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
+00007fff8e870260 00007fff8e7544b8    JIT GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]]..ctor()
+00007fff8e75c0c0 00007fff8e7544b0   NONE GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]].MyMethod()
+                            </code></pre>
+                        </div>
+
+                        <aside class="notes">
+                            <p>Name is different.</p>
+                            <p>Method signatures are parameterized with Int32. Separate MethodDesc addresses.</p>
+                            <p>EEClass address is different too.</p>
+                        </aside>
+
+                    </section>
+                    <section>
+                        <p>EEClass:</p>
+                        <div style="font-size: 70%;">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+0:003> !DumpClass 00007fff8e862628
+Class Name:      GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]]
+mdToken:         0000000002000003
+File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
+Parent Class:    00007fffec824908
+Module:          00007fff8e752fc8
+Method Table:    00007fff8e7544c0
+Vtable Slots:    4
+Total Method Slots:  6
+Class Attributes:    100001
+Transparency:        Critical
+NumInstanceFields:   1
+NumStaticFields:     0
+MT    Field   Offset                 Type VT     Attr            Value Name
+00007fffecf03980  4000002        8         System.Int32  1 instance           _myField
+                            </code></pre>
+                        </div>
+
+                        <aside class="notes">
+                            <p>Typed name</p>
+                            <p>Field has type.</p>
+                        </aside>
+
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Under the hood</h2>
+                        <img src="img/awesom-o-under-the-hood.jpg" alt="awesom-o">
+                    </section>
+                    <section>
+                        <ul>
+                            <li>Value types don't share anything</li>
+                            <li>Reference types share code and EEClass</li>
+                            <li>System.__Canon - an internal type</li>
+                            <li>System.__Canon - will be replaced</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Optimizations by CLR</h2>
+                        <ol>
+                            <li class="fragment" data-fragment-index="1">
+                                Class loader
+                                <span style="color: darkred" class="fragment" data-fragment-index="13"> - 30x</span>
+                            </li>
+                            <li class="fragment" data-fragment-index="2">
+                                Type hierarchy walk with global dictionary cache lookup
+                                <span style="color: darkred" class="fragment" data-fragment-index="12"> - 6x</span>
+                            </li>
+                            <li class="fragment" data-fragment-index="3">
+                                Global dictionary cache lookup
+                                <span style="color: darkred" class="fragment" data-fragment-index="11"> - 3x</span>
+                            </li>
+                            <li class="fragment" data-fragment-index="4">
+                                Method Table slot
+                                <span style="color: darkred" class="fragment" data-fragment-index="10"> - 1x</span>
+                            </li>
+                        </ol>
+                        <p class="fragment" data-fragment-index="5">Note: Optimizes the generic calls in your method not your generic method</p>
+                    </section>
+
+                    <section>
+                        <h2>Links:</h2>
+                        <p><a href="http://research.microsoft.com/apps/pubs/default.aspx?id=64031">Design and Implementation of Generics for the .NET Common Language Runtime</a></p>
+                        <p><a href="https://github.com/dotnet/coreclr/blob/master/Documentation/botr/type-loader.md#22-generics">About generics in CoreCLR documentation</a></p>
+                        <p><a href="https://github.com/dotnet/coreclr/issues/55#issuecomment-89026823">Optimizations explained by a core developer</a></p>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section data-background="img/dessert.gif">
+                        <h1>Dessert</h1>
+
+                        <aside class="notes">
+                            <p>I work on high-load low latency blablabla systems</p>
+                            <p>Performance degradation in one of the modules</p>
+                            <p>One more topic to talk about: Algorithms we use in production, .NET isn't slower that CPP</p>
+                        </aside>
+
+                    </section>
+                    <section>
+                        <p>Simplified version:</p>
+                        <div style="font-size: 50%">
+                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+public class BaseClass&lt;T&gt;
+{
+    private List&lt;T&gt; _list = new List&lt;T&gt;();
+
+    public BaseClass()
+    {
+        Enumerable.Empty&lt;T&gt;();
+        // or Enumerable.Repeat(new T(), 10);
+        // or even new T();
+        // or foreach (var item in _list) {}
+    }
+
+    public void Run()
+    {
+        for (var i = 0; i < 8000000; i++)
+        {
+            if (_list.Any())
+            // or if (_list.Count() > 0)
+            // or if (_list.FirstOrDefault() != null)
+            // or if (_list.SingleOrDefault() != null)
+            // or other IEnumerable&lt;T&gt; method
+            {
+                return;
+            }
+        }
+    }
+}
+
+public class DerivedClass : BaseClass&lt;object&gt;
+{
+}
+                            </code></pre>
+                        </div>
+                    </section>
+                    <section>
+                        <p>Benchmark:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+public class Program
+{
+    public static void Main()
+    {
+        Measure(new DerivedClass());
+        Measure(new BaseClass&lt;object&gt;());
+    }
+
+    private static void Measure(BaseClass&lt;object&gt;> baseClass)
+    {
+        var sw = Stopwatch.StartNew();
+        baseClass.Run();
+        sw.Stop();
+        Console.WriteLine(sw.ElapsedMilliseconds);
+    }
+}
+                        </code></pre>
+
+                        <aside class="notes">
+                            <p>SO question, comments, Goldshtein</p>
+                            <p>Guess</p>
+                            <p>Workaround from RSDN, Microsoft</p>
+                            <p>CLR open sourced and issue on github</p>
+                            <p></p>
+                        </aside>
+
+                    </section>
+                    <section>
+                        <h2>Workaround:</h2>
+                        <p>"Just add two methods"</p>
+                        <pre><code class="cs" data-trim contenteditable>
+public class BaseClass&lt;T&gt;
+{
+...
+    public void Method1()
+    {
+    }
+
+    public void Method2()
+    {
+    }
+...
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Wat?</h2>
+                    </section>
+                    <section>
+                        <h2>The fix</h2>
+                        <img src="img/the-fix.png" alt="The fix">
+                        <a href="https://github.com/dotnet/coreclr/pull/618">The pull request on github</a>
+                    </section>
+                    <section>
+                        <h2>Moral:</h2>
+
+                        <aside class="notes">
+                            <p>No morale</p>
+                            <p>Everyone has the same issue but didn't notice</p>
+                            <p>.NET is made by developers like us</p>
+                            <p>Just for fun</p>
+                        </aside>
+
+                    </section>
+                    <section>
+                        <h2>Links:</h2>
+                        <p><a href="http://stackoverflow.com/questions/27176159/performance-type-derived-from-generic">Stackoverflow question</a></p>
+                        <p><a href="https://github.com/dotnet/coreclr/issues/55">An issue on github</a></p>
+                        <p><a href="https://github.com/dotnet/coreclr/issues/55#issuecomment-89026823">Great explanation of the CLR core developer</a></p>
+                        <p><a href="https://github.com/dotnet/coreclr/pull/618">The pull request with the fix</a></p>
+                    </section>
+                </section>
+
+                <section>
+
+                    <section>
+                        <h2>Interesting things</h2>
+                    </section>
+
+                    <section>
+                        <h2>Heuristic algorithm</h2>
+                            <pre><code class="cpp" data-trim contenteditable>
+DWORD numMethodsAdjusted =
+    (bmtMethod->dwNumDeclaredNonAbstractMethods == 0)
+    ? 0
+    : (bmtMethod->dwNumDeclaredNonAbstractMethods < 3)
+    ? 3
+    : bmtMethod->dwNumDeclaredNonAbstractMethods;
+
+DWORD nTypeFactorBy2 = (bmtGenerics->GetNumGenericArgs() == 1)
+                       ? 2
+                       : 3;
+
+DWORD estNumTypeSlots = (numMethodsAdjusted * nTypeFactorBy2 + 2) / 3;
+                            </code></pre>
+                            <p><a href="https://github.com/dotnet/coreclr/blob/master/src/vm/methodtablebuilder.cpp#L7253">Sources</a></p>
+
+                    </section>
+                    <section>
+                        <h2>Dictionary lookup</h2>
+                            <div style="font-size: 40%;">
+                                <pre><code class="cpp" data-trim contenteditable>
+CORINFO_GENERIC_HANDLE
+JIT_GenericHandleWorker(
+    MethodDesc *  pMD,
+    MethodTable * pMT,
+    LPVOID        signature)
+{
+     CONTRACTL {
+        THROWS;
+        GC_TRIGGERS;
+    } CONTRACTL_END;
+
+    MethodTable * pDeclaringMT = NULL;
+
+    if (pMT != NULL)
+    {
+        SigPointer ptr((PCCOR_SIGNATURE)signature);
+
+        ULONG kind; // DictionaryEntryKind
+        IfFailThrow(ptr.GetData(&kind));
+
+        // We need to normalize the class passed in (if any) for reliability purposes. That's because preparation of a code region that
+        // contains these handle lookups depends on being able to predict exactly which lookups are required (so we can pre-cache the
+        // answers and remove any possibility of failure at runtime). This is hard to do if the lookup (in this case the lookup of the
+        // dictionary overflow cache) is keyed off the somewhat arbitrary type of the instance on which the call is made (we'd need to
+        // prepare for every possible derived type of the type containing the method). So instead we have to locate the exactly
+        // instantiated (non-shared) super-type of the class passed in.
+
+        ULONG dictionaryIndex = 0;
+        IfFailThrow(ptr.GetData(&dictionaryIndex));
+
+        pDeclaringMT = pMT;
+        for (;;)
+        {
+            MethodTable * pParentMT = pDeclaringMT->GetParentMethodTable();
+            if (pParentMT->GetNumDicts() <= dictionaryIndex)
+                break;
+            pDeclaringMT = pParentMT;
+        }
+
+        if (pDeclaringMT != pMT)
+        {
+            JitGenericHandleCacheKey key((CORINFO_CLASS_HANDLE)pDeclaringMT, NULL, signature);
+            HashDatum res;
+            if (g_pJitGenericHandleCache->GetValue(&key,&res))
+            {
+                // Add the denormalized key for faster lookup next time. This is not a critical entry - no need
+                // to specify appdomain affinity.
+                JitGenericHandleCacheKey denormKey((CORINFO_CLASS_HANDLE)pMT, NULL, signature);
+                AddToGenericHandleCache(&denormKey, res);
+                return (CORINFO_GENERIC_HANDLE) (DictionaryEntry) res;
+            }
+        }
+    }
+
+    DictionaryEntry * pSlot;
+    CORINFO_GENERIC_HANDLE result = (CORINFO_GENERIC_HANDLE)Dictionary::PopulateEntry(pMD, pDeclaringMT, signature, FALSE, &pSlot);
+
+    if (pSlot == NULL)
+    {
+        // If we've overflowed the dictionary write the result to the cache.
+        BaseDomain *pDictDomain = NULL;
+
+        if (pMT != NULL)
+        {
+            pDictDomain = pDeclaringMT->GetDomain();
+        }
+        else
+        {
+            pDictDomain = pMD->GetDomain();
+        }
+
+        // Add the normalized key (pDeclaringMT) here so that future lookups of any
+        // inherited types are faster next time rather than just just for this specific pMT.
+        JitGenericHandleCacheKey key((CORINFO_CLASS_HANDLE)pDeclaringMT, (CORINFO_METHOD_HANDLE)pMD, signature, pDictDomain);
+        AddToGenericHandleCache(&key, (HashDatum)result);
+    }
+
+    return result;
+}
+                                </code></pre>
+                            </div>
+                            <p><a href="https://github.com/dotnet/coreclr/blob/master/src/vm/jithelpers.cpp#L3705">Sources</a></p>
+
+                    </section>
+
+                    <section>
+                        <h2>TODO</h2>
+                        <p>Generic method:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+public class MyClassWithGenericMethod
+{
+    public T MyGenericMethod&lt;T&gt;(T arg)
+    {
+        return arg;
+    }
+}
+                        </code></pre>
+                        <p>Generic struct:</p>
+                        <pre><code class="cs" data-trim contenteditable>
+public struct MyGenericStruct&lt;T&gt;
+{
+    private T _myField;
+
+    public T MyMethod()
+    {
+        return _myField;
+    }
+}
+                        </code></pre>
+                    </section>
+                </section>
+
+                <section data-background="img/reila-the-end.jpg">
+                    <h1>THE END</h1>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+
+            // Full list of configuration options available at:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                // Optional reveal.js plugins
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/notes/notes.js', async: true }
+                ]
+            });
+
+        </script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-52186816-2', 'auto');
+            ga('send', 'pageview');
+
+        </script>
+    </body>
+</html>
