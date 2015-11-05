@@ -528,7 +528,7 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                             <li>Value types don't share anything</li>
                             <li>Reference types share code and EEClass</li>
                             <li>System.__Canon - an internal type</li>
-                            <li>System.__Canon - will be replaced</li>
+                            <li>Unknown type -> Runtime handle lookup</li>
                         </ul>
                     </section>
 
@@ -619,8 +619,8 @@ public class Program
 {
     public static void Main()
     {
-        Measure(new DerivedClass());
         Measure(new BaseClass&lt;object&gt;());
+        Measure(new DerivedClass()); // 3.5x slower
     }
 
     private static void Measure(BaseClass&lt;object&gt;> baseClass)
