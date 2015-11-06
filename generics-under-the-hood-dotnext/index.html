@@ -526,10 +526,25 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                     <section>
                         <ul>
                             <li>Value types don't share anything</li>
+                            <li>Method table uniquely describes the type</li>
                             <li>Reference types share code and EEClass</li>
                             <li>System.__Canon - an internal type</li>
-                            <li>Unknown type -> Runtime handle lookup</li>
                         </ul>
+                    </section>
+
+                    <section>
+                        <h4>Tricky part:</h4>
+                        <p>Unknown type -> Runtime handle lookup</p>
+                        <pre><code class="cs" data-trim contenteditable>
+public class MyGenericClass&lt;T&gt;
+{
+    public void MyMethod()
+    {
+        new T();
+        Enumerable.Empty&lt;T&gt;();
+    }
+}
+                        </code></pre>
                     </section>
 
                     <section>
