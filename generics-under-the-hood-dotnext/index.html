@@ -111,7 +111,8 @@
                         <h2>Well known benefits</h2>
                         <ul>
                             <li>Reduce code duplication</li>
-                            <li>Constraints & variance</li>
+                            <li>Constraints: class, struct, new(), implementations</li>
+                            <li>Inheritance via variance</li>
                             <li>Performance improvements (no boxing, no casting)</li>
                             <li>Compile-time checks</li>
                         </ul>
@@ -165,6 +166,7 @@ var o = new object();
                                 <tr><td>Static Method addresses</td></tr>
                                 <tr><td>Static Fields values</td></tr>
                                 <tr><td>InterfaceN method addresses</td></tr>
+                                <tr><td>Other</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -541,7 +543,6 @@ public class MyGenericClass&lt;T&gt;
     public void MyMethod()
     {
         new T();
-        Enumerable.Empty&lt;T&gt;();
     }
 }
                         </code></pre>
@@ -555,7 +556,7 @@ public class MyGenericClass&lt;T&gt;
                                 <span style="color: darkred" class="fragment" data-fragment-index="13"> - 30x</span>
                             </li>
                             <li class="fragment" data-fragment-index="2">
-                                Type hierarchy walk with global cache lookup
+                                Global cache lookup but with type hierarchy walk
                                 <span style="color: darkred" class="fragment" data-fragment-index="12"> - 6x</span>
                             </li>
                             <li class="fragment" data-fragment-index="3">
