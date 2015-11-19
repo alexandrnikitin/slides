@@ -85,6 +85,35 @@
 					<section>
 						<h1>Architecture overview</h1>
 					</section>
+					<section>
+							<h3>High-level overview</h3>
+							<img src="img/architecture.jpg" width="80%">
+					</section>
+					<section data-background-size="80%" data-background-image="img/services.png"></section>
+					<section>
+							<h3>List of components:</h3>
+							<ul>
+								<li>API</li>
+								<li>API-Merge</li>
+								<li>Enrichment</li>
+								<li>Screen6</li>
+								<li>Screen6 Export</li>
+								<li>Pixel</li>
+								<li>Bidlogs</li>
+								<li>Apps</li>
+							</ul>
+					</section>
+					<section>
+							<h3>High-level technical overview</h3>
+							<ul>
+								<li>Microservices</li>
+								<li>Continuous Deployments</li>
+								<li>Design: CQRS, Event Sourcing (snapshots only)</li>
+								<li>Languages: Scala - the main. C# .NET - for existing platforms (AdServing, DMP, DSP)</li>
+								<li>Databases: Aerospike</li>
+								<li>Interservice communication via API, Kafka</li>
+							</ul>
+					</section>
 				</section>
 
 				<section>
