@@ -133,34 +133,33 @@
 
                     <section>
                         <h2>.NET memory layout</h2>
-                        <pre><code class="cs" data-trim contenteditable>
+                        <div style="font-size: 170%">
+                            <pre><code class="cs" data-trim contenteditable>
 var o = new object();
-                        </code></pre>
+                            </code></pre>
+                        </div>
                         <div class="fragment">
                             <p>Instance on heap:</p>
-                            <div style="font-size: 70%">
-                                <table>
-                                    <tbody>
-                                    <tr><td>Sync block address</td></tr>
-                                    <tr><td>Method table address</td></tr>
-                                    <tr><td>Field1</td></tr>
-                                    <tr><td>FieldN</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table>
+                                <tbody>
+                                <tr><td>Sync block address</td></tr>
+                                <tr><td>Method table address</td></tr>
+                                <tr><td>Field1</td></tr>
+                                <tr><td>FieldN</td></tr>
+                                </tbody>
+                            </table>
                         </div>
 
                     </section>
 
                     <section>
-                        <h2>Method Table structure</h2>
+                        <h2>Method Table</h2>
                         <ul>
                             <li>The central data structure of the runtime</li>
                             <li>"Hot" data</li>
                         </ul>
                         <br/>
-                        <br/>
-                        <div style="font-size: 60%">
+                        <div style="font-size: 80%">
                             <table>
                                 <tbody>
                                 <tr><td>EEClass address</td></tr>
@@ -178,7 +177,7 @@ var o = new object();
                     </section>
 
                     <section>
-                        <h2>EEClass structure</h2>
+                        <h2>EEClass</h2>
                         <ul>
                             <li>Everything about the type</li>
                             <li>Data needed by type loading, JITing or reflection</li>
