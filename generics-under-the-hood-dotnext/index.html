@@ -595,39 +595,26 @@ public class MyGenericClass&lt;T&gt;
                     </section>
                     <section>
                         <p>Simplified version:</p>
-                        <div style="font-size: 50%">
-                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+                        <div style="font-size: 130%">
+                            <pre class="stretch"><code style="overflow: hidden" class="cs" data-trim contenteditable>
 public class BaseClass&lt;T&gt;
 {
-    private List&lt;T&gt; _list = new List&lt;T&gt;();
+    private List&lt;T&gt; list = new List&lt;T&gt;();
 
     public BaseClass()
     {
-        Enumerable.Empty&lt;T&gt;();
-        // or Enumerable.Repeat(new T(), 10);
-        // or even new T();
-        // or foreach (var item in _list) {}
+        foreach (var _ in list) { }
     }
 
     public void Run()
     {
-        for (var i = 0; i < 8000000; i++)
-        {
-            if (_list.Any())
-            // or if (_list.Count() > 0)
-            // or if (_list.FirstOrDefault() != null)
-            // or if (_list.SingleOrDefault() != null)
-            // or other IEnumerable&lt;T&gt; method
-            {
+        for (var i = 0; i &lt; 11; i++)
+            if (list.Any(_ =&gt; true))
                 return;
-            }
-        }
     }
 }
 
-public class DerivedClass : BaseClass&lt;object&gt;
-{
-}
+public class DerivedClass : BaseClass&lt;object&gt; { }
                             </code></pre>
                         </div>
                     </section>
