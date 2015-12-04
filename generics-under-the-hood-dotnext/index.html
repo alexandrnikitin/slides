@@ -305,7 +305,8 @@ MT                Field          Offset    Type          VT Attr     Value Name
 
                     <section>
                         <p>An example class:</p>
-                        <pre><code class="cs" data-trim contenteditable>
+                        <div style="font-size: 170%">
+                            <pre class="stretch"><code class="cs" data-trim contenteditable>
 public class MyGenericClass&lt;T&gt;
 {
     private T _myField;
@@ -315,12 +316,14 @@ public class MyGenericClass&lt;T&gt;
         return _myField;
     }
 }
-                        </code></pre>
+                            </code></pre>
+                        </div>
                     </section>
 
                     <section>
                         <p>Compiles to:</p>
-                        <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
+                        <div style="font-size: 150%">
+                            <pre class="stretch"><code style="overflow: hidden" class="cs" data-trim contenteditable>
 .class public auto ansi beforefieldinit
     GenericsUnderTheHood.MyGenericClass`1&lt;T&gt;
         extends [mscorlib]System.Object
@@ -335,8 +338,8 @@ public class MyGenericClass&lt;T&gt;
 
     ...
 }
-                        </code></pre>
-
+                            </code></pre>
+                        </div>
                         <aside class="notes">
                             <p>Template that will be compiled by JIT</p>
                         </aside>
