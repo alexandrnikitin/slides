@@ -131,7 +131,7 @@ var o = new object();
                             <table>
                                 <tbody>
                                 <tr><td>Sync block address</td></tr>
-                                <tr><td>Method table address</td></tr>
+                                <tr><td>Method Table address</td></tr>
                                 <tr><td>Field1</td></tr>
                                 <tr><td>FieldN</td></tr>
                                 </tbody>
@@ -283,7 +283,7 @@ public class MyGenericClass&lt;T&gt;
                             var myObject = new MyGenericClass&lt;object&gt;();
                         </code></pre>
 
-                        <p>Method table:</p>
+                        <p>Method Table:</p>
                         <div style="width: 160%; margin-left: -30%">
                             <img class="no-border" style="width: 160%; height: auto" src="img/method-table-generic-object.png" alt="method-table-generic-object">
                         </div>
@@ -301,7 +301,7 @@ public class MyGenericClass&lt;T&gt;
                             var myString = new MyGenericClass&lt;string&gt;();
                         </code></pre>
 
-                        <p>Method table:</p>
+                        <p>Method Table:</p>
                         <div style="width: 160%; margin-left: -30%">
                             <img class="no-border" style="width: 160%; height: auto" src="img/method-table-generic-string.png" alt="method-table-generic-string">
                         </div>
@@ -313,7 +313,7 @@ public class MyGenericClass&lt;T&gt;
                             var myInt = new MyGenericClass&lt;int&gt;();
                         </code></pre>
 
-                        <p>Method table:</p>
+                        <p>Method Table:</p>
                         <div style="width: 160%; margin-left: -30%">
                             <img class="no-border" style="width: 160%; height: auto" src="img/method-table-generic-int.png" alt="method-table-generic-int">
                         </div>
@@ -337,7 +337,7 @@ public class MyGenericClass&lt;T&gt;
                             <li>Value types don't share anything</li>
                             <li>Code bloat &#9888;</li>
                             <li>Reference types share code and EEClass</li>
-                            <li>Method table &#8801; Type in Runtime</li>
+                            <li>Method Table &#8801; Type in Runtime</li>
                             <li>System.__Canon - an internal type</li>
                         </ul>
                     </section>
