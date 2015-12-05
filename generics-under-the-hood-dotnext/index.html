@@ -93,13 +93,6 @@
                 <section>
                     <section>
                         <h2>JAVA and swear words</h2>
-
-                        <aside class="notes">
-                            <p>When I developed for .NET ... :)</p>
-                            <p>Interest outweigh and I move to JVM and Scala</p>
-                            <p>Slipped some sh##</p>
-                        </aside>
-
                     </section>
                     <section>
                         <blockquote>&ldquo;Šuo ir kariamas pripranta.&rdquo;</blockquote>
@@ -121,11 +114,6 @@
                             <li>Performance improvements (no boxing, no casting)</li>
                             <li>Compile-time checks</li>
                         </ul>
-
-                        <aside class="notes">
-                            <p>What price do we pay for that?</p>
-                        </aside>
-
                     </section>
                 </section>
 
@@ -143,7 +131,7 @@ var o = new object();
                             <table>
                                 <tbody>
                                 <tr><td>Sync block address</td></tr>
-                                <tr><td>Method table address</td></tr>
+                                <tr><td>Method Table address</td></tr>
                                 <tr><td>Field1</td></tr>
                                 <tr><td>FieldN</td></tr>
                                 </tbody>
@@ -184,24 +172,12 @@ var o = new object();
                             <li>"Cold" data</li>
                             <li>Too complex: contains EEClassOptionalFields, EEClassPackedFields</li>
                         </ul>
-
-                        <aside class="notes">
-                            <p>EEClass is a class with getters and setters and contains other classes and structures</p>
-                            <p>MethodTable is an optimized array of addresses</p>
-                        </aside>
-
                     </section>
 
                     <section>
                         <h2>WinDbg the Great and Powerful</h2>
                         <p>SOS (Son of Strike)</p>
                         <p>SOSEX (SOS extensions)</p>
-
-                        <aside class="notes">
-                            <p>WinDbg awful UX</p>
-                            <p>SOS name story</p>
-                        </aside>
-
                     </section>
 
 
@@ -243,61 +219,17 @@ Total 1 objects
                                 </div>
                         </section>
 
-                    </section>
-
                     <section>
                         <h2>Method Table looks like:</h2>
-                        <div style="width: 160%; margin-left: -30%">
-                            <img style="width: 160%; height: auto" src="img/method-table.png" alt="method-table">
-                        </div>
-                    </section>
-                    <section>
-                        <h2>Method Table looks like:</h2>
-                        <div style="font-size: 70%;">
-                            <pre><code style="overflow: hidden" data-trim contenteditable>
-0:003> !dumpmt -md 00007fff8e7540d8
-EEClass:         00007fff8e8623f0
-Module:          00007fff8e752fc8
-Name:            GenericsUnderTheHood.MyClass
-mdToken:         0000000002000002
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-BaseSize:        0x18
-ComponentSize:   0x0
-Slots in VTable: 6
-Number of IFaces in IFaceMap: 0
---------------------------------------
-MethodDesc Table
-Entry            MethodDesc       JIT    Name
-00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
-00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
-00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
-00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
-00007fff8e8701c0 00007fff8e7540d0    JIT GenericsUnderTheHood.MyClass..ctor()
-00007fff8e75c048 00007fff8e7540c0   NONE GenericsUnderTheHood.MyClass.MyMethod()
-                            </code></pre>
+                        <div style="width: 150%; margin-left: -25%">
+                            <img class="no-border" style="width: 150%; height: auto" src="img/method-table.png" alt="method-table">
                         </div>
                     </section>
 
                     <section>
                         <h2>EEClass looks like:</h2>
-                        <div style="font-size: 70%;">
-                            <pre><code style="overflow: hidden" data-trim contenteditable>
-0:003> !DumpClass 00007fff8e8623f0
-Class Name:      GenericsUnderTheHood.MyClass
-mdToken:         0000000002000002
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-Parent Class:    00007fffec824908
-Module:          00007fff8e752fc8
-Method Table:    00007fff8e7540d8
-Vtable Slots:    4
-Total Method Slots:  5
-Class Attributes:    100001
-Transparency:        Critical
-NumInstanceFields:   1
-NumStaticFields:     0
-MT                Field          Offset    Type          VT Attr     Value Name
-00007fffecf03980  4000001        8         System.Int32  1 instance  _myField
-                            </code></pre>
+                        <div style="width: 150%; margin-left: -25%">
+                            <img class="no-border" style="width: 150%; height: auto" src="img/eeclass.png" alt="eeclass">
                         </div>
                     </section>
 
@@ -336,28 +268,7 @@ public class MyGenericClass&lt;T&gt;
 
                     <section>
                         <p>Compiles to:</p>
-                        <div style="font-size: 150%">
-                            <pre class="stretch"><code style="overflow: hidden" class="cs" data-trim contenteditable>
-.class public auto ansi beforefieldinit
-    GenericsUnderTheHood.MyGenericClass`1&lt;T&gt;
-        extends [mscorlib]System.Object
-{
-    .field private !T _myField
-
-    .method public hidebysig
-        instance !T MyMethod () cil managed
-    {
-        ...
-    }
-
-    ...
-}
-                            </code></pre>
-                        </div>
-                        <aside class="notes">
-                            <p>Template that will be compiled by JIT</p>
-                        </aside>
-
+                            <img class="no-border" style="width: 90%; height: auto" src="img/il-template.png" alt="il-template">
                     </section>
 
                     <section data-background="img/miracle.gif">
@@ -372,64 +283,16 @@ public class MyGenericClass&lt;T&gt;
                             var myObject = new MyGenericClass&lt;object&gt;();
                         </code></pre>
 
-                        <p>Method table:</p>
-                        <div style="font-size: 70%;">
-                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
-0:003> !DumpMT -md 00007fff8e754368
-EEClass:         00007fff8e862510
-Module:          00007fff8e752fc8
-Name:            GenericsUnderTheHood.MyGenericClass`1[[System.Object, mscorlib]]
-mdToken:         0000000002000003
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-BaseSize:        0x18
-ComponentSize:   0x0
-Slots in VTable: 6
-Number of IFaces in IFaceMap: 0
---------------------------------------
-MethodDesc Table
-Entry            MethodDesc       JIT    Name
-00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
-00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
-00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
-00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
-00007fff8e870210 00007fff8e754280    JIT GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]..ctor()
-00007fff8e75c098 00007fff8e754278   NONE GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]].MyMethod()
-                            </code></pre>
+                        <p>Method Table:</p>
+                        <div style="width: 150%; margin-left: -25%">
+                            <img class="no-border" style="width: 150%; height: auto" src="img/method-table-generic-object.png" alt="method-table-generic-object">
                         </div>
-
-                        <aside class="notes">
-                            <p>Typed name</p>
-                            <p>Magic System.__Canon type</p>
-                        </aside>
-
                     </section>
                     <section>
                         <p>EEClass:</p>
-                        <div style="font-size: 70%;">
-                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
-0:003> !DumpClass 00007fff8e862510
-Class Name:      GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]
-mdToken:         0000000002000003
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-Parent Class:    00007fffec824908
-Module:          00007fff8e752fc8
-Method Table:    00007fff8e7542a0
-Vtable Slots:    4
-Total Method Slots:  6
-Class Attributes:    100001
-Transparency:        Critical
-NumInstanceFields:   1
-NumStaticFields:     0
-MT                Field          Offset  Type            VT Attr       Value Name
-00007fffecf05c80  4000002        8       System.__Canon  0 instance    _myField
-                            </code></pre>
+                        <div style="width: 150%; margin-left: -25%">
+                            <img class="no-border" style="width: 150%; height: auto" src="img/eeclass-generic-object.png" alt="eeclass-generic-object">
                         </div>
-
-                        <aside class="notes">
-                            <p>Name isn't typed</p>
-                            <p>Magic System.__Canon as field type</p>
-                        </aside>
-
                     </section>
 
                     <section>
@@ -438,37 +301,10 @@ MT                Field          Offset  Type            VT Attr       Value Nam
                             var myString = new MyGenericClass&lt;string&gt;();
                         </code></pre>
 
-                        <p>Method table:</p>
-                        <div style="font-size: 70%;">
-                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
-0:003> !DumpMT -md 00007fff8e754400
-EEClass:         00007fff8e862510
-Module:          00007fff8e752fc8
-Name:            GenericsUnderTheHood.MyGenericClass`1[[System.String, mscorlib]]
-mdToken:         0000000002000003
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-BaseSize:        0x18
-ComponentSize:   0x0
-Slots in VTable: 6
-Number of IFaces in IFaceMap: 0
---------------------------------------
-MethodDesc Table
-Entry       MethodDesc    JIT Name
-00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
-00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
-00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
-00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
-00007fff8e870210 00007fff8e754280    JIT GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]..ctor()
-00007fff8e75c098 00007fff8e754278   NONE GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]].MyMethod()
-                            </code></pre>
+                        <p>Method Table:</p>
+                        <div style="width: 150%; margin-left: -25%">
+                            <img class="no-border" style="width: 150%; height: auto" src="img/method-table-generic-string.png" alt="method-table-generic-string">
                         </div>
-
-                        <aside class="notes">
-                            <p>Name is different and typed with String.</p>
-                            <p>But method signatures are the same. MethodDesc addresses too.</p>
-                            <p>EEClass address is the same too. It's shared.</p>
-                        </aside>
-
                     </section>
                     
                     <section>
@@ -477,65 +313,16 @@ Entry       MethodDesc    JIT Name
                             var myInt = new MyGenericClass&lt;int&gt;();
                         </code></pre>
 
-                        <p>Method table:</p>
-                        <div style="font-size: 70%;">
-                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
-0:003> !DumpMT -md 00007fff8e7544c0
-EEClass:         00007fff8e862628
-Module:          00007fff8e752fc8
-Name:            GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]]
-mdToken:         0000000002000003
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-BaseSize:        0x18
-ComponentSize:   0x0
-Slots in VTable: 6
-Number of IFaces in IFaceMap: 0
---------------------------------------
-MethodDesc Table
-Entry       MethodDesc    JIT Name
-00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
-00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
-00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
-00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
-00007fff8e870260 00007fff8e7544b8    JIT GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]]..ctor()
-00007fff8e75c0c0 00007fff8e7544b0   NONE GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]].MyMethod()
-                            </code></pre>
+                        <p>Method Table:</p>
+                        <div style="width: 150%; margin-left: -25%">
+                            <img class="no-border" style="width: 150%; height: auto" src="img/method-table-generic-int.png" alt="method-table-generic-int">
                         </div>
-
-                        <aside class="notes">
-                            <p>Name is different.</p>
-                            <p>Method signatures are parameterized with Int32. Separate MethodDesc addresses.</p>
-                            <p>EEClass address is different too.</p>
-                        </aside>
-
                     </section>
                     <section>
                         <p>EEClass:</p>
-                        <div style="font-size: 70%;">
-                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
-0:003> !DumpClass 00007fff8e862628
-Class Name:      GenericsUnderTheHood.MyGenericClass`1[[System.Int32, mscorlib]]
-mdToken:         0000000002000003
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-Parent Class:    00007fffec824908
-Module:          00007fff8e752fc8
-Method Table:    00007fff8e7544c0
-Vtable Slots:    4
-Total Method Slots:  6
-Class Attributes:    100001
-Transparency:        Critical
-NumInstanceFields:   1
-NumStaticFields:     0
-MT    Field   Offset                 Type VT     Attr            Value Name
-00007fffecf03980  4000002        8         System.Int32  1 instance           _myField
-                            </code></pre>
+                        <div style="width: 150%; margin-left: -25%">
+                            <img class="no-border" style="width: 150%; height: auto" src="img/eeclass-generic-int.png" alt="eeclass-generic-int">
                         </div>
-
-                        <aside class="notes">
-                            <p>Typed name</p>
-                            <p>Field has type.</p>
-                        </aside>
-
                     </section>
 
                 </section>
@@ -550,7 +337,7 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                             <li>Value types don't share anything</li>
                             <li>Code bloat &#9888;</li>
                             <li>Reference types share code and EEClass</li>
-                            <li>Method table &#8801; Type in Runtime</li>
+                            <li>Method Table &#8801; Type in Runtime</li>
                             <li>System.__Canon - an internal type</li>
                         </ul>
                     </section>
@@ -605,13 +392,6 @@ public class MyGenericClass&lt;T&gt;
                 <section>
                     <section data-background="img/dessert.gif">
                         <h1>Dessert</h1>
-
-                        <aside class="notes">
-                            <p>I work on high-load low latency blablabla systems</p>
-                            <p>Performance degradation in one of the modules</p>
-                            <p>One more topic to talk about: Algorithms we use in production, .NET isn't slower that CPP</p>
-                        </aside>
-
                     </section>
                     <section>
                         <p>Simplified version:</p>
@@ -639,34 +419,33 @@ public class DerivedClass : BaseClass&lt;object&gt; { }
                         </div>
                     </section>
                     <section>
-                        <p>Benchmark:</p>
-                        <pre><code class="cs" data-trim contenteditable>
-public class Program
+                        <p>Benchmark? BenchmarkDotNet! <a href="https://github.com/PerfDotNet/BenchmarkDotNet/blob/1dae2b3f588d05a4cf13d05bff1f74c4693db32d/BenchmarkDotNet.Samples/JIT/Jit_GenericsMethod.cs">The source</a></p>
+                        <div style="font-size: 100%; width: 150%; margin-left: -25%">
+                            <pre class="stretch"><code class="cs" style="overflow: hidden" data-trim contenteditable>
+[BenchmarkTask(platform: BenchmarkPlatform.X86, jitVersion: BenchmarkJitVersion.LegacyJit)]
+[BenchmarkTask(platform: BenchmarkPlatform.X64, jitVersion: BenchmarkJitVersion.LegacyJit)]
+[BenchmarkTask(platform: BenchmarkPlatform.X64, jitVersion: BenchmarkJitVersion.RyuJit)]
+public class Jit_GenericsMethod
 {
-    public static void Main()
+    // ... BaseClass and DerivedClass ...
+
+    private BaseClass&lt;object&gt; baseClass = new BaseClass&lt;object&gt;();
+    private BaseClass&lt;object&gt; derivedClass = new DerivedClass();
+
+    [Benchmark]
+    public void Base()
     {
-        Measure(new BaseClass&lt;object&gt;());
-        Measure(new DerivedClass()); // 3.5x slower
+        baseClass.Run();
     }
 
-    private static void Measure(BaseClass&lt;object&gt;> baseClass)
+    [Benchmark]
+    public void Derived()
     {
-        var sw = Stopwatch.StartNew();
-        baseClass.Run();
-        sw.Stop();
-        Console.WriteLine(sw.ElapsedMilliseconds);
+        derivedClass.Run(); // 3-5 times slower
     }
 }
-                        </code></pre>
-
-                        <aside class="notes">
-                            <p>SO question, comments, Goldshtein</p>
-                            <p>Guess</p>
-                            <p>Workaround from RSDN, Microsoft</p>
-                            <p>CLR open sourced and issue on github</p>
-                            <p></p>
-                        </aside>
-
+                            </code></pre>
+                        </div>
                     </section>
                     <section>
                         <h2>Workaround:</h2>
@@ -692,21 +471,13 @@ public class BaseClass&lt;T&gt;
                     </section>
                     <section>
                         <h2>The fix</h2>
-                        <div style="width: 160%; margin-left: -30%">
-                            <img style="width: 160%; height: auto" src="img/the-fix.png" alt="The fix">
+                        <div style="width: 150%; margin-left: -25%">
+                            <img style="width: 150%; height: auto" src="img/the-fix.png" alt="The fix">
                         </div>
                         <a href="https://github.com/dotnet/coreclr/pull/618">The pull request on github</a>
                     </section>
                     <section>
                         <h2>Moral</h2>
-
-                        <aside class="notes">
-                            <p>No morale</p>
-                            <p>Everyone has the same issue but didn't notice</p>
-                            <p>.NET is made by developers like us</p>
-                            <p>Just for fun</p>
-                        </aside>
-
                     </section>
                     <section>
                         <h2>Links:</h2>
@@ -725,7 +496,7 @@ public class BaseClass&lt;T&gt;
 
                     <section>
                         <h2>Heuristic algorithm</h2>
-                        <div style="font-size: 160%; width: 160%; margin-left: -30%">
+                        <div style="font-size: 150%; width: 150%; margin-left: -25%">
                             <pre class="stretch"><code class="cpp" data-trim contenteditable>
 DWORD numMethodsAdjusted =
     (bmtMethod->dwNumDeclaredNonAbstractMethods == 0)
