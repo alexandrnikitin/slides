@@ -207,7 +207,8 @@ var o = new object();
 
                     <section>
                         <p>An example class:</p>
-                        <pre><code class="cs" data-trim contenteditable>
+                        <div style="font-size: 170%">
+                            <pre class="stretch"><code class="cs" data-trim contenteditable>
 public class MyClass
 {
     private int _myField;
@@ -217,13 +218,19 @@ public class MyClass
         return _myField;
     }
 }
-                        </code></pre>
-                        <div class="fragment">
-                            <p>An instance:</p>
-                            <pre><code class="cs" data-trim contenteditable>
-var myClass = new MyClass();
                             </code></pre>
-                            <pre><code style="overflow: hidden" data-trim contenteditable>
+                        </div>
+                        </section>
+                        <section>
+                                <p>An instance:</p>
+                                <div style="font-size: 150%">
+                                    <pre><code class="cs" data-trim contenteditable>
+var myClass = new MyClass();
+                                    </code></pre>
+                                </div>
+                                <br/>
+                                <div style="font-size: 150%; width: 150%; margin-left: -25%">
+                                    <pre class="stretch"><code style="overflow: hidden" data-trim contenteditable>
 0:003> !DumpHeap -type GenericsUnderTheHood.MyClass
 Address          MT                     Size
 0000004a2d912de8 00007fff8e7540d8       24
@@ -232,8 +239,9 @@ Statistics:
 MT                      Count       TotalSize   Class Name
 00007fff8e7540d8        1           24          GenericsUnderTheHood.MyClass
 Total 1 objects
-                            </code></pre>
-                        </div>
+                                    </code></pre>
+                                </div>
+                        </section>
 
                     </section>
 
