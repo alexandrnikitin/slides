@@ -550,9 +550,10 @@ MT    Field   Offset                 Type VT     Attr            Value Name
                     </section>
 
                     <section>
-                        <h4>Tricky part:</h4>
+                        <h3>Crucial part:</h3>
                         <p>Unknown type -> Runtime handle lookup</p>
-                        <pre><code class="cs" data-trim contenteditable>
+                        <div style="font-size: 170%">
+                            <pre><code class="cs" data-trim contenteditable>
 public class MyGenericClass&lt;T&gt;
 {
     public void MyMethod()
@@ -560,7 +561,8 @@ public class MyGenericClass&lt;T&gt;
         new T();
     }
 }
-                        </code></pre>
+                            </code></pre>
+                        </div>
                     </section>
 
                     <section>
