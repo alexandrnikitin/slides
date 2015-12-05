@@ -692,7 +692,7 @@ public class BaseClass&lt;T&gt;
                         <a href="https://github.com/dotnet/coreclr/pull/618">The pull request on github</a>
                     </section>
                     <section>
-                        <h2>Moral:</h2>
+                        <h2>Moral</h2>
 
                         <aside class="notes">
                             <p>No morale</p>
@@ -719,7 +719,8 @@ public class BaseClass&lt;T&gt;
 
                     <section>
                         <h2>Heuristic algorithm</h2>
-                            <pre><code class="cpp" data-trim contenteditable>
+                        <div style="font-size: 160%; width: 160%; margin-left: -30%">
+                            <pre class="stretch"><code class="cpp" data-trim contenteditable>
 DWORD numMethodsAdjusted =
     (bmtMethod->dwNumDeclaredNonAbstractMethods == 0)
     ? 0
@@ -733,6 +734,7 @@ DWORD nTypeFactorBy2 = (bmtGenerics->GetNumGenericArgs() == 1)
 
 DWORD estNumTypeSlots = (numMethodsAdjusted * nTypeFactorBy2 + 2) / 3;
                             </code></pre>
+                            </div>
                             <p><a href="https://github.com/dotnet/coreclr/blob/release/1.0.0-rc1/src/vm/methodtablebuilder.cpp#L7268">Sources</a></p>
 
                     </section>
