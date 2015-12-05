@@ -227,32 +227,6 @@ Total 1 objects
                             <img style="width: 160%; height: auto" src="img/method-table.png" alt="method-table">
                         </div>
                     </section>
-                    <section>
-                        <h2>Method Table looks like:</h2>
-                        <div style="font-size: 70%;">
-                            <pre><code style="overflow: hidden" data-trim contenteditable>
-0:003> !dumpmt -md 00007fff8e7540d8
-EEClass:         00007fff8e8623f0
-Module:          00007fff8e752fc8
-Name:            GenericsUnderTheHood.MyClass
-mdToken:         0000000002000002
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-BaseSize:        0x18
-ComponentSize:   0x0
-Slots in VTable: 6
-Number of IFaces in IFaceMap: 0
---------------------------------------
-MethodDesc Table
-Entry            MethodDesc       JIT    Name
-00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
-00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
-00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
-00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
-00007fff8e8701c0 00007fff8e7540d0    JIT GenericsUnderTheHood.MyClass..ctor()
-00007fff8e75c048 00007fff8e7540c0   NONE GenericsUnderTheHood.MyClass.MyMethod()
-                            </code></pre>
-                        </div>
-                    </section>
 
                     <section>
                         <h2>EEClass looks like:</h2>
