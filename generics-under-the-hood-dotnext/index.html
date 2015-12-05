@@ -419,25 +419,33 @@ public class DerivedClass : BaseClass&lt;object&gt; { }
                         </div>
                     </section>
                     <section>
-                        <p>Benchmark:</p>
-                        <pre><code class="cs" data-trim contenteditable>
-public class Program
+                        <p>Benchmark? BenchmarkDotNet! <a href="https://github.com/PerfDotNet/BenchmarkDotNet/blob/1dae2b3f588d05a4cf13d05bff1f74c4693db32d/BenchmarkDotNet.Samples/JIT/Jit_GenericsMethod.cs">The source</a></p>
+                        <div style="font-size: 100%; width: 150%; margin-left: -25%">
+                            <pre class="stretch"><code class="cs" style="overflow: hidden" data-trim contenteditable>
+[BenchmarkTask(platform: BenchmarkPlatform.X86, jitVersion: BenchmarkJitVersion.LegacyJit)]
+[BenchmarkTask(platform: BenchmarkPlatform.X64, jitVersion: BenchmarkJitVersion.LegacyJit)]
+[BenchmarkTask(platform: BenchmarkPlatform.X64, jitVersion: BenchmarkJitVersion.RyuJit)]
+public class Jit_GenericsMethod
 {
-    public static void Main()
+    // ... BaseClass and DerivedClass ...
+
+    private BaseClass&lt;object&gt; baseClass = new BaseClass&lt;object&gt;();
+    private BaseClass&lt;object&gt; derivedClass = new DerivedClass();
+
+    [Benchmark]
+    public void Base()
     {
-        Measure(new BaseClass&lt;object&gt;());
-        Measure(new DerivedClass()); // 3.5x slower
+        baseClass.Run();
     }
 
-    private static void Measure(BaseClass&lt;object&gt;> baseClass)
+    [Benchmark]
+    public void Derived()
     {
-        var sw = Stopwatch.StartNew();
-        baseClass.Run();
-        sw.Stop();
-        Console.WriteLine(sw.ElapsedMilliseconds);
+        derivedClass.Run(); // 3-5 times slower
     }
 }
-                        </code></pre>
+                            </code></pre>
+                        </div>
                     </section>
                     <section>
                         <h2>Workaround:</h2>
