@@ -290,24 +290,8 @@ public class MyGenericClass&lt;T&gt;
                     </section>
                     <section>
                         <p>EEClass:</p>
-                        <div style="font-size: 70%;">
-                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
-0:003> !DumpClass 00007fff8e862510
-Class Name:      GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]
-mdToken:         0000000002000003
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-Parent Class:    00007fffec824908
-Module:          00007fff8e752fc8
-Method Table:    00007fff8e7542a0
-Vtable Slots:    4
-Total Method Slots:  6
-Class Attributes:    100001
-Transparency:        Critical
-NumInstanceFields:   1
-NumStaticFields:     0
-MT                Field          Offset  Type            VT Attr       Value Name
-00007fffecf05c80  4000002        8       System.__Canon  0 instance    _myField
-                            </code></pre>
+                        <div style="width: 160%; margin-left: -30%">
+                            <img class="no-border" style="width: 160%; height: auto" src="img/eeclass-generic-object.png" alt="method-table">
                         </div>
                     </section>
 
@@ -318,28 +302,8 @@ MT                Field          Offset  Type            VT Attr       Value Nam
                         </code></pre>
 
                         <p>Method table:</p>
-                        <div style="font-size: 70%;">
-                            <pre><code style="overflow: hidden" class="cs" data-trim contenteditable>
-0:003> !DumpMT -md 00007fff8e754400
-EEClass:         00007fff8e862510
-Module:          00007fff8e752fc8
-Name:            GenericsUnderTheHood.MyGenericClass`1[[System.String, mscorlib]]
-mdToken:         0000000002000003
-File:            C:\Projects\my\GenericsUnderTheHood\GenericsUnderTheHood\bin\Debug\GenericsUnderTheHood.exe
-BaseSize:        0x18
-ComponentSize:   0x0
-Slots in VTable: 6
-Number of IFaces in IFaceMap: 0
---------------------------------------
-MethodDesc Table
-Entry       MethodDesc    JIT Name
-00007fffecc86300 00007fffec8380e8 PreJIT System.Object.ToString()
-00007fffeccce760 00007fffec8380f0 PreJIT System.Object.Equals(System.Object)
-00007fffeccd1ad0 00007fffec838118 PreJIT System.Object.GetHashCode()
-00007fffeccceb50 00007fffec838130 PreJIT System.Object.Finalize()
-00007fff8e870210 00007fff8e754280    JIT GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]]..ctor()
-00007fff8e75c098 00007fff8e754278   NONE GenericsUnderTheHood.MyGenericClass`1[[System.__Canon, mscorlib]].MyMethod()
-                            </code></pre>
+                        <div style="width: 160%; margin-left: -30%">
+                            <img class="no-border" style="width: 160%; height: auto" src="img/eeclass-generic-string.png" alt="method-table">
                         </div>
                     </section>
                     
