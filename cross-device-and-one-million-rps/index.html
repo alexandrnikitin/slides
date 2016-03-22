@@ -82,7 +82,7 @@
 						<h3>Hardware</h3>
 						<ul>
 							<li>4 Application nodes in 2 DCs, 32core + 256GB RAM each + 2 network cards (firist is Gigabit Ethernet - 4 ports x 1Gbit; second is 10-Gigabit SFI/SFP+ - 2 ports x 10 Gbit)</li>
-							<li>4 Aerospike nodes in 2 DCs, 32core + 256GB RAM each</li>
+							<li>4 Aerospike nodes in 2 DCs, 32core + 256GB RAM + 5 SSD each</li>
 						</ul>
 					</section>
 				</section>
@@ -115,6 +115,14 @@
 						<ul>
 							<li>installs/uninstalls wrk</li>
 							<li>run wrk from several machies at once and get somewhat consolidated result</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Disclaimer, further possibilities</h3>
+						<ul>
+							<li>Performance almost out of the box (Netty + AE)</li>
+							<li>Possibly AE client optimization?</li>
+							<li>Different storage system like RAMCloud?</li>
 						</ul>
 					</section>
 				</section>
