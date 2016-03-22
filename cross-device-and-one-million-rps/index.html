@@ -63,7 +63,7 @@
 						</ul>
 					</section>
 					<section>
-						<h1>Tech stack</h1>
+						<h1>Tech stack, hardware</h1>
 					</section>
 					<section>
 						<h3>Netty</h3>
@@ -71,21 +71,31 @@
 							<li>todo: Config params, links to techempower and perf presentation:</li>
 							<li>todo: Code highlights</li>
 						</ul>
+					</section>
+					<section>						
 						<h3>Aerospike</h3>
 						<ul>
 							<li>todo: Configuration</li>
+						</ul>
+					</section>
+					<section>						
+						<h3>Hardware</h3>
+						<ul>
+							<li>4 Application nodes in 2 DCs, 32core + 256GB RAM each + 2 network cards (firist is Gigabit Ethernet - 4 ports x 1Gbit; second is 10-Gigabit SFI/SFP+ - 2 ports x 10 Gbit)</li>
+							<li>4 Aerospike nodes in 2 DCs, 32core + 256GB RAM + 5 SSD each</li>
 						</ul>
 					</section>
 				</section>
 				
 				<section>
 					<section>
-						<h1>Optimization techniks</h1>
+						<h1>Optimization technics</h1>
 					</section>
 					<section>
 						<h3>Local: Microbenchmarking with sbt-jmh</h3>
 						<ul>
-							<li>change and run:</li>
+							<li>to make sure no CPU is wasted (global warming note!): ~1 MLN tps from single core without networking (Aerospike call)</li>
+							<li>change and run style:</li>
 							<li>todo: result sample.</li>
 						</ul>
 					</section>
@@ -108,11 +118,21 @@
 							<li>run wrk from several machies at once and get somewhat consolidated result</li>
 						</ul>
 					</section>
+					<section>
+						<h3>Disclaimer, further possibilities</h3>
+						<ul>
+							<li>Performance almost out of the box (Netty + AE)</li>
+							<li>Setup continuous load testing (pretty controversial since causes global warming:-)</li>
+							<li>Possibly AE client optimization?</li>
+							<li>Different storage system like RAMCloud?</li>
+						</ul>
+					</section>
 				</section>
 
 				<section>
 					<section>
 						<h2>Links:</h2>
+						<p>Load test results: <a href="https://adform.atlassian.net/wiki/display/XD/Performance/">https://adform.atlassian.net/wiki/display/XD/Performance/</a></p>
 						<p>Wiki: <a href="https://adform.atlassian.net/wiki/display/XD/">https://adform.atlassian.net/wiki/display/XD/</a></p>
 						<p>Sources: <a href="https://gitz.adform.com/xd/cross-device">https://gitz.adform.com/xd/cross-device</a></p>
 						<p>CD: <a href="https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview">https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview</a></p>
