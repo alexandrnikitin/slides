@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Cross-Device And One Million RPS</title>
+
+		<meta name="description" content="Cross-Device And One Million RPS">
+		<meta name="author" content="Alexander Chervony, Alexandr Nikitin">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h1>Cross-Device And One Million RPS</h1>
+				</section>
+				
+				<section>
+					<section>
+						<h1>Architecture, overview</h1>
+					</section>
+					<section>
+						<h3>Attribution use case</h3>
+						<ul>
+							<li>todo: image?</li>
+						</ul>
+						<h3>CQRS</h3>
+						<ul>
+							<li>Read interface:</li>
+							<li>Split to real time and non-real time api (merge).</li>
+							<li>single AE read. todo: Image?</li>
+							<li>todo: sample request and response</li>
+						</ul>
+					</section>
+					<section>
+						<h1>Tech stack</h1>
+					</section>
+					<section>
+						<h3>Netty</h3>
+						<ul>
+							<li>todo: Config params, links to techempower and perf presentation:</li>
+							<li>todo: Code highlights</li>
+						</ul>
+						<h3>Aerospike</h3>
+						<ul>
+							<li>todo: Configuration</li>
+						</ul>
+					</section>
+				</section>
+				
+				<section>
+					<section>
+						<h1>Optimization techniks</h1>
+					</section>
+					<section>
+						<h3>Local: Microbenchmarking with sbt-jmh</h3>
+						<ul>
+							<li>change and run:</li>
+							<li>todo: result sample.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>OS network param tuning (both apps and load test machines)</h3>
+						<ul>
+							<li>todo: link, sample?</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Main: deploy and load test</h3>
+						<h3>wrk ansible role</h3>
+						<ul>
+							<li>installs/uninstalls wrk</li>
+							<li>run wrk from several machies at once and get somewhat consolidated result</li>
+						</ul>
+						<h3>wrk lua scripting</h3>
+						<ul>
+							<li>installs/uninstalls wrk</li>
+							<li>run wrk from several machies at once and get somewhat consolidated result</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Links:</h2>
+						<p>Wiki: <a href="https://adform.atlassian.net/wiki/display/XD/">https://adform.atlassian.net/wiki/display/XD/</a></p>
+						<p>Sources: <a href="https://gitz.adform.com/xd/cross-device">https://gitz.adform.com/xd/cross-device</a></p>
+						<p>CD: <a href="https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview">https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview</a></p>
+					</section>
+				</section>
+
+				<section>
+					<h1>Questions?</h1>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
