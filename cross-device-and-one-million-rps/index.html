@@ -44,40 +44,69 @@
 				<section>
 					<h1>Cross-Device And One Million RPS</h1>
 				</section>
-
+				
 				<section>
 					<section>
-						<h1>What can we provide?</h1>
+						<h1>Architecture, overview</h1>
 					</section>
 					<section>
-						<h3>API</h3>
+						<h3>Attribution use case</h3>
 						<ul>
-							<li>Read interface</li>
-							<li>Serves XD ids</li>
-							<li>Handles 500K? RPS</li>
+							<li>todo: image?</li>
+						</ul>
+						<h3>CQRS</h3>
+						<ul>
+							<li>Read interface:</li>
+							<li>Split to real time and non-real time api (merge).</li>
+							<li>single AE read. todo: Image?</li>
+							<li>todo: sample request and response</li>
 						</ul>
 					</section>
 					<section>
-						<h3>API-Merge</h3>
+						<h1>Tech stack</h1>
+					</section>
+					<section>
+						<h3>Netty</h3>
 						<ul>
-							<li>Write interface</li>
-							<li>Performs merge logic</li>
+							<li>todo: Config params, links to techempower and perf presentation:</li>
+							<li>todo: Code highlights</li>
+						</ul>
+						<h3>Aerospike</h3>
+						<ul>
+							<li>todo: Configuration</li>
+						</ul>
+					</section>
+				</section>
+				
+				<section>
+					<section>
+						<h1>Optimization techniks</h1>
+					</section>
+					<section>
+						<h3>Local: Microbenchmarking with sbt-jmh</h3>
+						<ul>
+							<li>change and run:</li>
+							<li>todo: result sample.</li>
 						</ul>
 					</section>
 					<section>
-						<h3>Pixel API</h3>
+						<h3>OS network param tuning (both apps and load test machines)</h3>
 						<ul>
-							<li>External interface</li>
-							<li>Write interface</li>
-							<li>Expects a pair of cookie and identifier</li>
+							<li>todo: link, sample?</li>
 						</ul>
 					</section>
 					<section>
-						<h2>Cross-Device as a Platform:</h2>
-						<h4>Mobile POD AdTruth case</h4>
-					</section>
-					<section>
-						<h1>Expertise</h1>
+						<h3>Main: deploy and load test</h3>
+						<h3>wrk ansible role</h3>
+						<ul>
+							<li>installs/uninstalls wrk</li>
+							<li>run wrk from several machies at once and get somewhat consolidated result</li>
+						</ul>
+						<h3>wrk lua scripting</h3>
+						<ul>
+							<li>installs/uninstalls wrk</li>
+							<li>run wrk from several machies at once and get somewhat consolidated result</li>
+						</ul>
 					</section>
 				</section>
 
