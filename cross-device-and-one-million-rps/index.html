@@ -227,69 +227,6 @@ JSON serialization - comparison, numbers?
 Network stack & kernel
 -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				
-
 				<section>
 					<h1>Part 2: One Million RPS</h1>
 				</section>
@@ -297,13 +234,20 @@ Network stack & kernel
 
 				<section>
 					<section>
-						<h1>Architecture, overview</h1>
+						<h3>Attribution request sample</h3>
+						<ul>
+							<li>Request: http://xd.root.adform.com:8080/adform/uniqueId?cid=21231231231</li>
+							<li>Response: {"auid":"8593283872557236166"} OR {"code":404,"message":"Unique not found."}</li>
+						</ul>
 					</section>
 					<section>
-						<h3>Attribution use case</h3>
+						<h3>Numbers</h3>
 						<ul>
-							<li>todo: image?</li>
+							<li>1 min run, 33% hit: 1113 KTPS with, ~1ms avg, 4.36-4.47ms 99 percentile, </li>
+							<li>20 min run,16% hit: 1072 KTPS with, ~2.2ms avg, 1.2ms 90s percentile, but up to 58ms 99th percentile</li>
 						</ul>
+					</section>
+					<section>
 						<h3>CQRS</h3>
 						<ul>
 							<li>Read interface:</li>
