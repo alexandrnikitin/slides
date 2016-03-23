@@ -270,6 +270,11 @@ Network stack & kernel
 					</section>
 					<section>
 						<h3>Tech stack:</h3>
+						<ul>
+							<li>Scala</li>
+							<li>Netty</li>
+							<li>Aerospike</li>
+						</ul>					
 					</section>
 					<section>
 						<h3>Netty</h3>
@@ -294,7 +299,7 @@ Network stack & kernel
 						<h3>Micro-benchmarking with sbt-jmh</h3>
 						<ul>
 							<li>Microbenchmarking with JMH: ~400 KTPS from single core without DB call.</li>
-							<img src="img/jmh.png" width="80%">
+							<li><img src="img/jmh.png" width="90%"></li>
 						</ul>
 					</section>
 					<section>
@@ -322,10 +327,26 @@ Network stack & kernel
 						</ul>
 					</section>
 					<section>
+						<h3>wrk sample result</h3>
+						<ul>
+							<li><img src="img/wrk.png" width="90%"></li>
+						</ul>
+					</section>
+					<section>
 						<h3>wrk vs other tools</h3>
 						<ul>
 							<li>yandex-tank, apache-jmeter</li>
 							<li>wrk2 and Coordinated Ommission aspect</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Further optimization possibilities</h3>
+						<ul>
+							<li>Setup continuous load testing</li>
+							<li>Aerospike client optimization</li>
+							<li>Different storage system like RAMCloud</li>
+							<li>Routing can be optimized</li>
 						</ul>
 					</section>
 					<section>
@@ -334,14 +355,6 @@ Network stack & kernel
 							<li>no difference but maybe due to testing methodology (fast client)</li>
 							<li>changed for future proof (many slow clients?)</li>
 							<li>serve DB requests and http requests with different network cards</li>
-						</ul>
-					</section>
-					<section>
-						<h3>Further optimization possibilities</h3>
-						<ul>
-							<li>Setup continuous load testing</li>
-							<li>Possibly AE client optimization?</li>
-							<li>Different storage system like RAMCloud?</li>
 						</ul>
 					</section>
 				</section>
