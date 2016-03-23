@@ -43,88 +43,326 @@
 
 				<section>
 					<h1>Cross-Device And One Million RPS</h1>
+					<p>
+						<small>by Alexandr Nikitin & Alexander Chervony</small>
+					</p>
 				</section>
-				
+
+				<section>
+					<h1>Part 1: About Cross-Device</h1>
+				</section>
+
 				<section>
 					<section>
-						<h1>Architecture, overview</h1>
+						<h2>Meet the team:</h2>
+						<p>Vytautas Jakštys - PO Vilnius</p>
+						<p>Alexandr Nikitin - dev Vilnius</p>
+						<p>Roman Oreshko - dev Minsk</p>
+						<p>Alexander Chervony - dev Minsk</p>
 					</section>
 					<section>
-						<h3>Attribution use case</h3>
+						<h2>Links:</h2>
+						<p>Wiki: <a href="https://adform.atlassian.net/wiki/display/XD/">https://adform.atlassian.net/wiki/display/XD/</a></p>
+						<p>Sources: <a href="https://gitz.adform.com/xd/cross-device">https://gitz.adform.com/xd/cross-device</a></p>
+						<p>CD: <a href="https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview">https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview</a></p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>What is Cross-Device?</h1>
+					</section>
+					<section data-background-size="80%" data-background-image="img/before-and-now.png">
+					</section>
+					<section>
+						<h3>How can we solve it?</h3>
+						<p>Probabilistic:</p>
+						<img src="img/how-1.png">
+						<p>Deterministic:</p>
+						<img src="img/how-2.png">
+					</section>
+					<section>
+						<h1>What can we do with Cross-Device?</h1>
+					</section>
+					<section>
+						<h3>Targeting</h3>
+						<img src="img/targeting.png">
+					</section>
+					<section>
+						<h3>Attribution</h3>
+						<img src="img/attribution.png">
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Architecture overview</h1>
+					</section>
+					<section>
+						<h3>High-level overview</h3>
+						<img src="img/architecture.jpg" width="80%">
+					</section>
+					<section data-background-size="80%" data-background-image="img/services.png"></section>
+					<section>
+						<h3>List of components:</h3>
 						<ul>
-							<li>todo: image?</li>
-						</ul>
-						<h3>CQRS</h3>
-						<ul>
-							<li>Read interface:</li>
-							<li>Split to real time and non-real time api (merge).</li>
-							<li>single AE read. todo: Image?</li>
-							<li>todo: sample request and response</li>
+							<li>API</li>
+							<li>API-Merge</li>
+							<li>Enrichment</li>
+							<li>Enrichment-Streaming</li>
+							<li>Screen6</li>
+							<li>Tapad-Import</li>
+							<li>Pixel</li>
+							<li>Optout</li>
+							<li>XD Topology in Storm</li>
+							<li>Others</li>
 						</ul>
 					</section>
 					<section>
-						<h1>Tech stack, hardware</h1>
-					</section>
-					<section>
-						<h3>Netty</h3>
+						<h3>High-level technical overview</h3>
 						<ul>
-							<li>todo: Config params, links to techempower and perf presentation:</li>
-							<li>todo: Code highlights</li>
+							<li>Microservices</li>
+							<li>Continuous Deployments</li>
+							<li>Design: CQRS, Event Sourcing (snapshots only)</li>
+							<li>Languages: Scala & C# .NET</li>
+							<li>Databases: Aerospike</li>
+							<li>Interservice communication via API, Kafka</li>
 						</ul>
 					</section>
-					<section>						
-						<h3>Aerospike</h3>
+					<section>
+						<h3>Internal integrations:</h3>
 						<ul>
-							<li>todo: Configuration</li>
+							<li>AdServing</li>
+							<li>DSP</li>
+							<li>DMP</li>
+							<li>Data Processing</li>
+						</ul>
+					</section>
+					<section>
+						<h3>External integrations:</h3>
+						<ul>
+							<li>Screen6</li>
+							<li>Tapad</li>
+							<li>Several publishers</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Usage</h3>
+						<ul>
+							<li>DSP: &gt; 100 XD line items</li>
+							<li>DMP: &gt; 1000 XD segments</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>What is next?</h3>
+						<ul>
+							<li>One stop XD in DSP</li>
+							<li>XD Frequency capping in DSP</li>
+							<li>Multi-provider XD attribution</li>
+							<li>In-house XD Graph solution</li>
+							<li>Universal ID Management (Devices & AdTruth)</li>
+						</ul>
+					</section>
+				</section>
+
+
+				<section>
+					<section>
+						<h1>What can we provide?</h1>
+					</section>
+					<section>
+						<h3>API</h3>
+						<ul>
+							<li>Read interface</li>
+							<li>Serves XD ids</li>
+							<li>Serves connections</li>
+							<li>Multi-provider</li>
+							<li>Handles 1M RPS &lt; 5ms</li>
+						</ul>
+					</section>
+					<section>
+						<h3>API-Merge</h3>
+						<ul>
+							<li>Write interface</li>
+							<li>Performs merge logic</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Pixel API</h3>
+						<ul>
+							<li>External interface</li>
+							<li>Write interface</li>
+							<li>Expects a pair of cookie and identifier</li>
+						</ul>
+					</section>
+					<section>
+						<h1>Expertise</h1>
+					</section>
+				</section>
+
+
+
+
+<!--
+Plan for part 2:
+Our numbers
+Measure, measure, measure!
+Wrk for throughput
+Wrk2 for latencies
+JMH for code
+Sandbox for profiling
+Stack:
+Linux vs Windows: that's why http://blog.zorinaq.com/?e=74
+Netty
+concept of buffers
+parsing http request
+routing - can be better
+Aerospike
+fast
+async client shit, sync sucks
+numbers and answer from Aerospike from https://github.com/aerospike/aerospike-client-java/issues/43
+JSON serialization - comparison, numbers?
+Network stack & kernel
+-->
+
+
+
+
+				<section>
+					<section>
+						<h1>Part 2: One Million RPS</h1>
+					</section>
+					<section>
+						<h3>Attribution request sample</h3>
+						<ul>
+							<li>Request: http://xd.root.adform.com:8080/adform/uniqueId?cid=21231231231</li>
+							<li>Response: {"auid":"8593283872557236166"} OR {"code":404,"message":"Unique not found."}</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Numbers</h3>
+						<ul>
+							<li>1 min run, 33% hit: 1113 KTPS with, ~1ms avg, 4.36-4.47ms 99 percentile, </li>
+							<li>20 min run,16% hit: 1072 KTPS with, ~2.2ms avg, 1.2ms 90s percentile, but up to 58ms 99th percentile</li>
 						</ul>
 					</section>
 					<section>						
 						<h3>Hardware</h3>
 						<ul>
-							<li>4 Application nodes in 2 DCs, 32core + 256GB RAM each + 2 network cards (firist is Gigabit Ethernet - 4 ports x 1Gbit; second is 10-Gigabit SFI/SFP+ - 2 ports x 10 Gbit)</li>
+							<li>4 Application nodes in 2 DCs, 32core + 256GB RAM each + 2 network cards (6 ports in total)</li>
 							<li>4 Aerospike nodes in 2 DCs, 32core + 256GB RAM + 5 SSD each</li>
+						</ul>
+					</section>
+				</section>
+				
+				
+				<section>
+					<section>
+						<h1>How?</h1>
+					</section>
+					<section>
+						<h3>CQRS</h3>
+						<ul>
+							<li>Separate read only endpoint.</li>
+							<li>Single Aerospike read per request.</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Tech stack:</h3>
+						<ul>
+							<li>Scala</li>
+							<li>Netty</li>
+							<li>Aerospike</li>
+						</ul>					
+					</section>
+					<section>
+						<h3>Netty (web app)</h3>
+						<ul>
+							<li>Works well out of the box</li>
+							<li>Tuned params: worker threads</li>
+							<li>Concept of buffers (ByteBuf)</li>
+							<li>For keep-alive connections: flush on channelReadComplete only</li>
+							<li>No-framework JSON serialization</li>
+						</ul>
+					</section>
+					<section>						
+						<h3>Aerospike DB</h3>
+						<ul>
+							<li>4 nodes in 2 Datacenters</li>
+							<li>Rack-aware configuration</li>
+							<li>Storage engine is "device": data is on SSDs</li>
+							<li>Client setting: maxThreads = 30000</li>
+							<li>Client could be better (CPU inefficiency)</li>
 						</ul>
 					</section>
 				</section>
 				
 				<section>
 					<section>
-						<h1>Optimization technics</h1>
+						<h1>Measure, measure, measure!</h1>
 					</section>
 					<section>
-						<h3>Local: Microbenchmarking with sbt-jmh</h3>
+						<h3>Bottleneck identification</h3>
 						<ul>
-							<li>to make sure no CPU is wasted (global warming note!): ~1 MLN tps from single core without networking (Aerospike call)</li>
-							<li>change and run style:</li>
-							<li>todo: result sample.</li>
+							<li>VisualVM.</li>
+							<li>Sandbox app for profiling.</li>
 						</ul>
 					</section>
 					<section>
-						<h3>OS network param tuning (both apps and load test machines)</h3>
+						<h3>Micro-benchmarking</h3>
 						<ul>
-							<li>todo: link, sample?</li>
+							<li>Microbenchmarking with JMH: ~400 KTPS from single core without DB call.</li>
+							<li><img src="img/jmh.png" width="90%"></li>
 						</ul>
 					</section>
 					<section>
-						<h3>Main: deploy and load test</h3>
+						<h3>Deploy and load test on real hardware</h3>
+					</section>
+					<section>
 						<h3>wrk ansible role</h3>
 						<ul>
 							<li>installs/uninstalls wrk</li>
 							<li>run wrk from several machies at once and get somewhat consolidated result</li>
 						</ul>
+					</section>
+					<section>
 						<h3>wrk lua scripting</h3>
 						<ul>
-							<li>installs/uninstalls wrk</li>
-							<li>run wrk from several machies at once and get somewhat consolidated result</li>
+							<li>even request distribution across app nodes (client-side balancing)</li>
+							<li>request pre-creation</li>
 						</ul>
 					</section>
 					<section>
-						<h3>Disclaimer, further possibilities</h3>
+						<h3>wrk sample result</h3>
 						<ul>
-							<li>Performance almost out of the box (Netty + AE)</li>
-							<li>Setup continuous load testing (pretty controversial since causes global warming:-)</li>
-							<li>Possibly AE client optimization?</li>
-							<li>Different storage system like RAMCloud?</li>
+							<li><img src="img/wrk.png" width="90%"></li>
+						</ul>
+					</section>
+					<section>
+						<h3>wrk vs other tools</h3>
+						<ul>
+							<li>yandex-tank, apache-jmeter</li>
+							<li>wrk2 and Coordinated Ommission aspect</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Further optimization possibilities</h3>
+						<ul>
+							<li>Setup continuous load testing</li>
+							<li>Aerospike client optimization</li>
+							<li>Different storage system like RAMCloud</li>
+							<li>Routing can be optimized</li>
+						</ul>
+					</section>
+					<section>
+						<h3>TCP tuning, Hardware utilization</h3>
+						<ul>
+							<li>no difference but maybe due to testing methodology (fast client)</li>
+							<li>changed for future proof (many slow clients?)</li>
+							<li>serve DB requests and http requests with different network cards</li>
 						</ul>
 					</section>
 				</section>
@@ -133,6 +371,11 @@
 					<section>
 						<h2>Links:</h2>
 						<p>Load test results: <a href="https://adform.atlassian.net/wiki/display/XD/Performance/">https://adform.atlassian.net/wiki/display/XD/Performance/</a></p>
+						<p>TCP tuning: <a href="https://lowlatencyweb.wordpress.com/2012/03/20/500000-requestssec-modern-http-servers-are-fast/">https://lowlatencyweb.wordpress.com/2012/03/20/500000-requestssec-modern-http-servers-are-fast/</a></p>
+						<p>On HTTP Load Testing: <a href="https://www.mnot.net/blog/2011/05/18/http_benchmark_rules/">https://www.mnot.net/blog/2011/05/18/http_benchmark_rules/</a></p>
+						<p>TechEmpower&amp;s sample HelloServerHandler.java<a href="https://github.com/TechEmpower/FrameworkBenchmarks/blob/master/frameworks/Java/netty/src/main/java/hello/HelloServerHandler.java">https://github.com/TechEmpower/FrameworkBenchmarks/blob/master/frameworks/Java/netty/src/main/java/hello/HelloServerHandler.java</a></p>
+						<p>Netty object pools <a href="http://netty.io/wiki/reference-counted-objects.html">http://netty.io/wiki/reference-counted-objects.html</a></p>
+						<p>Netty generic lib (for thread local):<a href="http://netty.io/wiki/using-as-a-generic-library.html">http://netty.io/wiki/using-as-a-generic-library.html</a></p>
 						<p>Wiki: <a href="https://adform.atlassian.net/wiki/display/XD/">https://adform.atlassian.net/wiki/display/XD/</a></p>
 						<p>Sources: <a href="https://gitz.adform.com/xd/cross-device">https://gitz.adform.com/xd/cross-device</a></p>
 						<p>CD: <a href="https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview">https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview</a></p>
