@@ -94,7 +94,7 @@
 					<section>
 						<h3>Local: Microbenchmarking with sbt-jmh</h3>
 						<ul>
-							<li>to make sure no CPU is wasted (global warming note!): ~1 MLN tps from single core without networking (Aerospike call)</li>
+							<li>to make sure no CPU is wasted (global warming note!): ~0.5 MLN tps from single core without DB call</li>
 							<li>change and run style:</li>
 							<li>todo: result sample.</li>
 						</ul>
@@ -114,8 +114,8 @@
 						</ul>
 						<h3>wrk lua scripting</h3>
 						<ul>
-							<li>installs/uninstalls wrk</li>
-							<li>run wrk from several machies at once and get somewhat consolidated result</li>
+							<li>even request distribution across app nodes (client-side balancing)</li>
+							<li>request pre-creation</li>
 						</ul>
 					</section>
 					<section>
