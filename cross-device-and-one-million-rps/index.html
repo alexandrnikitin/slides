@@ -282,6 +282,7 @@ Network stack & kernel
 							<li>Works well out of the box</li>
 							<li>Tuned params: worker threads</li>
 							<li>Concept of buffers (ByteBuf)</li>
+							<li>for keep-alive connections: flush on channelReadComplete only</li>
 						</ul>
 					</section>
 					<section>						
@@ -290,6 +291,7 @@ Network stack & kernel
 							<li>4 nodes in 2 Datacenters</li>
 							<li>rack-aware configuration</li>
 							<li>storage engine is "device": data is on SSDs</li>
+							<li>client setting: maxThreads = 30000</li>
 						</ul>
 					</section>
 				</section>
@@ -368,6 +370,7 @@ Network stack & kernel
 						<p>Load test results: <a href="https://adform.atlassian.net/wiki/display/XD/Performance/">https://adform.atlassian.net/wiki/display/XD/Performance/</a></p>
 						<p>TCP tuning: <a href="https://lowlatencyweb.wordpress.com/2012/03/20/500000-requestssec-modern-http-servers-are-fast/">https://lowlatencyweb.wordpress.com/2012/03/20/500000-requestssec-modern-http-servers-are-fast/</a></p>
 						<p>On HTTP Load Testing: <a href="https://www.mnot.net/blog/2011/05/18/http_benchmark_rules/">https://www.mnot.net/blog/2011/05/18/http_benchmark_rules/</a></p>
+						<p>TechEmpower&amp;s sample HelloServerHandler.java<a href="https://github.com/TechEmpower/FrameworkBenchmarks/blob/master/frameworks/Java/netty/src/main/java/hello/HelloServerHandler.java">https://github.com/TechEmpower/FrameworkBenchmarks/blob/master/frameworks/Java/netty/src/main/java/hello/HelloServerHandler.java</a></p>
 						<p>Wiki: <a href="https://adform.atlassian.net/wiki/display/XD/">https://adform.atlassian.net/wiki/display/XD/</a></p>
 						<p>Sources: <a href="https://gitz.adform.com/xd/cross-device">https://gitz.adform.com/xd/cross-device</a></p>
 						<p>CD: <a href="https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview">https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview</a></p>
