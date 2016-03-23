@@ -265,7 +265,7 @@ Network stack & kernel
 						<h3>CQRS</h3>
 						<ul>
 							<li>Separate read only endpoint.</li>
-							<li>Single AE read</li>
+							<li>Single Aerospike read per request.</li>
 						</ul>
 					</section>
 					<section>
@@ -288,25 +288,26 @@ Network stack & kernel
 				
 				<section>
 					<section>
-						<h1>Optimization technics</h1>
+						<h1>Measure, measure, measure!</h1>
 					</section>
 					<section>
-						<h3>Local: Microbenchmarking with sbt-jmh</h3>
+						<h3>Micro-benchmarking with sbt-jmh</h3>
 						<ul>
-							<li>to make sure no CPU is wasted (global warming note!): ~0.5 MLN tps from single core without DB call</li>
-							<li>change and run style:</li>
-							<li>todo: result sample.</li>
+							<li>Microbenchmarking with JMH: ~400 KTPS from single core without DB call.</li>
+							<img src="img/jmh.png" width="80%">
 						</ul>
 					</section>
 					<section>
-						<h3>TCP tuning</h3>
+						<h3>Bottleneck identification</h3>
 						<ul>
-							<li>no difference but maybe due to testing methodology (fast client)</li>
-							<li>changed for future proof (many slow clients?)</li>
+							<li>VisualVM.</li>
 						</ul>
 					</section>
+
 					<section>
-						<h3>Main: deploy and load test</h3>
+						<h3>Main way: deploy and load test</h3>
+					</section>
+					<section>
 						<h3>wrk ansible role</h3>
 						<ul>
 							<li>installs/uninstalls wrk</li>
@@ -323,14 +324,21 @@ Network stack & kernel
 					<section>
 						<h3>wrk vs other tools</h3>
 						<ul>
-							<li>wrk2 and Coordinated Ommission aspect</li>
 							<li>yandex-tank, apache-jmeter</li>
+							<li>wrk2 and Coordinated Ommission aspect</li>
+						</ul>
+					</section>
+					<section>
+						<h3>TCP tuning, Hardware utilization</h3>
+						<ul>
+							<li>no difference but maybe due to testing methodology (fast client)</li>
+							<li>changed for future proof (many slow clients?)</li>
+							<li>serve DB requests and http requests with different network cards</li>
 						</ul>
 					</section>
 					<section>
 						<h3>Further optimization possibilities</h3>
 						<ul>
-							<li>Performance almost out of the box (Netty + AE)</li>
 							<li>Setup continuous load testing</li>
 							<li>Possibly AE client optimization?</li>
 							<li>Different storage system like RAMCloud?</li>
