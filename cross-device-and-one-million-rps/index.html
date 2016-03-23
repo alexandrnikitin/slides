@@ -43,6 +43,9 @@
 
 				<section>
 					<h1>Cross-Device And One Million RPS</h1>
+					<p>
+						<small>by Alexandr Nikitin & Alexander Chervony</small>
+					</p>
 				</section>
 
 				<section>
@@ -91,9 +94,64 @@
 					</section>
 				</section>
 
+				<section>
+					<section>
+						<h1>Architecture overview</h1>
+					</section>
+					<section>
+						<h3>High-level overview</h3>
+						<img src="img/architecture.jpg" width="80%">
+					</section>
+					<section data-background-size="80%" data-background-image="img/services.png"></section>
+					<section>
+						<h3>List of components:</h3>
+						<ul>
+							<li>API</li>
+							<li>API-Merge</li>
+							<li>Enrichment</li>
+							<li>Screen6</li>
+							<li>Screen6 Export</li>
+							<li>Pixel</li>
+							<li>Bidlogs</li>
+							<li>Apps</li>
+						</ul>
+					</section>
+					<section>
+						<h3>High-level technical overview</h3>
+						<ul>
+							<li>Microservices</li>
+							<li>Continuous Deployments</li>
+							<li>Design: CQRS, Event Sourcing (snapshots only)</li>
+							<li>Languages: Scala - the main. C# .NET - for existing platforms</li>
+							<li>Databases: Aerospike</li>
+							<li>Interservice communication via API, Kafka</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Integrations:</h3>
+						<ul>
+							<li>AdServing</li>
+							<li>DSP</li>
+							<li>DMP</li>
+							<li>Data Processing</li>
+						</ul>
+					</section>
+					<section>
+						<h3>What is next?</h3>
+						<ul>
+							<li>Multi-provider targeting</li>
+							<li>Multi-provider attribution</li>
+							<li>One stop DSP</li>
+							<li>Move to DP Platform</li>
+						</ul>
+					</section>
+				</section>
 
 
 
+				<!--TODO Usage line items, segments-->
+				<!--realtime dmp-dsp-->
+				 <!--next one stop dsp freq capp-->
 
 
 
