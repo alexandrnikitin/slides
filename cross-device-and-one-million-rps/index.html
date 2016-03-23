@@ -227,12 +227,13 @@ JSON serialization - comparison, numbers?
 Network stack & kernel
 -->
 
-				<section>
-					<h1>Part 2: One Million RPS</h1>
-				</section>
+
 
 
 				<section>
+					<section>
+						<h1>Part 2: One Million RPS</h1>
+					</section>
 					<section>
 						<h3>Attribution request sample</h3>
 						<ul>
@@ -256,11 +257,11 @@ Network stack & kernel
 					</section>
 				</section>
 				
-				<section>
-					<h1>How?</h1>
-				</section>
 				
 				<section>
+					<section>
+						<h1>How?</h1>
+					</section>
 					<section>
 						<h3>CQRS</h3>
 						<ul>
@@ -277,21 +278,23 @@ Network stack & kernel
 						</ul>					
 					</section>
 					<section>
-						<h3>Netty</h3>
+						<h3>Netty (web app)</h3>
 						<ul>
 							<li>Works well out of the box</li>
 							<li>Tuned params: worker threads</li>
 							<li>Concept of buffers (ByteBuf)</li>
-							<li>for keep-alive connections: flush on channelReadComplete only</li>
+							<li>For keep-alive connections: flush on channelReadComplete only</li>
+							<li>No-framework JSON serialization</li>
 						</ul>
 					</section>
 					<section>						
-						<h3>Aerospike</h3>
+						<h3>Aerospike DB</h3>
 						<ul>
 							<li>4 nodes in 2 Datacenters</li>
-							<li>rack-aware configuration</li>
-							<li>storage engine is "device": data is on SSDs</li>
-							<li>client setting: maxThreads = 30000</li>
+							<li>Rack-aware configuration</li>
+							<li>Storage engine is "device": data is on SSDs</li>
+							<li>Client setting: maxThreads = 30000</li>
+							<li>Client could be better (CPU inefficiency)</li>
 						</ul>
 					</section>
 				</section>
