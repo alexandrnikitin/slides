@@ -247,17 +247,29 @@ Network stack & kernel
 							<li>20 min run,16% hit: 1072 KTPS with, ~2.2ms avg, 1.2ms 90s percentile, but up to 58ms 99th percentile</li>
 						</ul>
 					</section>
+					<section>						
+						<h3>Hardware</h3>
+						<ul>
+							<li>4 Application nodes in 2 DCs, 32core + 256GB RAM each + 2 network cards (6 ports in total)</li>
+							<li>4 Aerospike nodes in 2 DCs, 32core + 256GB RAM + 5 SSD each</li>
+						</ul>
+					</section>
+				</section>
+				
+				<section>
+					<h1>How?</h1>
+				</section>
+				
+				<section>
 					<section>
 						<h3>CQRS</h3>
 						<ul>
-							<li>Read interface:</li>
-							<li>Split to real time and non-real time api (merge).</li>
-							<li>single AE read. todo: Image?</li>
-							<li>todo: sample request and response</li>
+							<li>Separate read only endpoint.</li>
+							<li>Single AE read</li>
 						</ul>
 					</section>
 					<section>
-						<h1>Tech stack, hardware</h1>
+						<h3>Tech stack:</h3>
 					</section>
 					<section>
 						<h3>Netty</h3>
@@ -270,13 +282,6 @@ Network stack & kernel
 						<h3>Aerospike</h3>
 						<ul>
 							<li>todo: Configuration</li>
-						</ul>
-					</section>
-					<section>						
-						<h3>Hardware</h3>
-						<ul>
-							<li>4 Application nodes in 2 DCs, 32core + 256GB RAM each + 2 network cards (6 ports in total)</li>
-							<li>4 Aerospike nodes in 2 DCs, 32core + 256GB RAM + 5 SSD each</li>
 						</ul>
 					</section>
 				</section>
@@ -323,7 +328,7 @@ Network stack & kernel
 						</ul>
 					</section>
 					<section>
-						<h3>Disclaimer, further possibilities</h3>
+						<h3>Further optimization possibilities</h3>
 						<ul>
 							<li>Performance almost out of the box (Netty + AE)</li>
 							<li>Setup continuous load testing</li>
