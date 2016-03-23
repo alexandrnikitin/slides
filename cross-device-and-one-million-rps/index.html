@@ -81,7 +81,7 @@
 					<section>						
 						<h3>Hardware</h3>
 						<ul>
-							<li>4 Application nodes in 2 DCs, 32core + 256GB RAM each + 2 network cards (firist is Gigabit Ethernet - 4 ports x 1Gbit; second is 10-Gigabit SFI/SFP+ - 2 ports x 10 Gbit)</li>
+							<li>4 Application nodes in 2 DCs, 32core + 256GB RAM each + 2 network cards (6 ports in total)</li>
 							<li>4 Aerospike nodes in 2 DCs, 32core + 256GB RAM + 5 SSD each</li>
 						</ul>
 					</section>
@@ -94,15 +94,16 @@
 					<section>
 						<h3>Local: Microbenchmarking with sbt-jmh</h3>
 						<ul>
-							<li>to make sure no CPU is wasted (global warming note!): ~1 MLN tps from single core without networking (Aerospike call)</li>
+							<li>to make sure no CPU is wasted (global warming note!): ~0.5 MLN tps from single core without DB call</li>
 							<li>change and run style:</li>
 							<li>todo: result sample.</li>
 						</ul>
 					</section>
 					<section>
-						<h3>OS network param tuning (both apps and load test machines)</h3>
+						<h3>TCP tuning</h3>
 						<ul>
-							<li>todo: link, sample?</li>
+							<li>no difference but maybe due to testing methodology (fast client)</li>
+							<li>changed for future proof (many slow clients?)</li>
 						</ul>
 					</section>
 					<section>
@@ -114,15 +115,15 @@
 						</ul>
 						<h3>wrk lua scripting</h3>
 						<ul>
-							<li>installs/uninstalls wrk</li>
-							<li>run wrk from several machies at once and get somewhat consolidated result</li>
+							<li>even request distribution across app nodes (client-side balancing)</li>
+							<li>request pre-creation</li>
 						</ul>
 					</section>
 					<section>
 						<h3>Disclaimer, further possibilities</h3>
 						<ul>
 							<li>Performance almost out of the box (Netty + AE)</li>
-							<li>Setup continuous load testing (pretty controversial since causes global warming:-)</li>
+							<li>Setup continuous load testing</li>
 							<li>Possibly AE client optimization?</li>
 							<li>Different storage system like RAMCloud?</li>
 						</ul>
@@ -133,6 +134,8 @@
 					<section>
 						<h2>Links:</h2>
 						<p>Load test results: <a href="https://adform.atlassian.net/wiki/display/XD/Performance/">https://adform.atlassian.net/wiki/display/XD/Performance/</a></p>
+						<p>TCP tuning: <a href="https://lowlatencyweb.wordpress.com/2012/03/20/500000-requestssec-modern-http-servers-are-fast/">https://lowlatencyweb.wordpress.com/2012/03/20/500000-requestssec-modern-http-servers-are-fast/</a></p>
+						<p>On HTTP Load Testing: <a href="https://www.mnot.net/blog/2011/05/18/http_benchmark_rules/">https://www.mnot.net/blog/2011/05/18/http_benchmark_rules/</a></p>
 						<p>Wiki: <a href="https://adform.atlassian.net/wiki/display/XD/">https://adform.atlassian.net/wiki/display/XD/</a></p>
 						<p>Sources: <a href="https://gitz.adform.com/xd/cross-device">https://gitz.adform.com/xd/cross-device</a></p>
 						<p>CD: <a href="https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview">https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview</a></p>
