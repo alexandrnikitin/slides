@@ -235,9 +235,9 @@ Network stack & kernel
 						<h1>Part 2: One Million RPS</h1>
 					</section>
 					<section>
-						<h3>Attribution request sample</h3>
+						<h3>Attribution request</h3>
 						<ul>
-							<li>Request: http://xd.root.adform.com:8080/adform/uniqueId?cid=21231231231</li>
+							<li>Request: http://xd.root.adform.com:8080/adform/uniqueId?did=21231231231</li>
 							<li>Response: {"auid":"8593283872557236166"} OR {"code":404,"message":"Unique not found."}</li>
 						</ul>
 					</section>
@@ -265,12 +265,12 @@ Network stack & kernel
 					<section>
 						<h3>CQRS</h3>
 						<ul>
-							<li>Separate read only endpoint.</li>
-							<li>Single Aerospike read per request.</li>
+							<li>Separate read only endpoint</li>
+							<li>Single Aerospike read per request</li>
 						</ul>
 					</section>
 					<section>
-						<h3>Tech stack:</h3>
+						<h3>Tech stack</h3>
 						<ul>
 							<li>Scala</li>
 							<li>Netty</li>
@@ -281,20 +281,19 @@ Network stack & kernel
 						<h3>Netty (web app)</h3>
 						<ul>
 							<li>Works well out of the box</li>
-							<li>Tuned params: worker threads</li>
-							<li>Concept of buffers (ByteBuf)</li>
+							<li>Icreased worker threads number</li>
 							<li>For keep-alive connections: flush on channelReadComplete only</li>
+							<li>Reference counted objects (ByteBuf)</li>
 							<li>No-framework JSON serialization</li>
 						</ul>
 					</section>
 					<section>						
-						<h3>Aerospike DB</h3>
+						<h3>Aerospike (DB)</h3>
 						<ul>
 							<li>4 nodes in 2 Datacenters</li>
-							<li>Rack-aware configuration</li>
 							<li>Storage engine is "device": data is on SSDs</li>
-							<li>Client setting: maxThreads = 30000</li>
-							<li>Client could be better (CPU inefficiency)</li>
+							<li>Client in async mode doesnt perform, sync could be better (CPU inefficiency)</li>
+							<li>Client setting: maxThreads = 30000 (max connection pool size)</li>
 						</ul>
 					</section>
 				</section>
@@ -306,14 +305,14 @@ Network stack & kernel
 					<section>
 						<h3>Bottleneck identification</h3>
 						<ul>
-							<li>VisualVM.</li>
-							<li>Sandbox app for profiling.</li>
+							<li>VisualVM</li>
+							<li>Sandbox app for profiling</li>
 						</ul>
 					</section>
 					<section>
 						<h3>Micro-benchmarking</h3>
 						<ul>
-							<li>Microbenchmarking with JMH: ~400 KTPS from single core without DB call.</li>
+							<li>Microbenchmarking with JMH: ~400 KTPS from single core without DB call</li>
 							<li><img src="img/jmh.png" width="90%"></li>
 						</ul>
 					</section>
@@ -323,15 +322,15 @@ Network stack & kernel
 					<section>
 						<h3>wrk ansible role</h3>
 						<ul>
-							<li>installs/uninstalls wrk</li>
-							<li>runs wrk from several machies at once and gets somewhat consolidated result</li>
+							<li>Installs/uninstalls wrk</li>
+							<li>Runs wrk from several machies at once and gets somewhat consolidated result</li>
 						</ul>
 					</section>
 					<section>
 						<h3>wrk lua scripting</h3>
 						<ul>
-							<li>even request distribution across app nodes (client-side balancing)</li>
-							<li>request pre-creation</li>
+							<li>Even request distribution across app nodes (client-side balancing)</li>
+							<li>Request pre-creation</li>
 						</ul>
 					</section>
 					<section>
@@ -361,9 +360,9 @@ Network stack & kernel
 					<section>
 						<h3>TCP tuning, Hardware utilization</h3>
 						<ul>
-							<li>no difference but maybe due to testing methodology (fast client)</li>
-							<li>changed for future proof (many slow clients?)</li>
-							<li>serve DB requests and http requests with different network cards</li>
+							<li>No difference but maybe due to testing methodology (fast client)</li>
+							<li>Changed for future proof (many slow clients?)</li>
+							<li>Serve DB requests and http requests with different network cards</li>
 						</ul>
 					</section>
 				</section>
