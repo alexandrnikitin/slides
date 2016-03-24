@@ -324,7 +324,7 @@ Network stack & kernel
 						<h3>wrk ansible role</h3>
 						<ul>
 							<li>installs/uninstalls wrk</li>
-							<li>run wrk from several machies at once and get somewhat consolidated result</li>
+							<li>runs wrk from several machies at once and gets somewhat consolidated result</li>
 						</ul>
 					</section>
 					<section>
@@ -355,6 +355,7 @@ Network stack & kernel
 							<li>Aerospike client optimization</li>
 							<li>Different storage system like RAMCloud</li>
 							<li>Routing can be optimized</li>
+							<li>Thread local registry for response buffer</li>
 						</ul>
 					</section>
 					<section>
@@ -370,15 +371,16 @@ Network stack & kernel
 				<section>
 					<section>
 						<h2>Links:</h2>
-						<p>Load test results: <a href="https://adform.atlassian.net/wiki/display/XD/Performance/">https://adform.atlassian.net/wiki/display/XD/Performance/</a></p>
-						<p>TCP tuning: <a href="https://lowlatencyweb.wordpress.com/2012/03/20/500000-requestssec-modern-http-servers-are-fast/">https://lowlatencyweb.wordpress.com/2012/03/20/500000-requestssec-modern-http-servers-are-fast/</a></p>
-						<p>On HTTP Load Testing: <a href="https://www.mnot.net/blog/2011/05/18/http_benchmark_rules/">https://www.mnot.net/blog/2011/05/18/http_benchmark_rules/</a></p>
-						<p>TechEmpower&amp;s sample HelloServerHandler.java<a href="https://github.com/TechEmpower/FrameworkBenchmarks/blob/master/frameworks/Java/netty/src/main/java/hello/HelloServerHandler.java">https://github.com/TechEmpower/FrameworkBenchmarks/blob/master/frameworks/Java/netty/src/main/java/hello/HelloServerHandler.java</a></p>
-						<p>Netty object pools <a href="http://netty.io/wiki/reference-counted-objects.html">http://netty.io/wiki/reference-counted-objects.html</a></p>
-						<p>Netty generic lib (for thread local):<a href="http://netty.io/wiki/using-as-a-generic-library.html">http://netty.io/wiki/using-as-a-generic-library.html</a></p>
-						<p>Wiki: <a href="https://adform.atlassian.net/wiki/display/XD/">https://adform.atlassian.net/wiki/display/XD/</a></p>
-						<p>Sources: <a href="https://gitz.adform.com/xd/cross-device">https://gitz.adform.com/xd/cross-device</a></p>
-						<p>CD: <a href="https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview">https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview</a></p>
+						<ul>
+							<li><a href="https://adform.atlassian.net/wiki/display/XD/Performance/">XD Load test results</a></li>
+							<li><a href="https://gitz.adform.com/xd/cross-device">XD Sources</a></li>
+							<li><a href="https://teamcity.adform.com/project.html?projectId=XdCrossDevice&tab=projectOverview">XD Continuous Deployment</a></li>
+							<li><a href="http://netty.io/wiki/reference-counted-objects.html">Netty's reference counted objects (object pools)</a></li>
+							<li><a href="http://netty.io/wiki/using-as-a-generic-library.html">Netty generic lib (for thread local registry)</a></li>
+							<li><a href="https://github.com/TechEmpower/FrameworkBenchmarks/blob/master/frameworks/Java/netty/src/main/java/hello/HelloServerHandler.java">Netty HelloServerHandler.java @ TechEmpower</a></li>
+							<li><a href="https://www.mnot.net/blog/2011/05/18/http_benchmark_rules/">On HTTP Load Testing</a></li>
+							<li><a href="https://lowlatencyweb.wordpress.com/2012/03/20/500000-requestssec-modern-http-servers-are-fast/">TCP tuning</a></li>
+						</ul>
 					</section>
 				</section>
 
