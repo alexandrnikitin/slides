@@ -237,15 +237,21 @@ Network stack & kernel
 					<section>
 						<h3>Attribution request</h3>
 						<ul>
-							<li>Request: http://xd.root.adform.com:8080/adform/uniqueId?did=21231231231</li>
-							<li>Response: {"auid":"8593283872557236166"} OR {"code":404,"message":"Unique not found."}</li>
+							<li>Request: <br/>http://xd.root.adform.com:8080/adform/uniqueId?did=21231231231</li>
+							<br/>
+							<li>Response: <br/> {"auid":"8593283872557236166"} OR <br/>{"code":404,"message":"Unique not found."}</li>
 						</ul>
 					</section>
 					<section>
 						<h3>Numbers</h3>
 						<ul>
-							<li>1 min run, 33% hit: 1113 KTPS with, ~1ms avg, 4.36-4.47ms 99 percentile, </li>
+							<li>1113 KTPS</li>
+							<li>~1ms avg</li>
+							<li>~4.5ms 99th percentile</li>
+							<li>33% hit rate</li>
+							<br/>
 							<li>20 min run,16% hit: 1072 KTPS with, ~2.2ms avg, 1.2ms 90s percentile, but up to 58ms 99th percentile</li>
+
 						</ul>
 					</section>
 					<section>						
@@ -281,10 +287,10 @@ Network stack & kernel
 						<h3>Netty (web app)</h3>
 						<ul>
 							<li>Works well out of the box</li>
-							<li>Icreased worker threads number</li>
+							<li>Tunning (Buffers, Sockets, Workers)</li>
 							<li>For keep-alive connections: flush on channelReadComplete only</li>
-							<li>Reference counted objects (ByteBuf)</li>
-							<li>No-framework JSON serialization</li>
+							<li>Concept of Reference counted objects (ByteBuf)</li>
+							<li>JSON: Lib -> String Builder -> ByteBuf</li>
 						</ul>
 					</section>
 					<section>						
@@ -292,7 +298,7 @@ Network stack & kernel
 						<ul>
 							<li>4 nodes in 2 Datacenters</li>
 							<li>Storage engine is "device": data is on SSDs</li>
-							<li>Client in async mode doesnt perform, sync could be better (CPU inefficiency)</li>
+							<li>Client in async mode doesn't perform, sync could be better (CPU inefficiency)</li>
 							<li>Client setting: maxThreads = 30000 (max connection pool size)</li>
 						</ul>
 					</section>
