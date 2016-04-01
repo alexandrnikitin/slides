@@ -14,3 +14,6 @@ Slides: http://alexandrnikitin.github.io/slides/generics-under-the-hood-dotnext/
 5. "Cross Device POD"  
 Adform knowledge sharing 2015 Vilnius  
 Slides: http://alexandrnikitin.github.io/slides/cross-device-pod/#/  
+5. "Cross Device and One Million RPS"  
+Adform knowledge sharing 2016 Vilnius  
+Slides: http://alexandrnikitin.github.io/slides/cross-device-and-one-million-rps/#/
