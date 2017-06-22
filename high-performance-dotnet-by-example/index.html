@@ -24,48 +24,132 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>
+                <section>
+                    <section>
+                        <p>NET Meetup #22 Minsk 2017</p>
+                        <h3>High-performance .NET by example:</h3>
+                        <h4>Filtering bot traffic</h4>
+                        <p>
+                            <small>by <a href="https://twitter.com/nikitin_a_a">Alexandr Nikitin</a></small>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>About me:</h2>
+                        <p>Software Engineer @Adform</p>
+                        <p>@nikitin_a_a</p>
+                        <p>https://github.com/alexandrnikitin/</p>
+                        <p>https://alexandrnikitin.github.io/blog</p>
+                    </section>
 
-				<section>
-						<p>NET Meetup #22 Minsk 2017</p>
-						<h3>High-performance .NET by example:</h3>
-						<h4>Filtering bot traffic</h4>
+                    <section>
+                        <h2>Overview</h2>
+                        <ul>
+                            <li>Domain</li>
+                            <li>Measure, measure, measure!</li>
+                            <li>Algorithm</li>
+                            <li>Tools</li>
+                            <li>Performance optimizations</li>
+                        </ul>
+                    </section>
+                </section>
 
-						<p>
-								<small>by <a href="https://twitter.com/nikitin_a_a">Alexandr Nikitin</a></small>
-						</p>
-				</section>
-				<section>
-						<h2>About me:</h2>
-						<p>Software Engineer @Adform</p>
-						<p>@nikitin_a_a</p>
-						<p>https://github.com/alexandrnikitin/</p>
-						<p>https://alexandrnikitin.github.io/blog</p>
-				</section>
+                <section>
+                    <section><h2>Domain</h2></section>
+                    <section data-background="img/about-adform.png" data-background-size="60%"></section>
+                    <section><h2>All websites receive bot traffic!</h2></section>
+                    <section>
+                        <h2>The bot classification</h2>
+                        <ul>
+                            <li>White bots (good) - search engine bots like Google, Bing or DuckDuckGo.</li>
+                            <li>Grey bots (neutral) - feed fetchers, website crawlers and data scrappers.</li>
+                            <li>Black bots (harmful) - fraud and criminal activity, intentional impersonation for profit.</li>
+                        </ul>
+                    </section>
 
-				<section>
-						<h2>Overview</h2>
-						<ul>
-								<li>Domain</li>
-								<li>Measure, measure, measure!</li>
-								<li>Algorithm</li>
-								<li>Tools</li>
-								<li>Performance optimizations</li>
-						</ul>
-				</section>
-			</section>
+                    <section>
+                        <h2>Ways to identify bot traffic:</h2>
+                        <ul>
+                            <li>Technical info: IP addresses, User Agent strings</li>
+                            <li>Behavior analysis</li>
+                            <li>Honeypots</li>
+                        </ul>
+                    </section>
+                    <section>
+                        Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
+                    </section>
+
+                    <section>
+                        Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+
+                        https://support.google.com/webmasters/answer/1061943
+                    </section>
+
+                    <section>
+                        The Interactive Advertising Bureau (IAB)
+
+						advertising business organization that develops industry standards
+
+						Do Not Track and Internet Explorer
+						Blocking of 3rd party cookies in Firefox
+						Did not allow Adblock Plus to attend their event
+                    </section>
+
+					<section>
+						IAB/ABC International Spiders and Bots List
+
+						Pricing:
+
+						IAB General Member: $4,000
+						IAB Associate Member: $7,000
+						Non-Member: $14,000
+
+						The list “is required for compliance to the IAB’s Client Side Counting (CSC) Measurement Guidelines”
+
+						googlebot
+						bingbot
+						twitterbot
+						duckduckbot
+						curl
+					</section>
+
+
+
+                </section>
 
 			<section>
 				<section>
-						<h2>Domain</h2>
+					<h2>Measure, measure, measure!</h2>
+					<blockquote>&ldquo;If you can not measure it, you can not improve it.&rdquo;</blockquote>
+					<p style="text-align: right;">Lord Kelvin</p>
 				</section>
-				<section data-background="img/about-adform.png" data-background-size="60%">
-				</section>
-			</section>
-
-			<section>
 				<section>
-						<h2>Measure, measure, measure!</h2>
+					Measurement is hard!
+					macro
+					micro
+				</section>
+				<section>
+					Microbenchmarking DOs DON’Ts from Microsoft:
+				</section>
+				<section>
+					<pre><code data-trim contenteditable>
+A feature -> C# code
+C# code + Compiler -> IL assembly
+IL assembly + BCL + 3rdParty libs -> Application
+Application + CLR -> ASM
+ASM + CPU -> Result
+					</code></pre>
+				</section>
+				<section>
+					<pre><code data-trim contenteditable>
+C# Compilers: Legacy, Roslyn
+IL Compilation: JIT, NGen, MPGO, .NET Native, LLVM
+JITs: Legacy x86/ x64, RyuJIT, Mono
+CLRs: CLR2, CLR4, CoreCLR, Mono
+GCs: Microsoft GC (few modes), Boehm, Sgen
+OSes: Windows, Linux, OS X
+Hardware: ...
+                   </code></pre>
+
 				</section>
 			</section>
 
@@ -73,19 +157,144 @@
 				<section>
 						<h2>Algorithm</h2>
 				</section>
+
+				<section>
+					Multiple string/ pattern matching problem
+				</section>
+
+				<section>
+					There are several string searching algorithms
+				</section>
+
+				<section>
+					Key features of the Aho–Corasick algorithm:
+
+a pattern matching algorithm
+accepts a finite set of patterns
+matches all patterns simultaneously
+constructs a finite state machine from patterns backed by a Trie
+constructs additional “failure” links between nodes that allows to continue traversal in case of match failure
+				</section>
+
+				<section>
+					You can play with an animated version of the algorithm here.
+					http://blog.ivank.net/aho-corasick-algorithm-in-as3.html
+				</section>
+
 			</section>
 
 			<section>
 				<section>
 						<h2>Tools</h2>
 				</section>
+
+				<section>
+					BenchmarkDotNet
+					alternatives
+				</section>
+
+				<section>
+					ILSpy
+				</section>
+
+				<section>
+					WinDbg
+				</section>
+
+				<section>
+					PerfView
+				</section>
+
+				<section>
+					Intel VTune Amplifier
+				</section>
+
+
 			</section>
 
 			<section>
 				<section>
 						<h2>Performance optimizations</h2>
 				</section>
+
+				<section>
+					the code
+				</section>
+
+				<section>
+					Measurement
+				</section>
+
+				<section>
+					APIs of Libraries
+				</section>
+
+				<section>
+					CLR internals
+				</section>
+
+				<section>
+					BCL Data Structures
+				</section>
+
+				<section>
+					How CPU works
+				</section>
+
+				<section>
+					<pre><code data-trim contenteditable>
+Caches:
+Cache line = 64 bytes
+L1 Data cache = 32 KB
+L1 Instruction cache = 32 KB
+L2 cache = 256 KB
+L3 cache = 8 MB
+
+Latency:
+L1 Data Cache Latency = 4 cycles for simple access via pointer
+L1 Data Cache Latency = 5 cycles for access with complex address calculation
+L2 Cache Latency = 12 cycles
+L3 Cache Latency = 36 cycles
+RAM Latency = 36 cycles + 57 ns
+                   </code></pre>
+				</section>
+
+				<section>
+					Front-end and the Back-end
+				</section>
+				<section>
+					Maximum IPC (instructions per cycle)
+				</section>
+
+				<section>
+					Advanced data structures
+				</section>
+
+				<section>
+					Hacks
+				</section>
+
+				<section>
+					A HUGE mistake
+				</section>
+
+				<section>
+					String traversal
+				</section>
+
 			</section>
+
+				<section>
+					Summary
+				</section>
+
+				<section>
+					What's next?
+					compacting the data structure
+					perfect hash
+					ASCII -> bit masks
+					SIMD (Single instruction, multiple data)
+				</section>
 
 			</div>
 		</div>
