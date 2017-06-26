@@ -24,95 +24,103 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-                <section>
-                    <section>
-                        <p>NET Meetup #22 Minsk 2017</p>
-                        <h3>High-performance .NET by example:</h3>
-                        <h4>Filtering bot traffic</h4>
-                        <p>
-                            <small>by <a href="https://twitter.com/nikitin_a_a">Alexandr Nikitin</a></small>
-                        </p>
-                    </section>
-                    <section>
-                        <h2>About me:</h2>
-                        <p>Software Engineer @Adform</p>
-                        <p>@nikitin_a_a</p>
-                        <p>https://github.com/alexandrnikitin/</p>
-                        <p>https://alexandrnikitin.github.io/blog</p>
-                    </section>
+				<section>
+					<section>
+						<h3>High-performance .NET by example:</h3>
+						<h4>Filtering bot traffic</h4>
+						<br/>
+						<p>NET Meetup #22 Minsk 2017</p>
+						<p>
+							<small>by <a href="https://twitter.com/nikitin_a_a">Alexandr Nikitin</a></small>
+						</p>
+					</section>
+					<section>
+						<h2>About me:</h2>
+						<p>Software Engineer @Adform</p>
+						<p>@nikitin_a_a</p>
+						<p>https://github.com/alexandrnikitin/</p>
+						<p>https://alexandrnikitin.github.io/blog/</p>
+					</section>
 
-                    <section>
-                        <h2>Overview</h2>
-                        <ul>
-                            <li>Domain</li>
-                            <li>Measure, measure, measure!</li>
-                            <li>Algorithm</li>
-                            <li>Tools</li>
-                            <li>Performance optimizations</li>
-                        </ul>
-                    </section>
-                </section>
+					<section>
+						<h2>Overview</h2>
+						<ul>
+							<li>Domain</li>
+							<li>Measure, measure, measure!</li>
+							<li>Algorithm</li>
+							<li>Tools</li>
+							<li>Performance optimizations</li>
+						</ul>
+					</section>
+				</section>
 
-                <section>
+				<section>
                     <section><h2>Domain</h2></section>
                     <section data-background="img/about-adform.png" data-background-size="60%"></section>
                     <section><h2>All websites receive bot traffic!</h2></section>
+					<section data-background="img/incapsula.png" data-background-size="75%"></section>
+					<section data-background="img/solve-media.png" data-background-size="70%"></section>
                     <section>
                         <h2>The bot classification</h2>
                         <ul>
-                            <li>White bots (good) - search engine bots like Google, Bing or DuckDuckGo.</li>
-                            <li>Grey bots (neutral) - feed fetchers, website crawlers and data scrappers.</li>
-                            <li>Black bots (harmful) - fraud and criminal activity, intentional impersonation for profit.</li>
+							<li><u>White bots (good)</u> - search engine bots like Google, Bing or DuckDuckGo.</li>
+                            <li><u>Grey bots (neutral)</u> - feed fetchers, website crawlers and data scrappers.</li>
+                            <li><u>Black bots (harmful)</u> - fraud and criminal activity, intentional impersonation for profit.</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h2>Ways to identify bot traffic:</h2>
+                        <h2>Ways to identify:</h2>
                         <ul>
-                            <li>Technical info: IP addresses, User Agent strings</li>
+                            <li>Technical info</li>
                             <li>Behavior analysis</li>
                             <li>Honeypots</li>
                         </ul>
                     </section>
+
                     <section>
                         Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
                     </section>
 
                     <section>
                         Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
-
-                        https://support.google.com/webmasters/answer/1061943
                     </section>
 
                     <section>
-                        The Interactive Advertising Bureau (IAB)
+                        <h3>The Interactive Advertising Bureau (IAB)</h3>
 
-						advertising business organization that develops industry standards
-
-						Do Not Track and Internet Explorer
-						Blocking of 3rd party cookies in Firefox
-						Did not allow Adblock Plus to attend their event
+						<ul>
+							<li>advertising business organization</li>
+							<li>develops industry standards</li>
+							<br/>
+							<li>Do Not Track and Internet Explorer</li>
+							<li>3rd party cookies in Firefox</li>
+							<li>Adblock Plus and IAB summit</li>
+						</ul>
                     </section>
 
 					<section>
-						IAB/ABC International Spiders and Bots List
-
-						Pricing:
-
-						IAB General Member: $4,000
-						IAB Associate Member: $7,000
-						Non-Member: $14,000
-
-						The list “is required for compliance to the IAB’s Client Side Counting (CSC) Measurement Guidelines”
-
-						googlebot
-						bingbot
-						twitterbot
-						duckduckbot
-						curl
+						<h3>IAB International Spiders and Bots List</h3>
+						<div class="fragment"><pre><code data-trim contenteditable>
+Pricing:
+IAB General Member: $4 000
+IAB Associate Member: $7 000
+Non-Member: $14 000
+						</code></pre></div>
+						<div class="fragment">The list “is required for compliance to the IAB’s Client Side Counting (CSC) Measurement Guidelines”</div>
 					</section>
 
-
+					<section>
+						<h3>Simplified content</h3>
+						<div style="font-size: 200%; width: 200%; margin-left: -25%">
+							<pre><code class="cs" data-trim contenteditable>
+googlebot
+bingbot
+twitterbot
+duckduckbot
+curl
+						</code></pre></div>
+					</section>
 
                 </section>
 
@@ -124,32 +132,34 @@
 				</section>
 				<section>
 					Measurement is hard!
-					macro
-					micro
 				</section>
 				<section>
-					Microbenchmarking DOs DON’Ts from Microsoft:
+					<h4>Microbenchmarking DOs DON’Ts from Microsoft:</h4>
+					<div style="font-size: 80%;"><ul>
+						<li>DO use a microbenchmark when you have an isolated piece of code whose performance you want to analyze.</li>
+						<li>DO NOT use a microbenchmark for code that has non-deterministic dependences (e.g. network calls, file I/O etc.)</li>
+						<li>DO run all performance testing against retail optimized builds.</li>
+						<li>DO run many iterations of the code in question to filter out noise.</li>
+						<li>DO minimize the effects of other applications on the performance of the microbenchmark by closing as many unnecessary applications as possible.</li>
+					</ul></div>
 				</section>
 				<section>
-					<pre><code data-trim contenteditable>
-A feature -> C# code
-C# code + Compiler -> IL assembly
-IL assembly + BCL + 3rdParty libs -> Application
-Application + CLR -> ASM
-ASM + CPU -> Result
-					</code></pre>
+					<h4>Development pipeline:</h4>
+						<div class="fragment" align="left">A feature -> C# code</div>
+						<div class="fragment" align="left">C# code + Compiler -> IL assembly</div>
+						<div class="fragment" align="left">IL assembly + BCL + 3rdParty libs -> Application</div>
+						<div class="fragment" align="left">Application + CLR -> ASM</div>
+						<div class="fragment" align="left">ASM + CPU -> Result</div>
 				</section>
 				<section>
-					<pre><code data-trim contenteditable>
-C# Compilers: Legacy, Roslyn
-IL Compilation: JIT, NGen, MPGO, .NET Native, LLVM
-JITs: Legacy x86/ x64, RyuJIT, Mono
-CLRs: CLR2, CLR4, CoreCLR, Mono
-GCs: Microsoft GC (few modes), Boehm, Sgen
-OSes: Windows, Linux, OS X
-Hardware: ...
-                   </code></pre>
-
+					<h4>Variety of implementations:</h4>
+					<div class="fragment" align="left">C# Compilers: Legacy, Roslyn, Mono</div>
+					<div class="fragment" align="left">IL Compilation: JIT, NGen, MPGO, .NET Native, LLVM</div>
+					<div class="fragment" align="left">JITs: Legacy x86/ x64, RyuJIT, Mono</div>
+					<div class="fragment" align="left">CLRs: CLR2, CLR4, CoreCLR, Mono</div>
+					<div class="fragment" align="left">GCs: Microsoft GC (few modes), Boehm, Sgen</div>
+					<div class="fragment" align="left">OSes: Windows, Linux, OS X</div>
+					<div class="fragment" align="left">Hardware: ...</div>
 				</section>
 			</section>
 
@@ -159,26 +169,46 @@ Hardware: ...
 				</section>
 
 				<section>
-					Multiple string/ pattern matching problem
+					<h4>Multiple string/ pattern matching problem</h4>
+					<ul>
+						<li>anti-virus software</li>
+						<li>network security</li>
+						<li>biology and DNA</li>
+						<li>spam detection</li>
+						<li>plagiarism detection</li>
+					</ul>
+				</section>
+
+				<section data-background="img/banners.jpg" data-background-size="80%"></section>
+
+				<section>
+					<h4>String searching algorithms:</h4>
+					<ul>
+						<li>Naive</li>
+						<li>Finite-state automaton</li>
+						<li>Aho–Corasick</li>
+						<li>Boyer-Moore & Commentz-Walter</li>
+						<li>Backward Oracle Matching & Set-BOM</li>
+						<li>Rabin–Karp</li>
+					</ul>
 				</section>
 
 				<section>
-					There are several string searching algorithms
+					<h4>Key features of the Aho–Corasick algorithm:</h4>
+					<ul>
+						<li>a pattern matching algorithm</li>
+						<li>accepts a finite set of patterns</li>
+						<li>matches all patterns simultaneously</li>
+						<li>backed by a Trie</li>
+						<li>“failure” links between nodes</li>
+					</ul>
 				</section>
 
-				<section>
-					Key features of the Aho–Corasick algorithm:
-
-a pattern matching algorithm
-accepts a finite set of patterns
-matches all patterns simultaneously
-constructs a finite state machine from patterns backed by a Trie
-constructs additional “failure” links between nodes that allows to continue traversal in case of match failure
-				</section>
+				<section data-background="img/ahocorasick.png" data-background-size="70%"></section>
 
 				<section>
-					You can play with an animated version of the algorithm here.
-					http://blog.ivank.net/aho-corasick-algorithm-in-as3.html
+					<p>An animated version</p>
+					<p>http://blog.ivank.net/aho-corasick-algorithm-in-as3.html</p>
 				</section>
 
 			</section>
@@ -189,24 +219,36 @@ constructs additional “failure” links between nodes that allows to continue 
 				</section>
 
 				<section>
-					BenchmarkDotNet
-					alternatives
+					<h4>BenchmarkDotNet</h4>
+					<a href="http://benchmarkdotnet.org/">http://benchmarkdotnet.org/</a>
+					<img src="img/benchmarkdotnet.png" alt="benchmarkdotnet">
+					<p>Alternatives: xunit.performance, NBench</p>
 				</section>
 
 				<section>
-					ILSpy
+					<h4>ILSpy</h4>
+					<a href="https://github.com/icsharpcode/ILSpy">https://github.com/icsharpcode/ILSpy</a>
+					<img src="img/ilspy.png" alt="ilspy">
+					<p>Alternatives: ildasm, dotPeek, Just Decompile, dnSpy</p>
 				</section>
 
 				<section>
-					WinDbg
+					<h4>PerfView</h4>
+					<a href="https://github.com/Microsoft/perfview">https://github.com/Microsoft/perfview</a>
+					<img src="img/perfview.png" alt="perfview">
 				</section>
 
 				<section>
-					PerfView
+					<h4>WinDbg</h4>
+					<a href="http://www.windbg.org/">http://www.windbg.org/</a>
+					<img src="img/windbg.png" alt="windbg">
+					<p><a href="https://docs.google.com/document/d/1yMQ8NAQZEBtsfVp7AsFLSA_MkIKlYNuSowG72_nU0ek">“Debugging .NET with WinDbg” by Sebastian Solnica</a></p>
 				</section>
 
 				<section>
-					Intel VTune Amplifier
+					<h4>Intel VTune Amplifier</h4>
+					<a href="https://software.intel.com/en-us/intel-vtune-amplifier-xe">https://software.intel.com/en-us/intel-vtune-amplifier-xe</a>
+					<img src="img/intel-vtune.png" alt="intel-vtune">
 				</section>
 
 
@@ -262,6 +304,7 @@ RAM Latency = 36 cycles + 57 ns
 				<section>
 					Front-end and the Back-end
 				</section>
+
 				<section>
 					Maximum IPC (instructions per cycle)
 				</section>
