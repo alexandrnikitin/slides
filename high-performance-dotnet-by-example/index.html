@@ -260,11 +260,125 @@ curl
 				</section>
 
 				<section>
-					the code
+					<h4>The code</h4>
+					<pre><code class="cs" data-trim contenteditable>
+public class AhoCorasickTree
+{
+    internal AhoCorasickTreeNode Root { get; set; }
+    public AhoCorasickTree(IEnumerable&lt;string&gt; keywords) { ... }
+    public bool Contains(string text) { ... }
+}
+					</code></pre>
+					<pre><code class="cs" data-trim contenteditable style="width: 150%;">
+internal class AhoCorasickTreeNode
+{
+    public char Value { get; private set; }
+    public AhoCorasickTreeNode Failure { get; set; }
+
+    private readonly Dictionary&lt;char, AhoCorasickTreeNode&gt; _transitionsDictionary;
+}
+					</code></pre>
 				</section>
 
 				<section>
+					<pre><code class="cs" data-trim contenteditable style="height: 100%; max-height: 600px;">
+public bool Contains(string text) { return Contains(text, false); }
+
+private bool Contains(string text, bool onlyStarts)
+{
+    var pointer = Root;
+    foreach (var c in text)
+    {
+        var transition = GetTransition(c, ref pointer);
+        if (transition != null)
+            pointer = transition;
+        else if (onlyStarts)
+            return false;
+        if (pointer.Results.Any())
+            return true;
+    }
+    return false;
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="height: 100%; max-height: 600px; width: 150%;">
+private AhoCorasickTreeNode GetTransition(char c, ref AhoCorasickTreeNode pointer)
+{
+    AhoCorasickTreeNode transition = null;
+    while (transition == null)
+    {
+        transition = pointer.GetTransition(c);
+
+        if (pointer == Root)
+            break;
+
+        if (transition == null)
+            pointer = pointer.Failure;
+    }
+    return transition;
+}
+					</code></pre>
+					<pre><code class="cs" data-trim contenteditable>
+public AhoCorasickTreeNode GetTransition(char c)
+{
+    return _transitionsDictionary.ContainsKey(c)
+               ? _transitionsDictionary[c]
+               : null;
+}
+					</code></pre>
+				</section>
+
+
+				<section>
 					Measurement
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="height: 100%; max-height: 600px; width: 150%; margin-left: -20%; overflow: hidden">
+public class SimpleManyKeywordsBenchmark
+{
+    // a common user agent string
+    private const string UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
+
+    // create the SUT
+    private readonly AhoCorasickTree _tree;
+    public SimpleManyKeywordsBenchmark()
+    {
+        _tree = new AhoCorasickTree(ResourcesUtils.GetKeywords().ToArray());
+    }
+
+    [Benchmark]
+    public bool Baseline()
+    {
+        return _tree.Contains(UserAgent);
+    }
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code data-trim contenteditable style="height: 100%; max-height: 600px;">
+``` ini
+BenchmarkDotNet=v0.10.3.0, OS=Microsoft Windows NT 6.2.9200.0
+Processor=Intel(R) Core(TM) i7-4600U CPU 2.10GHz, ProcessorCount=4
+Frequency=2630635 Hz, Resolution=380.1364 ns, Timer=TSC
+  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1637.0
+  Job-ECROUK : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1637.0
+
+Jit=RyuJit  Platform=X64  LaunchCount=5
+TargetCount=20  WarmupCount=20
+```
+
+
+
+|  Method  |      Mean |    StdDev |
+|--------- |---------- |---------- |
+| Baseline | 6.1364 us | 0.0314 us |
+					</code></pre>
+
+
 				</section>
 
 				<section>
