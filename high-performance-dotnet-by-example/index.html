@@ -377,28 +377,167 @@ TargetCount=20  WarmupCount=20
 |--------- |---------- |---------- |
 | Baseline | 6.1364 us | 0.0314 us |
 					</code></pre>
-
-
 				</section>
 
 				<section>
-					APIs of Libraries
+					<h4>Chapter 1: APIs of Libraries</h4>
+					<pre><code class="cs" data-trim contenteditable>
+public AhoCorasickTreeNode GetTransition(char c)
+{
+    return _transitionsDictionary.ContainsKey(c)
+               ? _transitionsDictionary[c]
+               : null;
+					</code></pre>
+					<div class="fragment">
+						<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+public AhoCorasickTreeNode GetTransition(char c)
+{
+    _transitionsDictionary.TryGetValue(c, out AhoCorasickTreeNode node);
+    return node;
+}
+						</code></pre>
+						<p>5% faster</p>
+					</div>
 				</section>
 
 				<section>
-					CLR internals
+					<h4>Chapter 2: CLR internals</h4>
+					<img src="img/perfview-collect.png" alt="perfview">
 				</section>
 
 				<section>
-					BCL Data Structures
+					<img src="img/allocations.png" alt="alloc">
 				</section>
 
 				<section>
-					How CPU works
+					<img src="img/allocation-stack.png" alt="alloc-stack">
 				</section>
 
 				<section>
-					<pre><code data-trim contenteditable>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+public static bool Any&lt;TSource&gt;(this IEnumerable&lt;TSource&gt; source)
+{
+  ...
+  using (IEnumerator&lt;TSource&gt; enumerator = source.GetEnumerator())
+  {
+    if (enumerator.MoveNext())
+      return true;
+  }
+  return false;
+}					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+public class List&lt;T&gt; : ... IEnumerable&lt;T&gt; ...
+{
+  ...
+    IEnumerator&lt;T&gt; IEnumerable&lt;T&gt;.GetEnumerator()
+    {
+      return (IEnumerator&lt;T&gt;) new List&lt;T&gt;.Enumerator(this);
+    }
+}
+					</code></pre>
+				</section>
+				<section>
+					<pre><code data-trim contenteditable style="width: 150%; margin-left: -20%; overflow: hidden">
+...
+IL_0000: ldarg.0
+IL_0001: newobj instance void valuetype System.Collections.Generic.List`1/Enumerator&lt;!T&gt;::.ctor(class System.Collections.Generic.List`1&lt;!0&gt;)
+IL_0006: box valuetype System.Collections.Generic.List`1/Enumerator&lt;!T&gt;
+IL_000b: ret
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+|    Method |      Mean |    StdDev |    Median | Scaled | Scaled-StdDev |
+|---------- |---------- |---------- |---------- |------- |-------------- |
+|   Control | 5.7016 us | 0.0669 us | 5.6759 us |   1.00 |          0.00 |
+| Treatment | 2.8440 us | 0.0357 us | 2.8433 us |   0.50 |          0.01 |
+					</code></pre>
+				</section>
+
+				<section>
+					<h4>Chapter 3: BCL Data Structures</h4>
+					<img src="img/bottleneck-dictionary.png" alt="bottleneck">
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 150%; margin-left: -20%; overflow: hidden">
+private int FindEntry(TKey key)
+{
+  if ((object) key == null) ThrowHelper.ThrowArgumentNullException(ExceptionArgument.key);
+  if (this.buckets != null)
+  {
+    int num = this.comparer.GetHashCode(key) & int.MaxValue;
+    for (int index = this.buckets[num % this.buckets.Length]; index >= 0; index = this.entries[index].next)
+    {
+      if (this.entries[index].hashCode == num && this.comparer.Equals(this.entries[index].key, key))
+        return index;
+    }
+  }
+  return -1;
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+Dictionary&lt;TKey, TValue&gt;.TryGetValue()
+  Dictionary&lt;TKey, TValue&gt;.FindEntry()
+    GenericEqualityComparer&lt;T&gt;.GetHashCode()
+      Char.GetHashCode() (inlined)
+    GenericEqualityComparer&lt;TKey&gt;.Equals()
+      Char.Equals() (inlined)
+    // repeat if hash collision
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="max-height:800px; width: 110%; margin-left: -5%; overflow: hidden">
+internal class AhoCorasickTreeNode
+{
+  private int[] _buckets;
+  private Entry[] _entries;
+  ...
+
+  public AhoCorasickTreeNode GetTransition(char c)
+  {
+      var bucket = c % _buckets.Length;
+      for (int i = _buckets[bucket]; i >= 0; i = _entries[i].Next)
+      {
+          if (_entries[i].Key == c)
+          {
+              return _entries[i].Value;
+          }
+      }
+
+      return null;
+  }
+
+  ...
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+|    Method |      Mean |    StdDev | Scaled | Scaled-StdDev |
+|---------- |---------- |---------- |------- |-------------- |
+|   Control | 2.7514 us | 0.0249 us |   1.00 |          0.00 |
+| Treatment | 1.7416 us | 0.0216 us |   0.63 |          0.01 |
+					</code></pre>
+				</section>
+
+
+				<section>
+					<h4>How CPU works</h4>
+					<img src="img/cpu.jpg" alt="cpu">
+				</section>
+
+				<section>
+					<pre><code data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
 Caches:
 Cache line = 64 bytes
 L1 Data cache = 32 KB
@@ -414,45 +553,301 @@ L3 Cache Latency = 36 cycles
 RAM Latency = 36 cycles + 57 ns
                    </code></pre>
 				</section>
+				<section>
+					Front-end and Back-end
+				</section>
+				<section data-background="img/stackoverflow-question.png" data-background-size="80%"></section>
+				<section data-background="img/stackoverflow-answer.png" data-background-size="80%"></section>
+				<section data-background="img/stackoverflow-code.png" data-background-size="80%"></section>
 
 				<section>
-					Front-end and the Back-end
+					<a href="https://software.intel.com/en-us/articles/intel-sdm">"Intel 64 and IA-32 Architectures Software Developer Manuals"</a>
+					<a href="http://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-optimization-manual.html">"Intel 64 and IA-32 Architectures Optimization Reference Manual"</a>
 				</section>
 
 				<section>
-					Maximum IPC (instructions per cycle)
+					<h4>Chapter 4: Advanced data structures</h4>
+					<p>PerfView is useless at this point</p>
+					<p>Intel VTune Amplifier FTW</p>
+				</section>
+				<section data-background="img/vtune-ge.png" data-background-size="70%"></section>
+				<section data-background="img/vtune-ma.png" data-background-size="70%"></section>
+
+				<section>
+
+					<div style="font-size: 80%;"><pre><code class="cs" data-trim contenteditable style="height: 200%; max-height: 1000px">
+internal class AhoCorasickTreeNode
+{
+  // We have two arrays located in different places of the heap.
+  // one for buckets
+  private int[] _buckets;
+  // another for values
+  private Entry[] _entries;
+
+  public AhoCorasickTreeNode GetTransition(char c)
+  {
+      // access the length of the bucket array's
+      var bucket = c % _buckets.Length;
+
+      // access an element of the bucket array
+      for (int i = _buckets[bucket]; i >= 0; i = _entries[i].Next)
+      {
+          // access the value array somewhere on the heap
+          if (_entries[i].Key == c)
+          {
+              return _entries[i].Value;
+          }
+
+          // we use the separate chaining method for hash collision resolution
+          // if case of hash collision we follow the "Next" pointer
+          // which can point to any place of the values array
+      }
+      return null;
+  }
+}
+					</code></pre></div>
 				</section>
 
 				<section>
-					Advanced data structures
+					<h4>Open addressing</h4>
+					<p>hash collision is resolved by probing</p>
+					<p>Linear, Quadratic, Double hashing</p>
+					<p>is not a silver bullet</p>
+					<img src="img/openaddress.png" alt="openaddress" style="max-height: 250px; background-color: white">
 				</section>
 
 				<section>
-					Hacks
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+|    Method |          Mean |     StdDev |        Median | Scaled | Scaled-StdDev |
+|---------- |-------------- |----------- |-------------- |------- |-------------- |
+|   Control | 1,732.3850 ns | 22.5726 ns | 1,726.0844 ns |   1.00 |          0.00 |
+| Treatment |   723.2748 ns |  6.9478 ns |   722.9084 ns |   0.42 |          0.01 |
+					</code></pre>
+				</section>
+
+
+				<section>
+					<h4>Chapter 5: Hacks</h4>
+					<img src="img/vtune-ge-divider.png" alt="divider">
 				</section>
 
 				<section>
-					A HUGE mistake
+					<pre><code class="cs" data-trim contenteditable>
+public AhoCorasickTreeNode GetTransition(char c)
+{
+    if (_size == 0) return null;
+=>  var ind = c % _size;
+    var keyThere = _entries[ind].Key;
+...
+}
+					</code></pre>
+					<div class="fragment"><pre><code class="asm" data-trim contenteditable style="width: 120%; margin-left: -10%; overflow: hidden">
+...
+; r8d has _size
+movzx r9d, dx ; char argument to r9d
+mov eax, r9d ; r9d to eax
+cdq ; clear edx
+idiv r8d ; divide eax by r8d (_size); quotient in ax, remainder in dx
+mov eax, edx ; result to eax
+...
+					</code></pre></div>
+				</section>
+				<section>
+					<pre><code class="cs" data-trim contenteditable>
+public AhoCorasickTreeNode GetTransition(char c)
+{
+    if (_size == 0) return null;
+    var ind = c & (_size - 1); // _size needs to be a power of 2
+    var keyThere = _entries[ind].Key;
+...
+}					</code></pre>
+					<a href="https://graphics.stanford.edu/~seander/bithacks.html">More bithacks on the Stanford university website</a>
 				</section>
 
 				<section>
-					String traversal
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+|    Method |        Mean |    StdDev | Scaled | Scaled-StdDev |
+|---------- |------------ |---------- |------- |-------------- |
+|   Control | 757.1089 ns | 8.5518 ns |   1.00 |          0.00 |
+| Treatment | 427.0176 ns | 6.4534 ns |   0.56 |          0.01 |
+					</code></pre>
 				</section>
 
+
+				<section>
+					<h4>Chapter 6: A HUGE mistake</h4>
+					<img src="img/this-is-fine.jpg" alt="fine">
+				</section>
+
+				<section>
+					<h4>Sidenote: String traversal</h4>
+					<pre><code class="cs" data-trim contenteditable>
+for (var i = 0; i < userAgent.Length; i++)
+{
+    var c = userAgent[i];
+    ...
+}
+					</code></pre>
+					<div class="fragment"><pre><code>
+...
+; Block 2:
+movsxd r8, eax
+movzx r8d, word ptr [rcx+r8*2+0xc]
+inc eax
+cmp edx, eax
+jnle 0x7ffdeecd3d39 ; Block 2
+...
+					</code></pre></div>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable>
+fixed (char* p = userAgent)
+{
+    var len = userAgent.Length * 2;
+    var cptr = p;
+    while (len > 0)
+    {
+        var c = *cptr;
+        cptr++;
+        len -= 2;
+        ...
+    }
+}
+					</code></pre>
+					<div class="fragment"><pre><code>
+...
+; Block 4:
+movzx ecx, word ptr [rax]
+add rax, 0x2
+add edx, 0xfffffffe
+test edx, edx
+jnle 0x7ffdeecd3d83 ; Block 4
+...
+					</code></pre></div>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+|          Method |        Mean |    StdDev |      Median | Scaled | Scaled-StdDev |
+|---------------- |------------ |---------- |------------ |------- |-------------- |
+|        Traverse | 132.5022 ns | 0.9385 ns | 132.1233 ns |   1.00 |          0.00 |
+|  TraverseUnsafe |  70.7301 ns | 0.1986 ns |  70.6969 ns |   0.53 |          0.00 |
+					</code></pre>
+				</section>
+
+				<section>
+					<ul>
+						<li>Bound checks</li>
+						<li>Relative pointers</li>
+						<li>Pointer reuse</li>
+						<li>String traversal</li>
+					</ul>
+				</section>
+				<section data-background="img/unsafe.jpg" data-background-size="70%"></section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+[
+  Node1: [Size, FailureIndex, [Key1, NodeIndex1; KeyN, NodeIndexN;]];
+  NodeN: ...
+]
+					</code></pre>
+				</section>
+
+				<section><div style="font-size: 60%;"><pre><code class="cs" data-trim contenteditable style="height: 200%; max-height: 1000px">
+private readonly byte[] _data;
+
+private static unsafe byte GetKey(byte* currentNodePtr, int ind)
+{
+    return *(byte*)(currentNodePtr + SizeOfSize + SizeOfFailure + ind * (SizeOfKey + SizeOfNode));
+}
+
+public unsafe bool Contains(string text)
+{
+    fixed (byte* b = _data)
+    fixed (char* p = text)
+    {
+        var len = text.Length * 2;
+        var currentNodePtr = b;
+        var cptr = p;
+        while (len > 0)
+        {
+            var c = *cptr;
+            cptr++;
+            len -= 2;
+
+            CheckFailure:
+            var size = *currentNodePtr;
+            var ind = c & (size - 1);
+            var key = GetKey(currentNodePtr, ind);
+            if (key == c)
+            {
+                currentNodePtr = GetNext(b, currentNodePtr, ind);
+                if (currentNodePtr == b) return true;
+            }
+            else
+            {
+                currentNodePtr = GetFailure(b, currentNodePtr);
+                if (currentNodePtr != b) goto CheckFailure;
+            }
+        }
+    }
+    return false;
+}
+				</code></pre></div></section>
+
+				<section>
+					<h4>How to measure?</h4>
+					<img src="img/custom-analysis.png" alt="ca" class="fragment">
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable>
+private static readonly byte[] Data = new byte[16 * 1024 * 1024];
+
+for (var i = 0; i < 1000000; i++)
+{
+    // clear the CPU caches
+    var sum = 0;
+    for (var j = 0; j < Data.Length; j++)
+    {
+        sum += Data[j];
+    }
+
+    // the code we profile
+    tree.Contains(UserAgent);
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<img src="img/vtune-llc.png" alt="llc">
+					<img src="img/vtune-llc-after.png" alt="llc-after" class="fragment">
+				</section>
 			</section>
-
 				<section>
-					Summary
+					<h4>Summary</h4>
+					<ul>
+						<li>Improved performance by 20-30? times</li>
+						<li>API usage</li>
+						<li>CLR internals</li>
+						<li>re-implementing Dictionary</li>
+						<li>Open addressing Hash table</li>
+						<li>modulo bit hack</li>
+						<li>Made a mistake</li>
+						<li>CPU-friendly implementation</li>
+					</ul>
 				</section>
-
 				<section>
-					What's next?
-					compacting the data structure
-					perfect hash
-					ASCII -> bit masks
-					SIMD (Single instruction, multiple data)
+					<h4>What's next?</h4>
+					<ul>
+						<li>Compacting the data structure</li>
+						<li>Perfect hash</li>
+						<li>ASCII -> bit masks</li>
+						<li>SIMD (Single instruction, multiple data)</li>
+					</ul>
 				</section>
-
 			</div>
 		</div>
 
