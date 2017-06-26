@@ -185,7 +185,7 @@ curl
 					<h4>String searching algorithms:</h4>
 					<ul>
 						<li>Naive</li>
-						<li>Finite-state automaton</li>
+						<li>Finite-state automation</li>
 						<li>Aho–Corasick</li>
 						<li>Boyer-Moore & Commentz-Walter</li>
 						<li>Backward Oracle Matching & Set-BOM</li>
@@ -378,6 +378,9 @@ TargetCount=20  WarmupCount=20
 | Baseline | 6.1364 us | 0.0314 us |
 					</code></pre>
 				</section>
+			</section>
+
+				<section>
 
 				<section>
 					<h4>Chapter 1: APIs of Libraries</h4>
@@ -399,6 +402,9 @@ public AhoCorasickTreeNode GetTransition(char c)
 						<p>5% faster</p>
 					</div>
 				</section>
+				</section>
+
+				<section>
 
 				<section>
 					<h4>Chapter 2: CLR internals</h4>
@@ -457,6 +463,9 @@ IL_000b: ret
 | Treatment | 2.8440 us | 0.0357 us | 2.8433 us |   0.50 |          0.01 |
 					</code></pre>
 				</section>
+				</section>
+
+				<section>
 
 				<section>
 					<h4>Chapter 3: BCL Data Structures</h4>
@@ -530,10 +539,16 @@ internal class AhoCorasickTreeNode
 					</code></pre>
 				</section>
 
+				</section>
+
+				<section>
 
 				<section>
 					<h4>How CPU works</h4>
 					<img src="img/cpu.jpg" alt="cpu">
+					<aside class="notes">
+						TODO
+					</aside>
 				</section>
 
 				<section>
@@ -562,8 +577,12 @@ RAM Latency = 36 cycles + 57 ns
 
 				<section>
 					<a href="https://software.intel.com/en-us/articles/intel-sdm">"Intel 64 and IA-32 Architectures Software Developer Manuals"</a>
+					<br/>
 					<a href="http://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-optimization-manual.html">"Intel 64 and IA-32 Architectures Optimization Reference Manual"</a>
 				</section>
+				</section>
+
+				<section>
 
 				<section>
 					<h4>Chapter 4: Advanced data structures</h4>
@@ -624,6 +643,9 @@ internal class AhoCorasickTreeNode
 | Treatment |   723.2748 ns |  6.9478 ns |   722.9084 ns |   0.42 |          0.01 |
 					</code></pre>
 				</section>
+				</section>
+
+				<section>
 
 
 				<section>
@@ -672,6 +694,9 @@ public AhoCorasickTreeNode GetTransition(char c)
 | Treatment | 427.0176 ns | 6.4534 ns |   0.56 |          0.01 |
 					</code></pre>
 				</section>
+				</section>
+
+				<section>
 
 
 				<section>
@@ -739,7 +764,7 @@ jnle 0x7ffdeecd3d83 ; Block 4
 				<section>
 					<ul>
 						<li>Bound checks</li>
-						<li>Relative pointers</li>
+						<li>Compressed relative pointers</li>
 						<li>Pointer reuse</li>
 						<li>String traversal</li>
 					</ul>
@@ -826,6 +851,8 @@ for (var i = 0; i < 1000000; i++)
 					<img src="img/vtune-llc-after.png" alt="llc-after" class="fragment">
 				</section>
 			</section>
+
+
 				<section>
 					<h4>Summary</h4>
 					<ul>
