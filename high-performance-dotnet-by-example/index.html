@@ -1,0 +1,1001 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<h3>High-performance .NET by example:</h3>
+						<h4>Filtering bot traffic</h4>
+						<br/>
+						<p>NET Meetup #22 Minsk 2017</p>
+						<p>
+							<small>by <a href="https://twitter.com/nikitin_a_a">Alexandr Nikitin</a></small>
+						</p>
+					</section>
+					<section>
+						<h2>About me:</h2>
+						<p>Software Engineer @Adform</p>
+						<p>@nikitin_a_a</p>
+						<p>https://github.com/alexandrnikitin/</p>
+						<p>https://alexandrnikitin.github.io/blog/</p>
+					</section>
+
+					<section>
+						<h2>Overview</h2>
+						<ul>
+							<li>Domain</li>
+							<li>Measure, measure, measure!</li>
+							<li>Algorithm</li>
+							<li>Tools</li>
+							<li>Performance optimizations</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+                    <section data-background="img/about-adform.png" data-background-size="60%"></section>
+                    <section>
+						<h2>All websites receive bot traffic!</h2>
+						<aside class="notes">
+							<p>Боты повсюду</p>
+							<p>В интернете есть достаточно исследований на эту тему.</p>
+							<p>Комерческие исследования имеют тенденцую занижать</p>
+							<p>Академики же в свою очередь ...</p>
+						</aside>
+					</section>
+					<section data-background="img/incapsula.png" data-background-size="75%"></section>
+					<section data-background="img/solve-media.png" data-background-size="70%"></section>
+					<section>
+						<p>Sources:</p>
+						<p><a href="https://www.incapsula.com/blog/bot-traffic-report-2016.html">Incapsula</a></p>
+						<p><a href="http://news.solvemedia.com/post/32450539468/solve-media-the-bot-stops-here-infographic">Solve Media</a></p>
+					</section>
+                    <section>
+                        <h2>The bot classification</h2>
+                        <ul>
+							<li><u>White bots (good)</u> - search engine bots like Google, Bing or DuckDuckGo.</li>
+                            <li><u>Grey bots (neutral)</u> - feed fetchers, website crawlers and data scrappers.</li>
+                            <li><u>Black bots (harmful)</u> - fraud and criminal activity, intentional impersonation for profit.</li>
+                        </ul>
+						<aside class="notes">
+							<p>Но не все боты плохие, без некоторых интернета бы не было</p>
+							<p>Я буду говорить только о white and grey bots которые идентифицируют себя как таковые</p>
+							<p>Я не буду касаться мошенечества и криминальной активности, это отдельная огромная и интересная тема.</p>
+						</aside>
+					</section>
+
+                    <section>
+                        <h2>Ways to identify:</h2>
+                        <ul>
+                            <li>Technical info</li>
+                            <li>Behavior analysis</li>
+                            <li>Honeypots</li>
+                        </ul>
+						<aside class="notes">
+							<p>Фокус доклана не на том как блокировать трафик, а на перформансе</p>
+							TODO фабрика ботов
+						</aside>
+					</section>
+
+                    <section>
+                        Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
+                    </section>
+
+                    <section>
+                        Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+                    </section>
+
+                    <section>
+                        <h3>The Interactive Advertising Bureau (IAB)</h3>
+
+						<ul>
+							<li>advertising business organization</li>
+							<li>develops industry standards</li>
+							<br/>
+							<li>Do Not Track and Internet Explorer</li>
+							<li>3rd party cookies in Firefox</li>
+							<li>Adblock Plus and IAB summit</li>
+						</ul>
+						<aside class="notes">
+							<p>В интернете есть бесплатные списки ботов которые эффективные и часто обновляются</p>
+							<p>Это бизнес организация, и членство стоит денег</p>
+						</aside>
+					</section>
+
+					<section>
+						<h3>IAB International Spiders and Bots List</h3>
+						<div class="fragment"><pre><code data-trim contenteditable>
+Pricing:
+IAB General Member: $4 000
+IAB Associate Member: $7 000
+Non-Member: $14 000
+						</code></pre></div>
+						<div class="fragment">The list “is required for compliance to the IAB’s Client Side Counting (CSC) Measurement Guidelines”</div>
+						<aside class="notes">
+							<p>У этой организации есть </p>
+							<p>И казалось бы зачем платить такие деньги, но... эта организация</p>
+							ТОДО профит
+						</aside>
+					</section>
+
+					<section>
+						<h3>Simplified content</h3>
+						<div style="font-size: 200%; width: 200%; margin-left: -25%">
+							<pre><code class="cs" data-trim contenteditable>
+googlebot
+bingbot
+twitterbot
+duckduckbot
+curl
+						</code></pre></div>
+					</section>
+
+                </section>
+
+			<section>
+				<section>
+					<h2>Measure, measure, measure!</h2>
+					<blockquote>&ldquo;If you can not measure it, you can not improve it.&rdquo;</blockquote>
+					<p style="text-align: right;">Lord Kelvin</p>
+					<aside class="notes">
+						<p>Это самое главное, что нужно вынести их этого доклада</p>
+					</aside>
+
+				</section>
+				<section>
+					Measurement is hard!
+				</section>
+				<section>
+					<h4>Microbenchmarking DOs DON’Ts from Microsoft:</h4>
+					<div style="font-size: 80%;"><ul>
+						<li>DO use a microbenchmark when you have an isolated piece of code whose performance you want to analyze.</li>
+						<li>DO NOT use a microbenchmark for code that has non-deterministic dependences (e.g. network calls, file I/O etc.)</li>
+						<li>DO run all performance testing against retail optimized builds.</li>
+						<li>DO run many iterations of the code in question to filter out noise.</li>
+						<li>DO minimize the effects of other applications on the performance of the microbenchmark by closing as many unnecessary applications as possible.</li>
+					</ul></div>
+				</section>
+				<section>
+					<h4>Development pipeline:</h4>
+						<div class="fragment" align="left">A feature -> C# code</div>
+						<div class="fragment" align="left">C# code + Compiler -> IL assembly</div>
+						<div class="fragment" align="left">IL assembly + BCL + 3rdParty libs -> Application</div>
+						<div class="fragment" align="left">Application + CLR -> ASM</div>
+						<div class="fragment" align="left">ASM + CPU -> Result</div>
+				</section>
+				<section>
+					<h4>Variety of implementations:</h4>
+					<div class="fragment" align="left">C# Compilers: Legacy, Roslyn, Mono</div>
+					<div class="fragment" align="left">IL Compilation: JIT, NGen, MPGO, .NET Native, LLVM</div>
+					<div class="fragment" align="left">JITs: Legacy x86/ x64, RyuJIT, Mono</div>
+					<div class="fragment" align="left">CLRs: CLR2, CLR4, CoreCLR, Mono</div>
+					<div class="fragment" align="left">GCs: Microsoft GC (few modes), Boehm, Sgen</div>
+					<div class="fragment" align="left">OSes: Windows, Linux, OS X</div>
+					<div class="fragment" align="left">Hardware: ...</div>
+				</section>
+			</section>
+
+			<section>
+				<section>
+						<h2>Algorithm</h2>
+					<aside class="notes">
+						<p>Измерения и оптимизации это хорошо, они отвечают на вопрос как быстро мы делаем работу?</p>
+						<p>Но перед этим нам надо ответить на вопрос сколько работы нам нужно сделать?</p>
+						<p>Наша цель проверить, содержит ли юзер агент один из кейвордов из списка</p>
+					</aside>
+				</section>
+
+				<section>
+					<h4>Multiple string/ pattern matching problem</h4>
+					<ul>
+						<li>anti-virus software</li>
+						<li>network security</li>
+						<li>biology and DNA</li>
+						<li>spam detection</li>
+						<li>plagiarism detection</li>
+					</ul>
+					<aside class="notes">
+						<p>Это важная проблема во многих областях комп саенс</p>
+					</aside>
+				</section>
+
+				<section data-background="img/banners.jpg" data-background-size="80%"></section>
+
+				<section>
+					<h4>String searching algorithms:</h4>
+					<ul>
+						<li>Naive</li>
+						<li>Finite-state automation</li>
+						<li>Aho–Corasick</li>
+						<li>Boyer-Moore & Commentz-Walter</li>
+						<li>Backward Oracle Matching & Set-BOM</li>
+						<li>Rabin–Karp</li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>Key features of the Aho–Corasick algorithm:</h4>
+					<ul>
+						<li>by Alfred Aho and Margaret Corasick in 1975</li>
+						<li>a pattern matching algorithm</li>
+						<li>accepts a finite set of patterns</li>
+						<li>matches all patterns simultaneously</li>
+						<li>backed by a Trie</li>
+						<li>“failure” links between nodes</li>
+					</ul>
+					<aside class="notes">
+						<p>Trie and persistent immutable DS</p>
+						<p>Первые версии grep</p>
+					</aside>
+				</section>
+
+				<section data-background="img/ahocorasick.png" data-background-size="70%"></section>
+
+				<section>
+					<p>An animated version</p>
+					<p>http://blog.ivank.net/aho-corasick-algorithm-in-as3.html</p>
+				</section>
+
+			</section>
+
+			<section>
+				<section>
+						<h2>Tools</h2>
+				</section>
+
+				<section>
+					<h4>BenchmarkDotNet</h4>
+					<a href="http://benchmarkdotnet.org/">http://benchmarkdotnet.org/</a>
+					<img src="img/benchmarkdotnet.png" alt="benchmarkdotnet">
+					<p>Alternatives: xunit.performance, NBench</p>
+					<aside class="notes">
+						<p>Как НЮнит для юнит тестов</p>
+						<p>Достаточно активно развивается: ГЦ, хардвар, мультитред</p>
+					</aside>
+				</section>
+
+				<section>
+					<h4>ILSpy</h4>
+					<a href="https://github.com/icsharpcode/ILSpy">https://github.com/icsharpcode/ILSpy</a>
+					<img src="img/ilspy.png" alt="ilspy">
+					<p>Alternatives: ildasm, dotPeek, Just Decompile, dnSpy</p>
+				</section>
+
+				<section>
+					<h4>PerfView</h4>
+					<a href="https://github.com/Microsoft/perfview">https://github.com/Microsoft/perfview</a>
+					<img src="img/perfview.png" alt="perfview">
+				</section>
+
+				<section>
+					<h4>WinDbg</h4>
+					<a href="http://www.windbg.org/">http://www.windbg.org/</a>
+					<img src="img/windbg.png" alt="windbg">
+					<p><a href="https://docs.google.com/document/d/1yMQ8NAQZEBtsfVp7AsFLSA_MkIKlYNuSowG72_nU0ek">“Debugging .NET with WinDbg” by Sebastian Solnica</a></p>
+				</section>
+
+				<section>
+					<h4>Intel VTune Amplifier</h4>
+					<a href="https://software.intel.com/en-us/intel-vtune-amplifier-xe">https://software.intel.com/en-us/intel-vtune-amplifier-xe</a>
+					<img src="img/intel-vtune.png" alt="intel-vtune">
+				</section>
+
+
+			</section>
+
+			<section>
+				<section>
+						<h2>Performance optimizations</h2>
+					<aside class="notes">
+						<p>Справедливости ради</p>
+						<p>Первая версия</p>
+						<p>Мой интерес </p>
+					</aside>
+				</section>
+
+				<section>
+					<h4>The code</h4>
+					<pre><code class="cs" data-trim contenteditable>
+public class AhoCorasickTree
+{
+    internal AhoCorasickTreeNode Root { get; set; }
+    public AhoCorasickTree(IEnumerable&lt;string&gt; keywords) { ... }
+    public bool Contains(string text) { ... }
+}
+					</code></pre>
+					<pre><code class="cs" data-trim contenteditable style="width: 150%;">
+internal class AhoCorasickTreeNode
+{
+    public char Value { get; private set; }
+    public AhoCorasickTreeNode Failure { get; set; }
+
+    private readonly Dictionary&lt;char, AhoCorasickTreeNode&gt; _transitionsDictionary;
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="height: 100%; max-height: 600px;">
+public bool Contains(string text) { return Contains(text, false); }
+
+private bool Contains(string text, bool onlyStarts)
+{
+    var pointer = Root;
+    foreach (var c in text)
+    {
+        var transition = GetTransition(c, ref pointer);
+        if (transition != null)
+            pointer = transition;
+        else if (onlyStarts)
+            return false;
+        if (pointer.Results.Any())
+            return true;
+    }
+    return false;
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="height: 100%; max-height: 600px; width: 150%;">
+private AhoCorasickTreeNode GetTransition(char c, ref AhoCorasickTreeNode pointer)
+{
+    AhoCorasickTreeNode transition = null;
+    while (transition == null)
+    {
+        transition = pointer.GetTransition(c);
+
+        if (pointer == Root)
+            break;
+
+        if (transition == null)
+            pointer = pointer.Failure;
+    }
+    return transition;
+}
+					</code></pre>
+					<pre><code class="cs" data-trim contenteditable>
+public AhoCorasickTreeNode GetTransition(char c)
+{
+    return _transitionsDictionary.ContainsKey(c)
+               ? _transitionsDictionary[c]
+               : null;
+}
+					</code></pre>
+				</section>
+
+
+				<section>
+					Measurement
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="height: 100%; max-height: 600px; width: 150%; margin-left: -20%; overflow: hidden">
+public class SimpleManyKeywordsBenchmark
+{
+    // a common user agent string
+    private const string UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
+
+    // create the SUT
+    private readonly AhoCorasickTree _tree;
+    public SimpleManyKeywordsBenchmark()
+    {
+        _tree = new AhoCorasickTree(ResourcesUtils.GetKeywords().ToArray());
+    }
+
+    [Benchmark]
+    public bool Baseline()
+    {
+        return _tree.Contains(UserAgent);
+    }
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code data-trim contenteditable style="height: 100%; max-height: 600px;">
+``` ini
+BenchmarkDotNet=v0.10.3.0, OS=Microsoft Windows NT 6.2.9200.0
+Processor=Intel(R) Core(TM) i7-4600U CPU 2.10GHz, ProcessorCount=4
+Frequency=2630635 Hz, Resolution=380.1364 ns, Timer=TSC
+  [Host]     : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1637.0
+  Job-ECROUK : Clr 4.0.30319.42000, 64bit RyuJIT-v4.6.1637.0
+
+Jit=RyuJit  Platform=X64  LaunchCount=5
+TargetCount=20  WarmupCount=20
+```
+
+
+
+|  Method  |      Mean |    StdDev |
+|--------- |---------- |---------- |
+| Baseline | 6.1364 us | 0.0314 us |
+					</code></pre>
+				</section>
+			</section>
+
+				<section>
+
+				<section>
+					<h4>Chapter 1: APIs of Libraries</h4>
+					<pre><code class="cs" data-trim contenteditable>
+public AhoCorasickTreeNode GetTransition(char c)
+{
+    return _transitionsDictionary.ContainsKey(c)
+               ? _transitionsDictionary[c]
+               : null;
+					</code></pre>
+					<div class="fragment">
+						<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+public AhoCorasickTreeNode GetTransition(char c)
+{
+    _transitionsDictionary.TryGetValue(c, out AhoCorasickTreeNode node);
+    return node;
+}
+						</code></pre>
+						<p>5% faster</p>
+					</div>
+				</section>
+				</section>
+
+				<section>
+
+				<section>
+					<h4>Chapter 2: CLR internals</h4>
+					<img src="img/perfview-collect.png" alt="perfview">
+				</section>
+
+					<section data-background="img/allocations.png" data-background-size="80%"></section>
+					<section data-background="img/allocation-stack.png" data-background-size="80%"></section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+public static bool Any&lt;TSource&gt;(this IEnumerable&lt;TSource&gt; source)
+{
+  ...
+  using (IEnumerator&lt;TSource&gt; enumerator = source.GetEnumerator())
+  {
+    if (enumerator.MoveNext())
+      return true;
+  }
+  return false;
+}					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+public class List&lt;T&gt; : ... IEnumerable&lt;T&gt; ...
+{
+  ...
+    IEnumerator&lt;T&gt; IEnumerable&lt;T&gt;.GetEnumerator()
+    {
+      return (IEnumerator&lt;T&gt;) new List&lt;T&gt;.Enumerator(this);
+    }
+}
+					</code></pre>
+				</section>
+				<section>
+					<pre><code data-trim contenteditable style="width: 150%; margin-left: -20%; overflow: hidden">
+...
+IL_0000: ldarg.0
+IL_0001: newobj instance void valuetype System.Collections.Generic.List`1/Enumerator&lt;!T&gt;::.ctor(class System.Collections.Generic.List`1&lt;!0&gt;)
+IL_0006: box valuetype System.Collections.Generic.List`1/Enumerator&lt;!T&gt;
+IL_000b: ret
+					</code></pre>
+					<aside class="notes">
+						<p>Интерфейс вызовы проходят через таблицу виртуальных методов. А у структур ее нет по своей природе. Чтобы обрести таблицу виртуальных методов, структуре надо стать референс типом. Со всеми вытекающими последствиями.</p>
+					</aside>
+				</section>
+					<section>
+					<pre><code class="cs">
+if (pointer.Results.Any())
+	return true;
+					</code></pre>
+					<pre><code class="cs">
+if (pointer.Results.Count > 0)
+	return true;
+					</code></pre>
+					</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+|    Method |      Mean |    StdDev |    Median | Scaled | Scaled-StdDev |
+|---------- |---------- |---------- |---------- |------- |-------------- |
+|   Control | 5.7016 us | 0.0669 us | 5.6759 us |   1.00 |          0.00 |
+| Treatment | 2.8440 us | 0.0357 us | 2.8433 us |   0.50 |          0.01 |
+					</code></pre>
+				</section>
+				</section>
+
+				<section>
+
+				<section>
+					<h4>Chapter 3: BCL Data Structures</h4>
+					<img src="img/bottleneck-dictionary.png" alt="bottleneck">
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 150%; margin-left: -20%; overflow: hidden">
+private int FindEntry(TKey key)
+{
+  if ((object) key == null) ThrowHelper.ThrowArgumentNullException(ExceptionArgument.key);
+  if (this.buckets != null)
+  {
+    int num = this.comparer.GetHashCode(key) & int.MaxValue;
+    for (int index = this.buckets[num % this.buckets.Length]; index >= 0; index = this.entries[index].next)
+    {
+      if (this.entries[index].hashCode == num && this.comparer.Equals(this.entries[index].key, key))
+        return index;
+    }
+  }
+  return -1;
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+Dictionary&lt;TKey, TValue&gt;.TryGetValue()
+  Dictionary&lt;TKey, TValue&gt;.FindEntry()
+    GenericEqualityComparer&lt;T&gt;.GetHashCode()
+      Char.GetHashCode() (inlined)
+    GenericEqualityComparer&lt;TKey&gt;.Equals()
+      Char.Equals() (inlined)
+    // repeat if hash collision
+					</code></pre>
+					<aside class="notes">
+						<p>Это в общем то понятно, Dictionary это генерик структура данных для общих целей. Ей надо поддерживать любой тип одинаково хорошо.</p>
+						<p>Но нам это все не надо, мы знаем наш тип. Почему бы нам самим просто не реализовать ее.</p>
+					</aside>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="max-height:800px; width: 110%; margin-left: -5%; overflow: hidden">
+internal class AhoCorasickTreeNode
+{
+  private int[] _buckets;
+  private Entry[] _entries;
+  ...
+
+  public AhoCorasickTreeNode GetTransition(char c)
+  {
+      var bucket = c % _buckets.Length;
+      for (int i = _buckets[bucket]; i >= 0; i = _entries[i].Next)
+      {
+          if (_entries[i].Key == c)
+          {
+              return _entries[i].Value;
+          }
+      }
+
+      return null;
+  }
+
+  ...
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+|    Method |      Mean |    StdDev | Scaled | Scaled-StdDev |
+|---------- |---------- |---------- |------- |-------------- |
+|   Control | 2.7514 us | 0.0249 us |   1.00 |          0.00 |
+| Treatment | 1.7416 us | 0.0216 us |   0.63 |          0.01 |
+					</code></pre>
+				</section>
+
+				</section>
+
+				<section>
+
+				<section>
+					<h4>How CPU works</h4>
+					<img src="img/cpu.jpg" alt="cpu">
+				</section>
+
+					<section data-background="img/cpu2.jpg" data-background-size="80%"></section>
+
+				<section>
+					<pre><code data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+Caches:
+Cache line = 64 bytes
+L1 Data cache = 32 KB
+L1 Instruction cache = 32 KB
+L2 cache = 256 KB
+L3 cache = 8 MB
+
+Latency:
+L1 Data Cache Latency = 4 cycles for simple access via pointer
+L1 Data Cache Latency = 5 cycles for access with complex address calculation
+L2 Cache Latency = 12 cycles
+L3 Cache Latency = 36 cycles
+RAM Latency = 36 cycles + 57 ns
+                   </code></pre>
+					<p><a href="http://www.7-cpu.com/cpu/Haswell.html">Source</a></p>
+				</section>
+				<section>
+					<h4>Front-end:</h4>
+					<ul>
+						<li>works with instructions</li>
+						<li>fetch & decode</li>
+					</ul>
+					<br/>
+					<h4>Back-end:</h4>
+					<ul>
+						<li>performs execution</li>
+					</ul>
+					<aside class="notes">
+						<p>Сементически ЦПУ можно разделить на две части</p>
+					</aside>
+				</section>
+				<section data-background="img/stackoverflow-question.png" data-background-size="80%"></section>
+				<section data-background="img/stackoverflow-answer.png" data-background-size="80%"></section>
+				<section data-background="img/stackoverflow-code.png" data-background-size="80%"></section>
+
+				<section>
+					<a href="https://software.intel.com/en-us/articles/intel-sdm">"Intel 64 and IA-32 Architectures Software Developer Manuals"</a>
+					<br/>
+					<a href="http://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-optimization-manual.html">"Intel 64 and IA-32 Architectures Optimization Reference Manual"</a>
+				</section>
+				</section>
+
+				<section>
+
+				<section>
+					<h4>Chapter 4: Advanced data structures</h4>
+					<aside class="notes">
+						<p>Perfview бесполезен на этот момент, он просто покажет где ЦПУ тратит время, но не расскажет почему.</p>
+						<p>Нам нужна тяжелая артилерия</p>
+						<p>Демо</p>
+					</aside>
+				</section>
+				<section data-background="img/vtune-ge.png" data-background-size="70%"></section>
+				<section data-background="img/vtune-ma.png" data-background-size="70%"></section>
+
+				<section>
+					<div style="font-size: 80%;"><pre><code class="cs" data-trim contenteditable style="height: 200%; max-height: 1000px">
+internal class AhoCorasickTreeNode
+{
+  // We have two arrays located in different places of the heap.
+  // one for buckets
+  private int[] _buckets;
+  // another for values
+  private Entry[] _entries;
+
+  public AhoCorasickTreeNode GetTransition(char c)
+  {
+      // access the length of the bucket array's
+      var bucket = c % _buckets.Length;
+
+      // access an element of the bucket array
+      for (int i = _buckets[bucket]; i >= 0; i = _entries[i].Next)
+      {
+          // access the value array somewhere on the heap
+          if (_entries[i].Key == c)
+          {
+              return _entries[i].Value;
+          }
+
+          // we use the separate chaining method for hash collision resolution
+          // if case of hash collision we follow the "Next" pointer
+          // which can point to any place of the values array
+      }
+      return null;
+  }
+}
+					</code></pre></div>
+				</section>
+
+				<section>
+					<h4>Open addressing</h4>
+					<p>hash collision is resolved by probing</p>
+					<p>Linear, Quadratic, Double hashing</p>
+					<p>is not a silver bullet</p>
+					<img src="img/openaddress.png" alt="openaddress" style="max-height: 250px; background-color: white">
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+|    Method |          Mean |     StdDev |        Median | Scaled | Scaled-StdDev |
+|---------- |-------------- |----------- |-------------- |------- |-------------- |
+|   Control | 1,732.3850 ns | 22.5726 ns | 1,726.0844 ns |   1.00 |          0.00 |
+| Treatment |   723.2748 ns |  6.9478 ns |   722.9084 ns |   0.42 |          0.01 |
+					</code></pre>
+				</section>
+				</section>
+
+				<section>
+
+
+				<section>
+					<h4>Chapter 5: Hacks</h4>
+					<img src="img/vtune-ge-divider.png" alt="divider">
+					<aside class="notes">
+						<p>Оптимизации это итеративный процесс</p>
+					</aside>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable>
+public AhoCorasickTreeNode GetTransition(char c)
+{
+    if (_size == 0) return null;
+=>  var ind = c % _size;
+    var keyThere = _entries[ind].Key;
+...
+}
+					</code></pre>
+					<div class="fragment"><pre><code class="asm" data-trim contenteditable style="width: 120%; margin-left: -10%; overflow: hidden">
+...
+; r8d has _size
+movzx r9d, dx ; char argument to r9d
+mov eax, r9d ; r9d to eax
+cdq ; clear edx
+idiv r8d ; divide eax by r8d (_size); quotient in ax, remainder in dx
+mov eax, edx ; result to eax
+...
+					</code></pre></div>
+				</section>
+				<section>
+					<pre><code class="cs" data-trim contenteditable>
+public AhoCorasickTreeNode GetTransition(char c)
+{
+    if (_size == 0) return null;
+    var ind = c & (_size - 1); // _size needs to be a power of 2
+    var keyThere = _entries[ind].Key;
+...
+}					</code></pre>
+					<a href="https://graphics.stanford.edu/~seander/bithacks.html">More bithacks on the Stanford university website</a>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+|    Method |        Mean |    StdDev | Scaled | Scaled-StdDev |
+|---------- |------------ |---------- |------- |-------------- |
+|   Control | 757.1089 ns | 8.5518 ns |   1.00 |          0.00 |
+| Treatment | 427.0176 ns | 6.4534 ns |   0.56 |          0.01 |
+					</code></pre>
+				</section>
+				</section>
+
+				<section>
+
+
+				<section>
+					<h4>Chapter 6: A HUGE mistake</h4>
+					<img class="fragment" src="img/this-is-fine.jpg" alt="fine">
+					<aside class="notes">
+						<p>Фор 1000000 итераций</p>
+						<p>Структура данных, которую мы оптимизируем, занимет меньше 32 килобайт, а следовательно слезает в Л1 кэш</p>
+						<p>Это конечно же скрывает все проблемы с памятью в проде. Мы вызываем этот код один раз на сетевой запрос. У нас много бизнесс логики вокруг, много выделений памяти. Это все значит, что Л1 и Л2 кеш не имеет нашей структуры. Л3 лишь частично.</p>
+						<p>Мы искажаем реальную картину. Например, последняя оптимизация с деление ничего не будет значить. ЦПУ простаивает и ждет данных из РАМА, Л3, </p>
+
+						<p>Мы построили дерево. Оно состоит из нод. Нода это класс, следовательно находится где-то в хипе. Наша нода или хеш таблица содержит массив с чайлд нодами. Массив тоже где-то в хипе. Все эти классы где-то разбросаны и нет четкого паттерна доступа</p>
+						<p>К чему я веду: У всех современных процессоров есть префетч оптимизация. ЦПУ может загрузить инструкции или данные в кеш до того как они понадобятся. Но для этого ему надо понимать паттерн доступа. Самый простой паттерн это последовательный доступ.</p>
+						<p>Software based prefetch</p>
+					</aside>
+				</section>
+
+				<section>
+					<h4>Sidenote: String traversal</h4>
+					<pre><code class="cs" data-trim contenteditable>
+for (var i = 0; i < userAgent.Length; i++)
+{
+    var c = userAgent[i];
+    ...
+}
+					</code></pre>
+					<div class="fragment"><pre><code>
+...
+; Block 2:
+movsxd r8, eax
+movzx r8d, word ptr [rcx+r8*2+0xc]
+inc eax
+cmp edx, eax
+jnle 0x7ffdeecd3d39 ; Block 2
+...
+					</code></pre></div>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable>
+fixed (char* p = userAgent)
+{
+    var len = userAgent.Length * 2;
+    var cptr = p;
+    while (len > 0)
+    {
+        var c = *cptr;
+        cptr++;
+        len -= 2;
+        ...
+    }
+}
+					</code></pre>
+					<div class="fragment"><pre><code>
+...
+; Block 4:
+movzx ecx, word ptr [rax]
+add rax, 0x2
+add edx, 0xfffffffe
+test edx, edx
+jnle 0x7ffdeecd3d83 ; Block 4
+...
+					</code></pre></div>
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+|          Method |        Mean |    StdDev |      Median | Scaled | Scaled-StdDev |
+|---------------- |------------ |---------- |------------ |------- |-------------- |
+|        Traverse | 132.5022 ns | 0.9385 ns | 132.1233 ns |   1.00 |          0.00 |
+|  TraverseUnsafe |  70.7301 ns | 0.1986 ns |  70.6969 ns |   0.53 |          0.00 |
+					</code></pre>
+				</section>
+
+				<section>
+					<h4>Unmanaged scalepans</h4>
+					<ul>
+						<li>Bound checks</li>
+						<li>String traversal</li>
+						<li>Compressed relative pointers</li>
+						<li>Pointer reuse</li>
+					</ul>
+				</section>
+				<section data-background="img/unsafe.jpg" data-background-size="70%"></section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
+[
+  Node1: [Size, FailureIndex, [Key1, NodeIndex1; KeyN, NodeIndexN;]];
+  NodeN: ...
+]
+					</code></pre>
+				</section>
+
+				<section><div style="font-size: 60%;"><pre><code class="cs" data-trim contenteditable style="height: 200%; max-height: 1000px">
+private readonly byte[] _data;
+
+private static unsafe byte GetKey(byte* currentNodePtr, int ind)
+{
+    return *(byte*)(currentNodePtr + SizeOfSize + SizeOfFailure + ind * (SizeOfKey + SizeOfNode));
+}
+
+public unsafe bool Contains(string text)
+{
+    fixed (byte* b = _data)
+    fixed (char* p = text)
+    {
+        var len = text.Length * 2;
+        var currentNodePtr = b;
+        var cptr = p;
+        while (len > 0)
+        {
+            var c = *cptr;
+            cptr++;
+            len -= 2;
+
+            CheckFailure:
+            var size = *currentNodePtr;
+            var ind = c & (size - 1);
+            var key = GetKey(currentNodePtr, ind);
+            if (key == c)
+            {
+                currentNodePtr = GetNext(b, currentNodePtr, ind);
+                if (currentNodePtr == b) return true;
+            }
+            else
+            {
+                currentNodePtr = GetFailure(b, currentNodePtr);
+                if (currentNodePtr != b) goto CheckFailure;
+            }
+        }
+    }
+    return false;
+}
+				</code></pre></div></section>
+
+				<section>
+					<h4>How to measure?</h4>
+					<img src="img/custom-analysis.png" alt="ca" class="fragment">
+					<aside class="notes">
+						<p>Главный вопрос!</p>
+						<p>Мы застряли в такой ситуации когда бенчмарки бесполезны и даже вредны. Также это невозможно измерить в проде.</p>
+						<p>Единственный выход это использовать хардварные перформанс каунтеры. Мы идентифицировали наш боттлнек как ЦПУ кеш мисы.</p>
+						<p>Мы будем мониторить только этот хардварный счетчик и поможет нам в этом VTune</p>
+					</aside>
+
+				</section>
+
+				<section>
+					<pre><code class="cs" data-trim contenteditable>
+private static readonly byte[] Data = new byte[16 * 1024 * 1024];
+
+for (var i = 0; i < 1000000; i++)
+{
+    // clear the CPU caches
+    var sum = 0;
+    for (var j = 0; j < Data.Length; j++)
+    {
+        sum += Data[j];
+    }
+
+    // the code we profile
+    tree.Contains(UserAgent);
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<img src="img/vtune-llc.png" alt="llc">
+					<img src="img/vtune-llc-after.png" alt="llc-after" class="fragment">
+				</section>
+			</section>
+
+
+				<section>
+					<h4>Summary</h4>
+					<ul>
+						<li>Improved performance by 20-30? times</li>
+						<li>API usage</li>
+						<li>CLR internals</li>
+						<li>re-implementing Dictionary</li>
+						<li>Open addressing Hash table</li>
+						<li>modulo bit hack</li>
+						<li>Made a mistake</li>
+						<li>CPU-friendly implementation</li>
+					</ul>
+				</section>
+				<section>
+					<h4>What's next?</h4>
+					<ul>
+						<li>Compacting the data structure</li>
+						<li>Perfect hash</li>
+						<li>ASCII -> bit masks</li>
+						<li>SIMD (Single instruction, multiple data)</li>
+					</ul>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
