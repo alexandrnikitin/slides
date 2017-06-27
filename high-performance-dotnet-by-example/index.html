@@ -95,9 +95,10 @@
                         </ul>
 						<aside class="notes">
 							<p>Фокус доклана не на том как блокировать трафик, а на перформансе</p>
-							TODO фабрика ботов
 						</aside>
 					</section>
+
+					<section data-background="img/bot-factory.jpg" data-background-size="80%"></section>
 
                     <section>
                         Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
@@ -227,7 +228,7 @@ curl
 					<h4>String searching algorithms:</h4>
 					<ul>
 						<li>Naive</li>
-						<li>Finite-state automation</li>
+						<li>Finite-state machine</li>
 						<li>Aho–Corasick</li>
 						<li>Boyer-Moore & Commentz-Walter</li>
 						<li>Backward Oracle Matching & Set-BOM</li>
@@ -300,6 +301,11 @@ curl
 					<h4>Intel VTune Amplifier</h4>
 					<a href="https://software.intel.com/en-us/intel-vtune-amplifier-xe">https://software.intel.com/en-us/intel-vtune-amplifier-xe</a>
 					<img src="img/intel-vtune.png" alt="intel-vtune">
+					<aside class="notes">
+						<p>Коммерческий инструмент</p>
+						<p>Поддерживает многие языки, в тч C#</p>
+						<p>Он показывает не только сколько времени занял тот или иной метод, но и почему это происходит.</p>
+					</aside>
 				</section>
 
 
@@ -309,9 +315,9 @@ curl
 				<section>
 						<h2>Performance optimizations</h2>
 					<aside class="notes">
-						<p>Справедливости ради</p>
-						<p>Первая версия</p>
-						<p>Мой интерес </p>
+						<p>Справедливости ради должен сказать что это все было 2 года назад</p>
+						<p>Первая версия была разработана </p>
+						<p>Мой интерес лежит в оптимизации производительности</p>
 					</aside>
 				</section>
 
@@ -614,6 +620,12 @@ internal class AhoCorasickTreeNode
 				<section>
 					<h4>How CPU works</h4>
 					<img src="img/cpu.jpg" alt="cpu">
+					<aside class="notes">
+						<p>ЦПУ это очень сложные штуки</p>
+						<p>ЦПУ несколько уровней кеша, 3-4, доступ к каждому следующему существенно медленнее предыдущего</p>
+						<p>ЦПУ работает с кешем маленькими блоками памяти 64 байта. Т.е. мы читаем инт поле в классе, вроде бы 4 байта, но нет, в кеш попало 64 байта</p>
+						<p>Чтобы держать кеш в консистентном виде, ядра обмениваются сообщениями. Сообщения эти не дешево стоят.</p>
+					</aside>
 				</section>
 
 					<section data-background="img/cpu2.jpg" data-background-size="80%"></section>
@@ -648,9 +660,12 @@ RAM Latency = 36 cycles + 57 ns
 						<li>performs execution</li>
 					</ul>
 					<aside class="notes">
-						<p>Сементически ЦПУ можно разделить на две части</p>
+						<p>Семантически ЦПУ можно разделить на две части</p>
 					</aside>
 				</section>
+
+
+				<section data-background="img/haswellexec.png" data-background-size="40%"></section>
 				<section data-background="img/stackoverflow-question.png" data-background-size="80%"></section>
 				<section data-background="img/stackoverflow-answer.png" data-background-size="80%"></section>
 				<section data-background="img/stackoverflow-code.png" data-background-size="80%"></section>
@@ -707,6 +722,9 @@ internal class AhoCorasickTreeNode
   }
 }
 					</code></pre></div>
+					<aside class="notes">
+						<p>.NET safety first - memory bounds check</p>
+					</aside>
 				</section>
 
 				<section>
@@ -955,28 +973,32 @@ for (var i = 0; i < 1000000; i++)
 				</section>
 			</section>
 
-
 				<section>
-					<h4>Summary</h4>
-					<ul>
-						<li>Improved performance by 20-30? times</li>
-						<li>API usage</li>
-						<li>CLR internals</li>
-						<li>re-implementing Dictionary</li>
-						<li>Open addressing Hash table</li>
-						<li>modulo bit hack</li>
-						<li>Made a mistake</li>
-						<li>CPU-friendly implementation</li>
-					</ul>
-				</section>
-				<section>
-					<h4>What's next?</h4>
-					<ul>
-						<li>Compacting the data structure</li>
-						<li>Perfect hash</li>
-						<li>ASCII -> bit masks</li>
-						<li>SIMD (Single instruction, multiple data)</li>
-					</ul>
+					<section>
+						<h4>Summary</h4>
+						<ul>
+							<li>Improved performance by 20-30? times</li>
+							<li>API usage</li>
+							<li>CLR internals</li>
+							<li>re-implementing Dictionary</li>
+							<li>Open addressing Hash table</li>
+							<li>modulo bit hack</li>
+							<li>Made a mistake</li>
+							<li>CPU-friendly implementation</li>
+						</ul>
+					</section>
+					<section>
+						<h4>What's next?</h4>
+						<ul>
+							<li>Compacting the data structure</li>
+							<li>Perfect hash</li>
+							<li>ASCII -> bit masks</li>
+							<li>SIMD (Single instruction, multiple data)</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Как жить дальше?</h4>
+					</section>
 				</section>
 			</div>
 		</div>
