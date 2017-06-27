@@ -55,11 +55,23 @@
 				</section>
 
 				<section>
-                    <section><h2>Domain</h2></section>
                     <section data-background="img/about-adform.png" data-background-size="60%"></section>
-                    <section><h2>All websites receive bot traffic!</h2></section>
+                    <section>
+						<h2>All websites receive bot traffic!</h2>
+						<aside class="notes">
+							<p>Боты повсюду</p>
+							<p>В интернете есть достаточно исследований на эту тему.</p>
+							<p>Комерческие исследования имеют тенденцую занижать</p>
+							<p>Академики же в свою очередь ...</p>
+						</aside>
+					</section>
 					<section data-background="img/incapsula.png" data-background-size="75%"></section>
 					<section data-background="img/solve-media.png" data-background-size="70%"></section>
+					<section>
+						<p>Sources:</p>
+						<p><a href="https://www.incapsula.com/blog/bot-traffic-report-2016.html">Incapsula</a></p>
+						<p><a href="http://news.solvemedia.com/post/32450539468/solve-media-the-bot-stops-here-infographic">Solve Media</a></p>
+					</section>
                     <section>
                         <h2>The bot classification</h2>
                         <ul>
@@ -67,7 +79,12 @@
                             <li><u>Grey bots (neutral)</u> - feed fetchers, website crawlers and data scrappers.</li>
                             <li><u>Black bots (harmful)</u> - fraud and criminal activity, intentional impersonation for profit.</li>
                         </ul>
-                    </section>
+						<aside class="notes">
+							<p>Но не все боты плохие, без некоторых интернета бы не было</p>
+							<p>Я буду говорить только о white and grey bots которые идентифицируют себя как таковые</p>
+							<p>Я не буду касаться мошенечества и криминальной активности, это отдельная огромная и интересная тема.</p>
+						</aside>
+					</section>
 
                     <section>
                         <h2>Ways to identify:</h2>
@@ -76,7 +93,11 @@
                             <li>Behavior analysis</li>
                             <li>Honeypots</li>
                         </ul>
-                    </section>
+						<aside class="notes">
+							<p>Фокус доклана не на том как блокировать трафик, а на перформансе</p>
+							TODO фабрика ботов
+						</aside>
+					</section>
 
                     <section>
                         Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
@@ -97,7 +118,11 @@
 							<li>3rd party cookies in Firefox</li>
 							<li>Adblock Plus and IAB summit</li>
 						</ul>
-                    </section>
+						<aside class="notes">
+							<p>В интернете есть бесплатные списки ботов которые эффективные и часто обновляются</p>
+							<p>Это бизнес организация, и членство стоит денег</p>
+						</aside>
+					</section>
 
 					<section>
 						<h3>IAB International Spiders and Bots List</h3>
@@ -108,6 +133,11 @@ IAB Associate Member: $7 000
 Non-Member: $14 000
 						</code></pre></div>
 						<div class="fragment">The list “is required for compliance to the IAB’s Client Side Counting (CSC) Measurement Guidelines”</div>
+						<aside class="notes">
+							<p>У этой организации есть </p>
+							<p>И казалось бы зачем платить такие деньги, но... эта организация</p>
+							ТОДО профит
+						</aside>
 					</section>
 
 					<section>
@@ -129,6 +159,10 @@ curl
 					<h2>Measure, measure, measure!</h2>
 					<blockquote>&ldquo;If you can not measure it, you can not improve it.&rdquo;</blockquote>
 					<p style="text-align: right;">Lord Kelvin</p>
+					<aside class="notes">
+						<p>Это самое главное, что нужно вынести их этого доклада</p>
+					</aside>
+
 				</section>
 				<section>
 					Measurement is hard!
@@ -166,6 +200,11 @@ curl
 			<section>
 				<section>
 						<h2>Algorithm</h2>
+					<aside class="notes">
+						<p>Измерения и оптимизации это хорошо, они отвечают на вопрос как быстро мы делаем работу?</p>
+						<p>Но перед этим нам надо ответить на вопрос сколько работы нам нужно сделать?</p>
+						<p>Наша цель проверить, содержит ли юзер агент один из кейвордов из списка</p>
+					</aside>
 				</section>
 
 				<section>
@@ -177,6 +216,9 @@ curl
 						<li>spam detection</li>
 						<li>plagiarism detection</li>
 					</ul>
+					<aside class="notes">
+						<p>Это важная проблема во многих областях комп саенс</p>
+					</aside>
 				</section>
 
 				<section data-background="img/banners.jpg" data-background-size="80%"></section>
@@ -196,12 +238,17 @@ curl
 				<section>
 					<h4>Key features of the Aho–Corasick algorithm:</h4>
 					<ul>
+						<li>by Alfred Aho and Margaret Corasick in 1975</li>
 						<li>a pattern matching algorithm</li>
 						<li>accepts a finite set of patterns</li>
 						<li>matches all patterns simultaneously</li>
 						<li>backed by a Trie</li>
 						<li>“failure” links between nodes</li>
 					</ul>
+					<aside class="notes">
+						<p>Trie and persistent immutable DS</p>
+						<p>Первые версии grep</p>
+					</aside>
 				</section>
 
 				<section data-background="img/ahocorasick.png" data-background-size="70%"></section>
@@ -223,6 +270,10 @@ curl
 					<a href="http://benchmarkdotnet.org/">http://benchmarkdotnet.org/</a>
 					<img src="img/benchmarkdotnet.png" alt="benchmarkdotnet">
 					<p>Alternatives: xunit.performance, NBench</p>
+					<aside class="notes">
+						<p>Как НЮнит для юнит тестов</p>
+						<p>Достаточно активно развивается: ГЦ, хардвар, мультитред</p>
+					</aside>
 				</section>
 
 				<section>
@@ -257,6 +308,11 @@ curl
 			<section>
 				<section>
 						<h2>Performance optimizations</h2>
+					<aside class="notes">
+						<p>Справедливости ради</p>
+						<p>Первая версия</p>
+						<p>Мой интерес </p>
+					</aside>
 				</section>
 
 				<section>
@@ -411,13 +467,8 @@ public AhoCorasickTreeNode GetTransition(char c)
 					<img src="img/perfview-collect.png" alt="perfview">
 				</section>
 
-				<section>
-					<img src="img/allocations.png" alt="alloc">
-				</section>
-
-				<section>
-					<img src="img/allocation-stack.png" alt="alloc-stack">
-				</section>
+					<section data-background="img/allocations.png" data-background-size="80%"></section>
+					<section data-background="img/allocation-stack.png" data-background-size="80%"></section>
 
 				<section>
 					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
@@ -453,7 +504,20 @@ IL_0001: newobj instance void valuetype System.Collections.Generic.List`1/Enumer
 IL_0006: box valuetype System.Collections.Generic.List`1/Enumerator&lt;!T&gt;
 IL_000b: ret
 					</code></pre>
+					<aside class="notes">
+						<p>Интерфейс вызовы проходят через таблицу виртуальных методов. А у структур ее нет по своей природе. Чтобы обрести таблицу виртуальных методов, структуре надо стать референс типом. Со всеми вытекающими последствиями.</p>
+					</aside>
 				</section>
+					<section>
+					<pre><code class="cs">
+if (pointer.Results.Any())
+	return true;
+					</code></pre>
+					<pre><code class="cs">
+if (pointer.Results.Count > 0)
+	return true;
+					</code></pre>
+					</section>
 
 				<section>
 					<pre><code class="cs" data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
@@ -501,6 +565,10 @@ Dictionary&lt;TKey, TValue&gt;.TryGetValue()
       Char.Equals() (inlined)
     // repeat if hash collision
 					</code></pre>
+					<aside class="notes">
+						<p>Это в общем то понятно, Dictionary это генерик структура данных для общих целей. Ей надо поддерживать любой тип одинаково хорошо.</p>
+						<p>Но нам это все не надо, мы знаем наш тип. Почему бы нам самим просто не реализовать ее.</p>
+					</aside>
 				</section>
 
 				<section>
@@ -546,10 +614,9 @@ internal class AhoCorasickTreeNode
 				<section>
 					<h4>How CPU works</h4>
 					<img src="img/cpu.jpg" alt="cpu">
-					<aside class="notes">
-						TODO
-					</aside>
 				</section>
+
+					<section data-background="img/cpu2.jpg" data-background-size="80%"></section>
 
 				<section>
 					<pre><code data-trim contenteditable style="width: 110%; margin-left: -5%; overflow: hidden">
@@ -567,9 +634,22 @@ L2 Cache Latency = 12 cycles
 L3 Cache Latency = 36 cycles
 RAM Latency = 36 cycles + 57 ns
                    </code></pre>
+					<p><a href="http://www.7-cpu.com/cpu/Haswell.html">Source</a></p>
 				</section>
 				<section>
-					Front-end and Back-end
+					<h4>Front-end:</h4>
+					<ul>
+						<li>works with instructions</li>
+						<li>fetch & decode</li>
+					</ul>
+					<br/>
+					<h4>Back-end:</h4>
+					<ul>
+						<li>performs execution</li>
+					</ul>
+					<aside class="notes">
+						<p>Сементически ЦПУ можно разделить на две части</p>
+					</aside>
 				</section>
 				<section data-background="img/stackoverflow-question.png" data-background-size="80%"></section>
 				<section data-background="img/stackoverflow-answer.png" data-background-size="80%"></section>
@@ -586,14 +666,16 @@ RAM Latency = 36 cycles + 57 ns
 
 				<section>
 					<h4>Chapter 4: Advanced data structures</h4>
-					<p>PerfView is useless at this point</p>
-					<p>Intel VTune Amplifier FTW</p>
+					<aside class="notes">
+						<p>Perfview бесполезен на этот момент, он просто покажет где ЦПУ тратит время, но не расскажет почему.</p>
+						<p>Нам нужна тяжелая артилерия</p>
+						<p>Демо</p>
+					</aside>
 				</section>
 				<section data-background="img/vtune-ge.png" data-background-size="70%"></section>
 				<section data-background="img/vtune-ma.png" data-background-size="70%"></section>
 
 				<section>
-
 					<div style="font-size: 80%;"><pre><code class="cs" data-trim contenteditable style="height: 200%; max-height: 1000px">
 internal class AhoCorasickTreeNode
 {
@@ -651,6 +733,9 @@ internal class AhoCorasickTreeNode
 				<section>
 					<h4>Chapter 5: Hacks</h4>
 					<img src="img/vtune-ge-divider.png" alt="divider">
+					<aside class="notes">
+						<p>Оптимизации это итеративный процесс</p>
+					</aside>
 				</section>
 
 				<section>
@@ -701,7 +786,7 @@ public AhoCorasickTreeNode GetTransition(char c)
 
 				<section>
 					<h4>Chapter 6: A HUGE mistake</h4>
-					<img src="img/this-is-fine.jpg" alt="fine">
+					<img class="fragment" src="img/this-is-fine.jpg" alt="fine">
 				</section>
 
 				<section>
