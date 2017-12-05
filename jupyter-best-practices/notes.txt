@@ -1,0 +1,35 @@
+# Hotkeys
+
+# Save in VCS
+
+# Themes
+
+# Structure
+    Cookiecutter
+    Dirs
+    Files
+
+# Tests
+    pytest-ipynb
+    
+# Long running jobs
+    
+# Snippets
+    
+# Extensions
+    Slides
+
+# Magic
+    Bash
+    Time
+    Profile
+    Languages
+
+# UI
+    Run one from another
+    ipywidgets
+    Dashboard
+
+# Interactive
+    Bokeh
+    Holoviews
